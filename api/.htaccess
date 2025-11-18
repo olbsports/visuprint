@@ -88,13 +88,15 @@ RewriteRule \.(jpg|jpeg|png|gif|pdf)$ - [F,L]
 # Désactiver l'affichage des erreurs PHP (production)
 # ============================================
 
-php_flag display_errors off
-php_flag display_startup_errors off
-php_value error_reporting 0
+# IMPORTANT: Directives PHP désactivées (incompatibles FastCGI/FPM)
+# php_flag display_errors off
+# php_flag display_startup_errors off
+# php_value error_reporting 0
 
 # ============================================
 # Log des erreurs
 # ============================================
 
-php_flag log_errors on
-php_value error_log /home/votre_user/logs/php_errors.log
+# IMPORTANT: Directives PHP désactivées (incompatibles FastCGI/FPM)
+# php_flag log_errors on
+# php_value error_log /home/votre_user/logs/php_errors.log
