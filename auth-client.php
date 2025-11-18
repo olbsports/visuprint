@@ -4,7 +4,10 @@
  * Gestion des sessions clients
  */
 
-session_start();
+// Démarrer la session uniquement si elle n'est pas déjà démarrée
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 require_once __DIR__ . '/api/config.php';
 
@@ -125,7 +128,7 @@ function creerCompteClient($email, $motDePasse, $prenom, $nom, $telephone = null
         [$email, $passwordHash, $prenom, $nom, $telephone]
     );
 
-    $clientId = $db->getLastInsertId();
+    $clientId = $db->lastInsertId();
 
     // Connecter automatiquement
     $_SESSION['client_id'] = $clientId;
