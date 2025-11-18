@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalogue - Imprixo</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="/"><h1>🎨 <span class="brand">Imprixo</span></h1></a>
+                </div>
+                <nav class="nav">
+                    <a href="/">Accueil</a>
+                    <a href="/catalogue.html" class="active">Catalogue</a>
+                    <a href="/mon-compte.php">Mon Compte</a>
+                </nav>
+                <div class="header-actions">
+                    <a href="/panier.html" class="btn-cart">🛒 Panier <span class="cart-count" id="cartCount">0</span></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section style="padding: 60px 0;">
+        <div class="container">
+            <h1 style="font-size: 42px; margin-bottom: 20px;">Catalogue Produits</h1>
+            <p style="color: #666; margin-bottom: 40px;">54 produits pour tous vos besoins d'impression grand format</p>
+
+            <!-- Filtres -->
+            <div style="background: white; padding: 25px; border-radius: 12px; margin-bottom: 40px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <div>
+                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">Catégorie</label>
+                        <select id="filterCategory" style="padding: 10px; border: 2px solid #e0e0e0; border-radius: 6px; min-width: 200px;">
+                            <option value="">Toutes</option>
+                            <option value="Supports rigides PVC">Supports rigides PVC</option>
+                            <option value="Supports aluminium premium">Supports aluminium</option>
+                            <option value="Textiles">Textiles</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">Recherche</label>
+                        <input type="text" id="searchProducts" placeholder="Rechercher..." style="padding: 10px; border: 2px solid #e0e0e0; border-radius: 6px; min-width: 250px;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grille produits -->
+            <div id="productsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px;">
+                <!-- Chargement... -->
+                <p>Chargement des produits...</p>
+            </div>
+        </div>
+    </section>
+
+    <script src="/js/app.js"></script>
+    <script>
+        let allProducts = [];
+
+        async function loadAllProducts() {
+            try {
+                const products = await Imprixo.loadProducts();
+                allProducts = products;
+                displayProducts(products);
+            } catch (error) {
+                document.getElementById('productsGrid').innerHTML = '<p style="color: red;">Erreur chargement produits</p>';
+            }
+        }
+
+        function displayProducts(products) {
+            const grid = document.getElementById('productsGrid');
+
+            if (products.length === 0) {
+                grid.innerHTML = '<p>Aucun produit trouvé</p>';
+                return;
+            }
+
+            grid.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <div class="product-image">📋</div>
+                    <div class="product-body">
+                        <div class="product-category">${product.categorie}</div>
+                        <h3 class="product-name">${product.nom}</h3>
+                        <p style="color: #666; font-size: 14px; margin-bottom: 15px;">${product.description_courte || ''}</p>
+                        <div class="product-price">
+                            ${product.prix_300_plus}€ <span>/m²</span>
+                        </div>
+                        <a href="/produit.html?code=${product.code}" class="btn btn-primary" style="width: 100%; text-align: center;">Configurer</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterProducts() {
+            const category = document.getElementById('filterCategory').value;
+            const search = document.getElementById('searchProducts').value.toLowerCase();
+
+            let filtered = allProducts;
+
+            if (category) {
+                filtered = filtered.filter(p => p.categorie === category);
+            }
+
+            if (search) {
+                filtered = filtered.filter(p =>
+                    p.nom.toLowerCase().includes(search) ||
+                    (p.description_courte && p.description_courte.toLowerCase().includes(search))
+                );
+            }
+
+            displayProducts(filtered);
+        }
+
+        document.getElementById('filterCategory').addEventListener('change', filterProducts);
+        document.getElementById('searchProducts').addEventListener('input', filterProducts);
+
+        loadAllProducts();
+    </script>
+</body>
+</html>
