@@ -1,112 +1,35 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Générateur de pages produits V2 - ULTRA PROFESSIONNEL
-- Tailles standards préformatées (A0-A4, formats courants)
-- Calcul fonds perdus + dimension finale affichée
-- Options configurables (finitions, supports, etc.)
-- Galerie photos produits
-- Minimum de commande respecté
-- Specs graphiques complètes (marges, traits de coupe, etc.)
-"""
-
-import csv
-import os
-import random
-import json
-
-# Lire le catalogue
-products = []
-with open('CATALOGUE_COMPLET_VISUPRINT.csv', 'r', encoding='utf-8') as f:
-    reader = csv.DictReader(f)
-    for row in reader:
-        if row.get('ID_PRODUIT'):
-            products.append(row)
-
-print(f"📦 {len(products)} produits trouvés dans le catalogue\n")
-
-os.makedirs('produit', exist_ok=True)
-
-# TAILLES STANDARDS PRÉFORMATÉES (largeur x hauteur en cm)
-TAILLES_STANDARDS = {
-    "A0 (84 × 119 cm)": {"w": 84, "h": 119},
-    "A1 (59 × 84 cm)": {"w": 59, "h": 84},
-    "A2 (42 × 59 cm)": {"w": 42, "h": 59},
-    "A3 (30 × 42 cm)": {"w": 30, "h": 42},
-    "A4 (21 × 30 cm)": {"w": 21, "h": 30},
-    "100 × 100 cm (carré)": {"w": 100, "h": 100},
-    "200 × 100 cm": {"w": 200, "h": 100},
-    "300 × 150 cm": {"w": 300, "h": 150},
-    "400 × 200 cm": {"w": 400, "h": 200},
-    "Format personnalisé": {"w": 100, "h": 100}
-}
-
-generated = 0
-
-for product in products:
-    code = product['ID_PRODUIT']
-    nom = product['NOM_PRODUIT'].replace("'", "\\'")
-    sous_titre = product['SOUS_TITRE'].replace("'", "\\'")
-    desc_courte = product['DESCRIPTION_COURTE'].replace("'", "\\'")
-    desc_longue = product['DESCRIPTION_LONGUE'].replace("'", "\\'")
-    categorie = product['CATEGORIE'].replace("'", "\\'")
-
-    poids = float(product['POIDS_M2']) if product['POIDS_M2'] else 0
-    epaisseur = product['EPAISSEUR']
-    format_max = product['FORMAT_MAX_CM']
-    usage = product['USAGE'].replace("'", "\\'")
-    duree_vie = product['DUREE_VIE']
-    certification = product['CERTIFICATION']
-    finition = product['FINITION']
-    impression_faces = product['IMPRESSION_FACES']
-    delai = int(product['DELAI_STANDARD_JOURS']) if product['DELAI_STANDARD_JOURS'] else 3
-
-    prix_0_10 = float(product['PRIX_0_10_M2']) if product['PRIX_0_10_M2'] else 0
-    prix_11_50 = float(product['PRIX_11_50_M2']) if product['PRIX_11_50_M2'] else 0
-    prix_51_100 = float(product['PRIX_51_100_M2']) if product['PRIX_51_100_M2'] else 0
-    prix_101_300 = float(product['PRIX_101_300_M2']) if product['PRIX_101_300_M2'] else 0
-    prix_300_plus = float(product['PRIX_300_PLUS_M2']) if product['PRIX_300_PLUS_M2'] else 0
-
-    rating = round(random.uniform(4.6, 4.9), 1)
-    review_count = random.randint(80, 200)
-
-    meta_desc = f"{nom} ✓ Prix dégressifs {prix_0_10}€→{prix_300_plus}€/m² ✓ Livraison {delai}j ✓ {certification}"
-
-    # Schema Product
-    schema_product = json.dumps({
-        "@context": "https://schema.org/",
-        "@type": "Product",
-        "name": nom.replace("\\'", "'"),
-        "description": desc_courte.replace("\\'", "'"),
-        "brand": {"@type": "Brand", "name": "Imprixo"},
-        "offers": {
-            "@type": "AggregateOffer",
-            "lowPrice": str(prix_300_plus),
-            "highPrice": str(prix_0_10),
-            "priceCurrency": "EUR",
-            "availability": "https://schema.org/InStock"
-        },
-        "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": str(rating),
-            "reviewCount": str(review_count)
-        }
-    }, ensure_ascii=False, indent=2)
-
-    # Générer tailles standards JSON
-    tailles_standards_json = json.dumps(TAILLES_STANDARDS, ensure_ascii=False)
-
-    html = f'''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{nom.replace(chr(92), "")} - Imprixo</title>
-    <meta name="description" content="{meta_desc.replace(chr(92), "")}">
-    <link rel="canonical" href="https://imprixo.fr/produit/{code}.php">
+    <title>PVC Backlite 510 - Imprixo</title>
+    <meta name="description" content="PVC Backlite 510 ✓ Prix dégressifs 21.0€→13.4€/m² ✓ Livraison 3j ✓ M2">
+    <link rel="canonical" href="https://imprixo.fr/produit/PVC-BACKLITE-510.php">
 
     <script type="application/ld+json">
-{schema_product}
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": "PVC Backlite 510",
+  "description": "Support textile PVC Backlite 510",
+  "brand": {
+    "@type": "Brand",
+    "name": "Imprixo"
+  },
+  "offers": {
+    "@type": "AggregateOffer",
+    "lowPrice": "13.4",
+    "highPrice": "21.0",
+    "priceCurrency": "EUR",
+    "availability": "https://schema.org/InStock"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "reviewCount": "173"
+  }
+}
     </script>
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -117,29 +40,29 @@ for product in products:
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 
-        * {{
+        * {
             font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
-        }}
+        }
 
-        .price-sidebar {{
+        .price-sidebar {
             position: sticky;
             top: 120px;
-        }}
+        }
 
-        .spec-badge {{
+        .spec-badge {
             background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
             border-left: 4px solid #3b82f6;
-        }}
+        }
 
-        .option-card:hover {{
+        .option-card:hover {
             border-color: #e63946;
             box-shadow: 0 0 0 2px rgba(230, 57, 70, 0.1);
-        }}
+        }
 
-        .option-card.selected {{
+        .option-card.selected {
             border-color: #e63946;
             background: #fff5f5;
-        }}
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -149,34 +72,34 @@ for product in products:
     <div id="root"></div>
 
     <script type="text/babel">
-        const {{useState, useEffect, useMemo, useRef}} = React;
+        const {useState, useEffect, useMemo, useRef} = React;
 
         // Données du produit
-        const PRODUCT_DATA = {{
-            code: '{code}',
-            nom: '{nom}',
-            sous_titre: '{sous_titre}',
-            desc_courte: '{desc_courte}',
-            desc_longue: '{desc_longue}',
-            categorie: '{categorie}',
-            poids: {poids},
-            epaisseur: '{epaisseur}',
-            format_max: '{format_max}',
-            usage: '{usage}',
-            duree_vie: '{duree_vie}',
-            certification: '{certification}',
-            finition: '{finition}',
-            impression_faces: '{impression_faces}',
-            delai: {delai},
-            prix: {{
-                '0-10': {prix_0_10},
-                '11-50': {prix_11_50},
-                '51-100': {prix_51_100},
-                '101-300': {prix_101_300},
-                '300+': {prix_300_plus}
-            }},
-            rating: {rating},
-            reviews: {review_count},
+        const PRODUCT_DATA = {
+            code: 'PVC-BACKLITE-510',
+            nom: 'PVC Backlite 510',
+            sous_titre: 'Textile PVC',
+            desc_courte: 'Support textile PVC Backlite 510',
+            desc_longue: 'Support textile professionnel PVC Backlite 510. Impression HD haute définition. Idéal pour événementiel, stands, kakémonos, roll-ups.',
+            categorie: 'Textiles rétroéclairés',
+            poids: 0.3,
+            epaisseur: '-',
+            format_max: 'Illimité',
+            usage: 'Intérieur/Extérieur selon produit',
+            duree_vie: '2-5 ans',
+            certification: 'M2',
+            finition: 'Mat ou brillant',
+            impression_faces: 'Simple face',
+            delai: 3,
+            prix: {
+                '0-10': 21.0,
+                '11-50': 18.5,
+                '51-100': 16.8,
+                '101-300': 15.1,
+                '300+': 13.4
+            },
+            rating: 4.8,
+            reviews: 173,
             // Minimum de commande fournisseur
             min_commande_m2: 1,
             min_quantite: 1,
@@ -184,36 +107,36 @@ for product in products:
             fonds_perdu: 0.3,
             // Photos produits
             photos: [
-                '/assets/products/{code}-1.jpg',
-                '/assets/products/{code}-2.jpg',
-                '/assets/products/{code}-3.jpg'
+                '/assets/products/PVC-BACKLITE-510-1.jpg',
+                '/assets/products/PVC-BACKLITE-510-2.jpg',
+                '/assets/products/PVC-BACKLITE-510-3.jpg'
             ]
-        }};
+        };
 
-        const TAILLES_STANDARDS = {tailles_standards_json};
+        const TAILLES_STANDARDS = {"A0 (84 × 119 cm)": {"w": 84, "h": 119}, "A1 (59 × 84 cm)": {"w": 59, "h": 84}, "A2 (42 × 59 cm)": {"w": 42, "h": 59}, "A3 (30 × 42 cm)": {"w": 30, "h": 42}, "A4 (21 × 30 cm)": {"w": 21, "h": 30}, "100 × 100 cm (carré)": {"w": 100, "h": 100}, "200 × 100 cm": {"w": 200, "h": 100}, "300 × 150 cm": {"w": 300, "h": 150}, "400 × 200 cm": {"w": 400, "h": 200}, "Format personnalisé": {"w": 100, "h": 100}};
 
         // OPTIONS PRODUIT (à configurer selon le produit)
-        const OPTIONS_DISPONIBLES = {{
+        const OPTIONS_DISPONIBLES = {
             laminat: [
-                {{ id: 'sans', nom: 'Sans lamination', prix: 0 }},
-                {{ id: 'mat', nom: 'Laminat mat', prix: 2.5 }},
-                {{ id: 'brillant', nom: 'Laminat brillant', prix: 2.5 }}
+                { id: 'sans', nom: 'Sans lamination', prix: 0 },
+                { id: 'mat', nom: 'Laminat mat', prix: 2.5 },
+                { id: 'brillant', nom: 'Laminat brillant', prix: 2.5 }
             ],
             finition: [
-                {{ id: 'standard', nom: 'Découpe standard', prix: 0 }},
-                {{ id: 'oeillets', nom: 'Avec œillets', prix: 5 }},
-                {{ id: 'barres', nom: 'Barres alu haut/bas', prix: 15 }}
+                { id: 'standard', nom: 'Découpe standard', prix: 0 },
+                { id: 'oeillets', nom: 'Avec œillets', prix: 5 },
+                { id: 'barres', nom: 'Barres alu haut/bas', prix: 15 }
             ],
             support: [
-                {{ id: 'aucun', nom: 'Aucun support', prix: 0 }},
-                {{ id: 'forex-3mm', nom: 'Support Forex 3mm', prix: 8 }},
-                {{ id: 'dibond-3mm', nom: 'Support Dibond 3mm', prix: 12 }}
+                { id: 'aucun', nom: 'Aucun support', prix: 0 },
+                { id: 'forex-3mm', nom: 'Support Forex 3mm', prix: 8 },
+                { id: 'dibond-3mm', nom: 'Support Dibond 3mm', prix: 12 }
             ]
-        }};
+        };
 
-        function ProductPage() {{
+        function ProductPage() {
             // État de configuration
-            const [config, setConfig] = useState({{
+            const [config, setConfig] = useState({
                 taille_preset: 'Format personnalisé',
                 largeur: 100,
                 hauteur: 100,
@@ -222,7 +145,7 @@ for product in products:
                 laminat: 'sans',
                 finition: 'standard',
                 support: 'aucun'
-            }});
+            });
 
             const [surface, setSurface] = useState(1);
             const [prixUnitaire, setPrixUnitaire] = useState(PRODUCT_DATA.prix['0-10']);
@@ -231,23 +154,23 @@ for product in products:
             const [currentPhoto, setCurrentPhoto] = useState(0);
 
             // Calculs dimensions avec fonds perdus
-            const dimensionsFinales = useMemo(() => {{
+            const dimensionsFinales = useMemo(() => {
                 const largeurFinale = config.largeur + (2 * PRODUCT_DATA.fonds_perdu);
                 const hauteurFinale = config.hauteur + (2 * PRODUCT_DATA.fonds_perdu);
-                const zoneSecurite = {{
+                const zoneSecurite = {
                     largeur: config.largeur - (2 * PRODUCT_DATA.fonds_perdu),
                     hauteur: config.hauteur - (2 * PRODUCT_DATA.fonds_perdu)
-                }};
+                };
 
-                return {{
+                return {
                     finale_largeur: largeurFinale,
                     finale_hauteur: hauteurFinale,
                     zone_securite: zoneSecurite
-                }};
-            }}, [config.largeur, config.hauteur]);
+                };
+            }, [config.largeur, config.hauteur]);
 
             // Calcul du prix
-            useEffect(() => {{
+            useEffect(() => {
                 const surf = (config.largeur * config.hauteur) / 10000;
                 setSurface(surf);
 
@@ -269,25 +192,25 @@ for product in products:
 
                 // Prix options
                 let totalOptions = 0;
-                Object.keys(OPTIONS_DISPONIBLES).forEach(optType => {{
+                Object.keys(OPTIONS_DISPONIBLES).forEach(optType => {
                     const option = OPTIONS_DISPONIBLES[optType].find(o => o.id === config[optType]);
                     if (option) totalOptions += option.prix;
-                }});
+                });
                 setPrixOptions(totalOptions * surf);
 
                 const total = (prix * surf * config.quantite * multiplicateur) + (totalOptions * surf * config.quantite);
                 setPrixTotal(total);
-            }}, [config]);
+            }, [config]);
 
             // Changer preset de taille
-            const handleTaillePreset = (preset) => {{
-                setConfig({{
+            const handleTaillePreset = (preset) => {
+                setConfig({
                     ...config,
                     taille_preset: preset,
                     largeur: TAILLES_STANDARDS[preset].w,
                     hauteur: TAILLES_STANDARDS[preset].h
-                }});
-            }};
+                });
+            };
 
             return (
                 <div className="max-w-7xl mx-auto px-4 py-8">
@@ -296,35 +219,35 @@ for product in products:
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                             <div className="md:col-span-3">
                                 <img
-                                    src={{PRODUCT_DATA.photos[currentPhoto]}}
-                                    alt={{PRODUCT_DATA.nom}}
+                                    src={PRODUCT_DATA.photos[currentPhoto]}
+                                    alt={PRODUCT_DATA.nom}
                                     className="w-full h-96 object-cover rounded-lg"
-                                    onError={{(e) => e.target.src = 'https://placehold.co/800x600/e63946/white?text=' + encodeURIComponent(PRODUCT_DATA.nom)}}
+                                    onError={(e) => e.target.src = 'https://placehold.co/800x600/e63946/white?text=' + encodeURIComponent(PRODUCT_DATA.nom)}
                                 />
                             </div>
                             <div className="flex md:flex-col gap-2">
-                                {{PRODUCT_DATA.photos.map((photo, idx) => (
+                                {PRODUCT_DATA.photos.map((photo, idx) => (
                                     <img
-                                        key={{idx}}
-                                        src={{photo}}
-                                        alt={{`Photo ${{idx + 1}}`}}
-                                        className={{`w-full h-24 object-cover rounded-lg cursor-pointer border-2 transition ${{currentPhoto === idx ? 'border-red-600' : 'border-gray-200 hover:border-red-400'}}`}}
-                                        onClick={{() => setCurrentPhoto(idx)}}
-                                        onError={{(e) => e.target.src = 'https://placehold.co/200x150/cccccc/666666?text=Photo+' + (idx + 1)}}
+                                        key={idx}
+                                        src={photo}
+                                        alt={`Photo ${idx + 1}`}
+                                        className={`w-full h-24 object-cover rounded-lg cursor-pointer border-2 transition ${currentPhoto === idx ? 'border-red-600' : 'border-gray-200 hover:border-red-400'}`}
+                                        onClick={() => setCurrentPhoto(idx)}
+                                        onError={(e) => e.target.src = 'https://placehold.co/200x150/cccccc/666666?text=Photo+' + (idx + 1)}
                                     />
-                                ))}}
+                                ))}
                             </div>
                         </div>
 
                         <div className="mt-6">
-                            <h1 className="text-3xl font-black text-gray-900">{{PRODUCT_DATA.nom}}</h1>
-                            <p className="text-lg text-gray-600 mt-2">{{PRODUCT_DATA.sous_titre}}</p>
+                            <h1 className="text-3xl font-black text-gray-900">{PRODUCT_DATA.nom}</h1>
+                            <p className="text-lg text-gray-600 mt-2">{PRODUCT_DATA.sous_titre}</p>
                             <div className="flex items-center gap-4 mt-3">
                                 <div className="flex items-center gap-1">
-                                    {{{{'★'.repeat(Math.floor(PRODUCT_DATA.rating)) + '☆'.repeat(5 - Math.floor(PRODUCT_DATA.rating))}}}}
-                                    <span className="text-sm text-gray-600 ml-2">{{PRODUCT_DATA.rating}} / 5</span>
+                                    {{'★'.repeat(Math.floor(PRODUCT_DATA.rating)) + '☆'.repeat(5 - Math.floor(PRODUCT_DATA.rating))}}
+                                    <span className="text-sm text-gray-600 ml-2">{PRODUCT_DATA.rating} / 5</span>
                                 </div>
-                                <span className="text-sm text-gray-500">({{PRODUCT_DATA.reviews}} avis)</span>
+                                <span className="text-sm text-gray-500">({PRODUCT_DATA.reviews} avis)</span>
                             </div>
                         </div>
                     </div>
@@ -339,19 +262,19 @@ for product in products:
                                 <div className="mb-6">
                                     <label className="block text-sm font-bold text-gray-700 mb-3">Taille préformatée</label>
                                     <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                                        {{Object.keys(TAILLES_STANDARDS).map(preset => (
+                                        {Object.keys(TAILLES_STANDARDS).map(preset => (
                                             <button
-                                                key={{preset}}
-                                                onClick={{() => handleTaillePreset(preset)}}
-                                                className={{`px-4 py-3 rounded-lg border-2 font-semibold text-sm transition ${{
+                                                key={preset}
+                                                onClick={() => handleTaillePreset(preset)}
+                                                className={`px-4 py-3 rounded-lg border-2 font-semibold text-sm transition ${
                                                     config.taille_preset === preset
                                                     ? 'border-red-600 bg-red-50 text-red-900'
                                                     : 'border-gray-300 hover:border-red-400 text-gray-700'
-                                                }}`}}
+                                                }`}
                                             >
-                                                {{preset}}
+                                                {preset}
                                             </button>
-                                        ))}}
+                                        ))}
                                     </div>
                                 </div>
 
@@ -361,8 +284,8 @@ for product in products:
                                         <label className="block text-sm font-bold text-gray-700 mb-2">Largeur (cm)</label>
                                         <input
                                             type="number"
-                                            value={{config.largeur}}
-                                            onChange={{(e) => setConfig({{...config, largeur: parseFloat(e.target.value) || 0, taille_preset: 'Format personnalisé'}})}}
+                                            value={config.largeur}
+                                            onChange={(e) => setConfig({...config, largeur: parseFloat(e.target.value) || 0, taille_preset: 'Format personnalisé'})}
                                             min="10"
                                             max="500"
                                             step="0.1"
@@ -373,8 +296,8 @@ for product in products:
                                         <label className="block text-sm font-bold text-gray-700 mb-2">Hauteur (cm)</label>
                                         <input
                                             type="number"
-                                            value={{config.hauteur}}
-                                            onChange={{(e) => setConfig({{...config, hauteur: parseFloat(e.target.value) || 0, taille_preset: 'Format personnalisé'}})}}
+                                            value={config.hauteur}
+                                            onChange={(e) => setConfig({...config, hauteur: parseFloat(e.target.value) || 0, taille_preset: 'Format personnalisé'})}
                                             min="10"
                                             max="500"
                                             step="0.1"
@@ -389,27 +312,27 @@ for product in products:
                                     <div className="grid grid-cols-2 gap-4 text-sm">
                                         <div>
                                             <div className="text-blue-700">Format fini (après coupe)</div>
-                                            <div className="font-bold text-blue-900 text-lg">{{config.largeur}} × {{config.hauteur}} cm</div>
+                                            <div className="font-bold text-blue-900 text-lg">{config.largeur} × {config.hauteur} cm</div>
                                         </div>
                                         <div>
                                             <div className="text-blue-700">Format à fournir (+3mm fonds perdus)</div>
                                             <div className="font-bold text-red-600 text-lg">
-                                                {{dimensionsFinales.finale_largeur.toFixed(1)}} × {{dimensionsFinales.finale_hauteur.toFixed(1)}} cm
+                                                {dimensionsFinales.finale_largeur.toFixed(1)} × {dimensionsFinales.finale_hauteur.toFixed(1)} cm
                                             </div>
                                         </div>
                                         <div>
                                             <div className="text-blue-700">Zone de sécurité (textes)</div>
                                             <div className="font-bold text-green-600">
-                                                {{dimensionsFinales.zone_securite.largeur.toFixed(1)}} × {{dimensionsFinales.zone_securite.hauteur.toFixed(1)}} cm
+                                                {dimensionsFinales.zone_securite.largeur.toFixed(1)} × {dimensionsFinales.zone_securite.hauteur.toFixed(1)} cm
                                             </div>
                                         </div>
                                         <div>
                                             <div className="text-blue-700">Surface</div>
-                                            <div className="font-bold text-gray-900">{{surface.toFixed(2)}} m²</div>
+                                            <div className="font-bold text-gray-900">{surface.toFixed(2)} m²</div>
                                         </div>
                                     </div>
                                     <div className="mt-3 text-xs text-blue-800 bg-blue-100 rounded p-2">
-                                        <strong>💡 Important:</strong> Votre fichier doit mesurer {{dimensionsFinales.finale_largeur.toFixed(1)}} × {{dimensionsFinales.finale_hauteur.toFixed(1)}} cm avec 3mm de fonds perdus de chaque côté. Placez vos textes dans la zone verte de sécurité.
+                                        <strong>💡 Important:</strong> Votre fichier doit mesurer {dimensionsFinales.finale_largeur.toFixed(1)} × {dimensionsFinales.finale_hauteur.toFixed(1)} cm avec 3mm de fonds perdus de chaque côté. Placez vos textes dans la zone verte de sécurité.
                                     </div>
                                 </div>
 
@@ -418,20 +341,20 @@ for product in products:
                                     <label className="block text-sm font-bold text-gray-700 mb-2">Quantité</label>
                                     <input
                                         type="number"
-                                        value={{config.quantite}}
-                                        onChange={{(e) => setConfig({{...config, quantite: parseInt(e.target.value) || 1}})}}
-                                        min={{PRODUCT_DATA.min_quantite}}
+                                        value={config.quantite}
+                                        onChange={(e) => setConfig({...config, quantite: parseInt(e.target.value) || 1})}
+                                        min={PRODUCT_DATA.min_quantite}
                                         className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none font-bold text-lg"
                                     />
-                                    <p className="text-xs text-gray-500 mt-1">Minimum: {{PRODUCT_DATA.min_quantite}} exemplaire(s)</p>
+                                    <p className="text-xs text-gray-500 mt-1">Minimum: {PRODUCT_DATA.min_quantite} exemplaire(s)</p>
                                 </div>
 
                                 <!-- Type impression -->
                                 <div className="mb-6">
                                     <label className="block text-sm font-bold text-gray-700 mb-2">Type d'impression</label>
                                     <select
-                                        value={{config.impression}}
-                                        onChange={{(e) => setConfig({{...config, impression: e.target.value}})}}
+                                        value={config.impression}
+                                        onChange={(e) => setConfig({...config, impression: e.target.value})}
                                         className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none font-bold"
                                     >
                                         <option value="Simple face">Simple face</option>
@@ -447,18 +370,18 @@ for product in products:
                                 <div className="mb-6">
                                     <label className="block text-sm font-bold text-gray-700 mb-3">Lamination</label>
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                        {{OPTIONS_DISPONIBLES.laminat.map(opt => (
+                                        {OPTIONS_DISPONIBLES.laminat.map(opt => (
                                             <div
-                                                key={{opt.id}}
-                                                onClick={{() => setConfig({{...config, laminat: opt.id}})}}
-                                                className={{`option-card border-2 rounded-lg p-4 cursor-pointer transition ${{config.laminat === opt.id ? 'selected' : 'border-gray-200'}}`}}
+                                                key={opt.id}
+                                                onClick={() => setConfig({...config, laminat: opt.id})}
+                                                className={`option-card border-2 rounded-lg p-4 cursor-pointer transition ${config.laminat === opt.id ? 'selected' : 'border-gray-200'}`}
                                             >
-                                                <div className="font-bold text-gray-900">{{opt.nom}}</div>
+                                                <div className="font-bold text-gray-900">{opt.nom}</div>
                                                 <div className="text-sm text-gray-600 mt-1">
-                                                    {{opt.prix > 0 ? `+${{opt.prix}}€/m²` : 'Inclus'}}
+                                                    {opt.prix > 0 ? `+${opt.prix}€/m²` : 'Inclus'}
                                                 </div>
                                             </div>
-                                        ))}}
+                                        ))}
                                     </div>
                                 </div>
 
@@ -466,18 +389,18 @@ for product in products:
                                 <div className="mb-6">
                                     <label className="block text-sm font-bold text-gray-700 mb-3">Finition</label>
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                        {{OPTIONS_DISPONIBLES.finition.map(opt => (
+                                        {OPTIONS_DISPONIBLES.finition.map(opt => (
                                             <div
-                                                key={{opt.id}}
-                                                onClick={{() => setConfig({{...config, finition: opt.id}})}}
-                                                className={{`option-card border-2 rounded-lg p-4 cursor-pointer transition ${{config.finition === opt.id ? 'selected' : 'border-gray-200'}}`}}
+                                                key={opt.id}
+                                                onClick={() => setConfig({...config, finition: opt.id})}
+                                                className={`option-card border-2 rounded-lg p-4 cursor-pointer transition ${config.finition === opt.id ? 'selected' : 'border-gray-200'}`}
                                             >
-                                                <div className="font-bold text-gray-900">{{opt.nom}}</div>
+                                                <div className="font-bold text-gray-900">{opt.nom}</div>
                                                 <div className="text-sm text-gray-600 mt-1">
-                                                    {{opt.prix > 0 ? `+${{opt.prix}}€` : 'Inclus'}}
+                                                    {opt.prix > 0 ? `+${opt.prix}€` : 'Inclus'}
                                                 </div>
                                             </div>
-                                        ))}}
+                                        ))}
                                     </div>
                                 </div>
 
@@ -485,18 +408,18 @@ for product in products:
                                 <div className="mb-6">
                                     <label className="block text-sm font-bold text-gray-700 mb-3">Support rigide</label>
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                        {{OPTIONS_DISPONIBLES.support.map(opt => (
+                                        {OPTIONS_DISPONIBLES.support.map(opt => (
                                             <div
-                                                key={{opt.id}}
-                                                onClick={{() => setConfig({{...config, support: opt.id}})}}
-                                                className={{`option-card border-2 rounded-lg p-4 cursor-pointer transition ${{config.support === opt.id ? 'selected' : 'border-gray-200'}}`}}
+                                                key={opt.id}
+                                                onClick={() => setConfig({...config, support: opt.id})}
+                                                className={`option-card border-2 rounded-lg p-4 cursor-pointer transition ${config.support === opt.id ? 'selected' : 'border-gray-200'}`}
                                             >
-                                                <div className="font-bold text-gray-900">{{opt.nom}}</div>
+                                                <div className="font-bold text-gray-900">{opt.nom}</div>
                                                 <div className="text-sm text-gray-600 mt-1">
-                                                    {{opt.prix > 0 ? `+${{opt.prix}}€/m²` : 'Inclus'}}
+                                                    {opt.prix > 0 ? `+${opt.prix}€/m²` : 'Inclus'}
                                                 </div>
                                             </div>
-                                        ))}}
+                                        ))}
                                     </div>
                                 </div>
 
@@ -504,12 +427,12 @@ for product in products:
                                 <div className="bg-blue-50 rounded-lg p-6 mt-6">
                                     <h3 className="font-bold text-blue-900 mb-3">✓ Caractéristiques incluses</h3>
                                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-blue-800">
-                                        <li>• Poids: {{PRODUCT_DATA.poids}} g/m²</li>
-                                        <li>• Épaisseur: {{PRODUCT_DATA.epaisseur}}</li>
-                                        <li>• Usage: {{PRODUCT_DATA.usage}}</li>
-                                        <li>• Durée de vie: {{PRODUCT_DATA.duree_vie}}</li>
-                                        <li>• Certification: {{PRODUCT_DATA.certification}}</li>
-                                        <li>• Finition: {{PRODUCT_DATA.finition}}</li>
+                                        <li>• Poids: {PRODUCT_DATA.poids} g/m²</li>
+                                        <li>• Épaisseur: {PRODUCT_DATA.epaisseur}</li>
+                                        <li>• Usage: {PRODUCT_DATA.usage}</li>
+                                        <li>• Durée de vie: {PRODUCT_DATA.duree_vie}</li>
+                                        <li>• Certification: {PRODUCT_DATA.certification}</li>
+                                        <li>• Finition: {PRODUCT_DATA.finition}</li>
                                     </ul>
                                 </div>
                             </div>
@@ -517,8 +440,8 @@ for product in products:
                             <!-- Description -->
                             <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 mt-6">
                                 <h2 className="text-2xl font-black text-gray-900 mb-4">📝 Description</h2>
-                                <p className="text-gray-700 mb-4">{{PRODUCT_DATA.desc_courte}}</p>
-                                <p className="text-gray-600 text-sm">{{PRODUCT_DATA.desc_longue}}</p>
+                                <p className="text-gray-700 mb-4">{PRODUCT_DATA.desc_courte}</p>
+                                <p className="text-gray-600 text-sm">{PRODUCT_DATA.desc_longue}</p>
                             </div>
                         </div>
 
@@ -527,32 +450,32 @@ for product in products:
                             <div className="price-sidebar bg-white rounded-xl shadow-lg p-6">
                                 <div className="text-sm text-gray-600 mb-2">Prix unitaire / m²</div>
                                 <div className="text-3xl font-black text-gray-900 mb-4">
-                                    {{prixUnitaire.toFixed(2)}} €<span className="text-lg text-gray-500">/m²</span>
+                                    {prixUnitaire.toFixed(2)} €<span className="text-lg text-gray-500">/m²</span>
                                 </div>
 
                                 <div className="border-t-2 border-gray-200 pt-4 mb-4">
                                     <div className="space-y-2 text-sm">
                                         <div className="flex justify-between">
                                             <span className="text-gray-600">Surface:</span>
-                                            <span className="font-bold">{{surface.toFixed(2)}} m²</span>
+                                            <span className="font-bold">{surface.toFixed(2)} m²</span>
                                         </div>
                                         <div className="flex justify-between">
                                             <span className="text-gray-600">Quantité:</span>
-                                            <span className="font-bold">{{config.quantite}}</span>
+                                            <span className="font-bold">{config.quantite}</span>
                                         </div>
                                         <div className="flex justify-between">
                                             <span className="text-gray-600">Impression:</span>
-                                            <span className="font-bold text-xs">{{config.impression}}</span>
+                                            <span className="font-bold text-xs">{config.impression}</span>
                                         </div>
-                                        {{prixOptions > 0 && (
+                                        {prixOptions > 0 && (
                                             <div className="flex justify-between text-blue-700">
                                                 <span>Options:</span>
-                                                <span className="font-bold">+{{prixOptions.toFixed(2)}} €</span>
+                                                <span className="font-bold">+{prixOptions.toFixed(2)} €</span>
                                             </div>
-                                        )}}
+                                        )}
                                         <div className="flex justify-between">
                                             <span className="text-gray-600">Délai:</span>
-                                            <span className="font-bold">{{PRODUCT_DATA.delai}} jours</span>
+                                            <span className="font-bold">{PRODUCT_DATA.delai} jours</span>
                                         </div>
                                     </div>
                                 </div>
@@ -560,23 +483,23 @@ for product in products:
                                 <div className="border-t-2 border-gray-200 pt-4 mb-6">
                                     <div className="flex justify-between items-baseline mb-2">
                                         <span className="text-lg font-bold text-gray-900">TOTAL HT</span>
-                                        <span className="text-3xl font-black text-red-600">{{prixTotal.toFixed(2)}} €</span>
+                                        <span className="text-3xl font-black text-red-600">{prixTotal.toFixed(2)} €</span>
                                     </div>
                                     <div className="flex justify-between text-sm text-gray-600">
                                         <span>TVA (20%)</span>
-                                        <span className="font-bold">{{(prixTotal * 0.2).toFixed(2)}} €</span>
+                                        <span className="font-bold">{(prixTotal * 0.2).toFixed(2)} €</span>
                                     </div>
                                     <div className="flex justify-between text-lg font-black text-gray-900 mt-2 pt-2 border-t border-gray-200">
                                         <span>TOTAL TTC</span>
-                                        <span className="text-red-600">{{(prixTotal * 1.2).toFixed(2)}} €</span>
+                                        <span className="text-red-600">{(prixTotal * 1.2).toFixed(2)} €</span>
                                     </div>
                                 </div>
 
-                                {{prixTotal >= 200 && (
+                                {prixTotal >= 200 && (
                                     <div className="bg-green-50 border-l-4 border-green-600 p-3 mb-4 rounded">
                                         <p className="text-sm font-bold text-green-900">✓ Livraison gratuite !</p>
                                     </div>
-                                )}}
+                                )}
 
                                 <button className="w-full bg-red-600 text-white py-4 rounded-lg font-black text-lg hover:bg-red-700 transition shadow-lg mb-3">
                                     AJOUTER AU PANIER
@@ -602,7 +525,7 @@ for product in products:
                                     </div>
                                     <div className="text-center p-3 bg-gray-50 rounded-lg">
                                         <div className="text-2xl mb-1">⭐</div>
-                                        <div className="text-xs font-bold text-gray-700">{{PRODUCT_DATA.rating}}/5</div>
+                                        <div className="text-xs font-bold text-gray-700">{PRODUCT_DATA.rating}/5</div>
                                     </div>
                                 </div>
                             </div>
@@ -613,18 +536,18 @@ for product in products:
                     <div className="mt-8 bg-white rounded-xl shadow-lg p-6 md:p-8">
                         <h2 className="text-2xl font-black text-gray-900 mb-6">💰 Prix dégressifs</h2>
                         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                            {{Object.entries(PRODUCT_DATA.prix).map(([range, prix]) => (
-                                <div key={{range}} className="border-2 border-gray-200 rounded-lg p-4 text-center hover:border-red-600 transition">
-                                    <div className="text-sm text-gray-600 mb-1">{{range}} m²</div>
-                                    <div className="text-2xl font-black text-red-600">{{prix.toFixed(2)}}€</div>
+                            {Object.entries(PRODUCT_DATA.prix).map(([range, prix]) => (
+                                <div key={range} className="border-2 border-gray-200 rounded-lg p-4 text-center hover:border-red-600 transition">
+                                    <div className="text-sm text-gray-600 mb-1">{range} m²</div>
+                                    <div className="text-2xl font-black text-red-600">{prix.toFixed(2)}€</div>
                                     <div className="text-xs text-gray-500">/m²</div>
                                 </div>
-                            ))}}
+                            ))}
                         </div>
                     </div>
                 </div>
             );
-        }}
+        }
 
         ReactDOM.render(<ProductPage />, document.getElementById('root'));
     </script>
@@ -632,15 +555,4 @@ for product in products:
     <!-- Footer -->
     <?php include __DIR__ . '/../includes/footer.php'; ?>
 </body>
-</html>'''
-
-    # Écrire le fichier
-    filename = f'produit/{code}.php'
-    with open(filename, 'w', encoding='utf-8') as f:
-        f.write(html)
-
-    generated += 1
-    print(f"✓ {generated}/{len(products)} - {code}.php")
-
-print(f"\n🎉 {generated} pages produits générées avec succès !")
-print("📂 Dossier: ./produit/")
+</html>

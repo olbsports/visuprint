@@ -6,8 +6,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
 // Vérifier si client connecté (si auth-client.php existe)
 $client_connecte = false;
 $client_nom = '';
-if (file_exists(__DIR__ . '/auth-client.php')) {
-    @include_once __DIR__ . '/auth-client.php';
+if (file_exists(__DIR__ . '/../auth-client.php')) {
+    @include_once __DIR__ . '/../auth-client.php';
     if (function_exists('estClientConnecte')) {
         $client_connecte = estClientConnecte();
         if ($client_connecte) {

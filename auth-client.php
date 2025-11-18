@@ -9,6 +9,19 @@ session_start();
 require_once __DIR__ . '/api/config.php';
 
 /**
+ * Nettoyer les données utilisateur
+ */
+function cleanInput($data) {
+    if (is_null($data)) {
+        return '';
+    }
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+    return $data;
+}
+
+/**
  * Vérifier si le client est connecté
  */
 function estClientConnecte() {
