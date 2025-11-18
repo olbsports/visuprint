@@ -1,0 +1,158 @@
+# ============================================
+# Protection Admin - VisuPrint Pro
+# ============================================
+
+# ============================================
+# IMPORTANT: Restriction par IP (RECOMMANDÉ)
+# ============================================
+
+# Décommenter et ajouter vos IPs de confiance:
+# <RequireAll>
+#     Require all denied
+#     # Remplacer par votre IP
+#     Require ip 123.456.789.0
+#     # IP bureau
+#     Require ip 123.456.789.10
+#     # IP domicile
+#     Require ip 123.456.789.20
+# </RequireAll>
+
+# ============================================
+# Protection supplémentaire: BasicAuth
+# ============================================
+
+# OPTION 1: Utiliser .htpasswd (double authentification)
+# AuthType Basic
+# AuthName "Zone Administrateur VisuPrint Pro"
+# AuthUserFile /home/votre_user/.htpasswd
+# Require valid-user
+
+# Pour créer le fichier .htpasswd:
+# Connectez-vous en SSH et exécutez:
+# htpasswd -c /home/votre_user/.htpasswd admin_visuprint
+
+# ============================================
+# Bloquer l'accès au fichier auth.php
+# ============================================
+
+<Files "auth.php">
+    Require all denied
+</Files>
+
+# ============================================
+# Headers de sécurité renforcés
+# ============================================
+
+<IfModule mod_headers.c>
+    # Protection XSS maximale
+    Header set X-XSS-Protection "1; mode=block"
+
+    # Interdire iframe (protection clickjacking)
+    Header set X-Frame-Options "DENY"
+
+    # Pas de sniffing MIME
+    Header set X-Content-Type-Options "nosniff"
+
+    # Content Security Policy stricte
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; frame-ancestors 'none';"
+
+    # Referrer Policy
+    Header set Referrer-Policy "no-referrer"
+
+    # Pas de cache pour les pages admin
+    Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+</IfModule>
+
+# ============================================
+# Bloquer les bots et scanners
+# ============================================
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Bloquer les user agents malveillants
+    RewriteCond %{HTTP_USER_AGENT} (nikto|sqlmap|fimap|nessus|openvas|metasploit) [NC]
+    RewriteRule .* - [F,L]
+
+    # Bloquer les tentatives d'injection
+    RewriteCond %{QUERY_STRING} (\<|%3C).*script.*(\>|%3E) [NC,OR]
+    RewriteCond %{QUERY_STRING} GLOBALS(=|[|\%[0-9A-Z]{0,2}) [OR]
+    RewriteCond %{QUERY_STRING} _REQUEST(=|[|\%[0-9A-Z]{0,2}) [OR]
+    RewriteCond %{QUERY_STRING} (\.\./|\.\.\\) [NC,OR]
+    RewriteCond %{QUERY_STRING} union.*select [NC,OR]
+    RewriteCond %{QUERY_STRING} base64_encode.*\(.*\) [NC]
+    RewriteRule .* - [F,L]
+</IfModule>
+
+# ============================================
+# Limiter les tentatives de connexion
+# ============================================
+
+# Note: Pour un vrai rate limiting, installer Fail2Ban
+# Ce fichier bloque juste les requêtes trop rapides
+
+<IfModule mod_rewrite.c>
+    # Limiter à 10 requêtes par minute (approximatif)
+    # Pour une vraie protection, utiliser mod_evasive
+</IfModule>
+
+# ============================================
+# Session sécurisée
+# ============================================
+
+php_value session.cookie_httponly 1
+php_value session.cookie_secure 1
+php_value session.use_only_cookies 1
+php_value session.cookie_samesite "Strict"
+
+# ============================================
+# Désactiver l'affichage des erreurs
+# ============================================
+
+php_flag display_errors off
+php_flag display_startup_errors off
+php_value error_reporting 0
+
+# ============================================
+# Log des tentatives d'accès
+# ============================================
+
+php_flag log_errors on
+php_value error_log /home/votre_user/logs/admin_errors.log
+
+# ============================================
+# Désactiver l'index des répertoires
+# ============================================
+
+Options -Indexes
+
+# ============================================
+# Timeout de session court (15 minutes)
+# ============================================
+
+php_value session.gc_maxlifetime 900
+
+# ============================================
+# RECOMMANDATIONS DE SÉCURITÉ
+# ============================================
+
+# 1. ✅ Activer HTTPS et forcer SSL:
+#    RewriteEngine On
+#    RewriteCond %{HTTPS} off
+#    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# 2. ✅ Changer le mot de passe admin par défaut
+
+# 3. ✅ Activer la restriction par IP (voir début du fichier)
+
+# 4. ✅ Utiliser double authentification avec .htpasswd
+
+# 5. ✅ Installer Fail2Ban sur le serveur
+
+# 6. ✅ Renommer le dossier /admin/ en quelque chose d'unique
+#    Exemple: /gestion-secure-xyz123/
+
+# 7. ✅ Surveiller les logs régulièrement:
+#    tail -f /home/votre_user/logs/admin_errors.log

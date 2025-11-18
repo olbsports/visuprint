@@ -1,0 +1,115 @@
+# ============================================
+# Protection Uploads - VisuPrint Pro
+# ============================================
+
+# ============================================
+# SÉCURITÉ CRITIQUE: Bloquer l'exécution de scripts
+# ============================================
+
+# Empêcher l'exécution de PHP, Perl, Python, etc.
+<FilesMatch "\.(php|php3|php4|php5|phtml|pl|py|jsp|asp|sh|cgi)$">
+    Require all denied
+</FilesMatch>
+
+# ============================================
+# Autoriser uniquement les fichiers images/PDF
+# ============================================
+
+# Bloquer tous les fichiers par défaut
+<Files "*">
+    Require all denied
+</Files>
+
+# Autoriser uniquement les extensions sûres
+<FilesMatch "\.(jpg|jpeg|png|gif|webp|pdf|svg)$">
+    Require all granted
+</FilesMatch>
+
+# ============================================
+# Protection contre les fichiers .htaccess uploadés
+# ============================================
+
+<FilesMatch "^\.ht">
+    Require all denied
+</FilesMatch>
+
+# ============================================
+# Headers de sécurité
+# ============================================
+
+<IfModule mod_headers.c>
+    # Empêcher le navigateur de deviner le type MIME
+    Header set X-Content-Type-Options "nosniff"
+
+    # Forcer le téléchargement des fichiers PDF (pas d'ouverture dans le navigateur)
+    <FilesMatch "\.pdf$">
+        Header set Content-Disposition "attachment"
+    </FilesMatch>
+
+    # Cache pour les images (30 jours)
+    <FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
+        Header set Cache-Control "public, max-age=2592000"
+    </FilesMatch>
+</IfModule>
+
+# ============================================
+# Protection contre le hotlinking
+# ============================================
+
+RewriteEngine On
+
+# Autoriser uniquement les requêtes depuis votre domaine
+RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^https?://(www\.)?visuprintpro\.fr [NC]
+RewriteRule \.(jpg|jpeg|png|gif|pdf)$ - [F,L]
+
+# ============================================
+# Désactiver les scripts CGI
+# ============================================
+
+Options -ExecCGI
+RemoveHandler .cgi .pl .py
+
+# ============================================
+# Types MIME autorisés
+# ============================================
+
+<IfModule mod_mime.c>
+    AddType image/jpeg .jpg .jpeg
+    AddType image/png .png
+    AddType image/gif .gif
+    AddType image/webp .webp
+    AddType application/pdf .pdf
+    AddType image/svg+xml .svg
+</IfModule>
+
+# ============================================
+# Désactiver l'index des répertoires
+# ============================================
+
+Options -Indexes
+
+# ============================================
+# Bloquer les doubles extensions dangereuses
+# ============================================
+
+<FilesMatch "\.(php|phtml|php3|php4|php5|pl|py|jsp|asp|htm|html|shtml|sh|cgi)\.(jpg|jpeg|png|gif|pdf)$">
+    Require all denied
+</FilesMatch>
+
+# ============================================
+# Protection supplémentaire: Validation par taille
+# ============================================
+
+# Limite de taille: 20 MB
+LimitRequestBody 20971520
+
+# ============================================
+# NOTES DE SÉCURITÉ
+# ============================================
+
+# ✅ Ce dossier ne doit JAMAIS exécuter de PHP
+# ✅ Valider les uploads côté PHP (type MIME, extension, taille)
+# ✅ Renommer les fichiers uploadés avec un nom unique
+# ✅ Stocker les fichiers sensibles hors de public_html si possible
+# ✅ Scanner les fichiers avec ClamAV si disponible
