@@ -26,8 +26,8 @@
   },
   "aggregateRating": {
     "@type": "AggregateRating",
-    "ratingValue": "4.8",
-    "reviewCount": "192"
+    "ratingValue": "4.6",
+    "reviewCount": "84"
   }
 }
     </script>
@@ -70,25 +70,14 @@
             border: 2px solid #059669;
         }
 
-        .step-active {
-            background: #e63946;
-            color: white;
-        }
-
-        .step-completed {
-            background: #10b981;
-            color: white;
-        }
-
-        .step-inactive {
-            background: #e5e7eb;
-            color: #6b7280;
+        .price-sidebar {
+            position: sticky;
+            top: 120px;
         }
     </style>
 </head>
 <body class="bg-gray-50">
 
-    <!-- HEADER -->
     <header class="bg-white border-b-2 border-gray-200 sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between py-2 text-sm border-b border-gray-100">
@@ -162,50 +151,17 @@
             '300+': 15.4
         },
         delai: 3,
-        rating: 4.8,
-        reviewCount: 192
+        rating: 4.6,
+        reviewCount: 84
     };
 
-    function StepIndicator({ currentStep }) {
-        const steps = [
-            { num: 1, name: 'Dimensions' },
-            { num: 2, name: 'Fichier' },
-            { num: 3, name: 'Options' },
-            { num: 4, name: 'Quantité' },
-            { num: 5, name: 'Récap' }
-        ];
-
-        return (
-            <div className="mb-8">
-                <div className="flex items-center justify-between">
-                    {steps.map((step, idx) => (
-                        <React.Fragment key={step.num}>
-                            <div className="flex flex-col items-center flex-1">
-                                <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center font-bold transition ${
-                                    currentStep === step.num ? 'step-active' :
-                                    currentStep > step.num ? 'step-completed' : 'step-inactive'
-                                }`}>
-                                    {currentStep > step.num ? '✓' : step.num}
-                                </div>
-                                <div className="text-xs mt-2 font-medium text-center">{step.name}</div>
-                            </div>
-                            {idx < steps.length - 1 && (
-                                <div className={`flex-1 h-1 mx-2 ${currentStep > step.num ? 'bg-green-500' : 'bg-gray-200'}`}></div>
-                            )}
-                        </React.Fragment>
-                    ))}
-                </div>
-            </div>
-        );
-    }
-
     function ProductPage() {
-        const [currentStep, setCurrentStep] = useState(1);
         const [config, setConfig] = useState({
             largeur: 100,
             hauteur: 100,
-            fichier: null,
-            quantite: 1
+            quantite: 1,
+            impression: 'Simple face',
+            fichier: null
         });
         const [surface, setSurface] = useState(1);
         const [prixUnitaire, setPrixUnitaire] = useState(PRODUCT_DATA.prix['0-10']);
@@ -226,8 +182,13 @@
             else if (totalSurf > 10) prix = PRODUCT_DATA.prix['11-50'];
 
             setPrixUnitaire(prix);
-            setPrixTotal(prix * surf * config.quantite);
-        }, [config.largeur, config.hauteur, config.quantite]);
+
+            let multiplicateur = 1;
+            if (config.impression === 'Double face - même visuel') multiplicateur = 1.5;
+            if (config.impression === 'Double face - visuels différents') multiplicateur = 1.8;
+
+            setPrixTotal(prix * surf * config.quantite * multiplicateur);
+        }, [config.largeur, config.hauteur, config.quantite, config.impression]);
 
         const handleFileChange = (e) => {
             const file = e.target.files[0];
@@ -240,6 +201,10 @@
         };
 
         const addToCart = () => {
+            if (!config.fichier) {
+                alert('⚠️ Veuillez importer votre fichier avant d\'ajouter au panier');
+                return;
+            }
             const cartItem = {
                 code: PRODUCT_DATA.code,
                 nom: PRODUCT_DATA.nom,
@@ -256,11 +221,11 @@
             window.location.href = '/panier.html';
         };
 
-        const economie = PRODUCT_DATA.prix['0-10'] - prixUnitaire;
+        const economie = ((PRODUCT_DATA.prix['0-10'] - prixUnitaire) * surface * config.quantite);
 
         return (
             <div className="container mx-auto px-4 py-8">
-                <div className="max-w-6xl mx-auto">
+                <div className="max-w-7xl mx-auto">
 
                     <nav className="text-sm mb-6 text-gray-600">
                         <a href="/index.html" className="hover:text-red-600">Accueil</a>
@@ -281,202 +246,216 @@
                             <span className="text-gray-500 text-sm ml-1">({PRODUCT_DATA.reviewCount} avis)</span>
                             <span className="text-gray-400 text-sm ml-4">Réf: {PRODUCT_DATA.code}</span>
                         </div>
-
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <div className="bg-white p-4 rounded-lg text-center shadow-sm border">
-                                <div className="text-3xl mb-2">⚡</div>
-                                <div className="text-xs font-bold">Livraison Express</div>
-                                <div className="text-xs text-gray-600">{PRODUCT_DATA.delai} jours</div>
-                            </div>
-                            <div className="bg-white p-4 rounded-lg text-center shadow-sm border">
-                                <div className="text-3xl mb-2">🔒</div>
-                                <div className="text-xs font-bold">Paiement Sécurisé</div>
-                                <div className="text-xs text-gray-600">SSL</div>
-                            </div>
-                            <div className="bg-white p-4 rounded-lg text-center shadow-sm border">
-                                <div className="text-3xl mb-2">↩️</div>
-                                <div className="text-xs font-bold">Satisfait/Remboursé</div>
-                                <div className="text-xs text-gray-600">30 jours</div>
-                            </div>
-                            <div className="bg-white p-4 rounded-lg text-center shadow-sm border">
-                                <div className="text-3xl mb-2">⭐</div>
-                                <div className="text-xs font-bold">Note Clients</div>
-                                <div className="text-xs text-gray-600">{PRODUCT_DATA.rating}/5</div>
-                            </div>
-                        </div>
                     </div>
 
-                    <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-8">
-                        <h2 className="text-2xl font-bold mb-6">Configurez votre produit</h2>
+                    <div className="grid lg:grid-cols-3 gap-8">
 
-                        <StepIndicator currentStep={currentStep} />
+                        <div className="lg:col-span-2">
+                            <div className="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                                <h2 className="text-2xl font-bold mb-6">Configurez votre produit</h2>
 
-                        {currentStep === 1 && (
-                            <div className="space-y-6">
-                                <h3 className="text-xl font-bold">Dimensions</h3>
-                                <div className="grid md:grid-cols-2 gap-6">
+                                <div className="space-y-6">
+
                                     <div>
-                                        <label className="block text-sm font-medium mb-2">Largeur (cm)</label>
-                                        <input type="number" value={config.largeur}
-                                               onChange={(e) => setConfig({...config, largeur: parseInt(e.target.value) || 0})}
-                                               className="w-full px-4 py-3 border-2 rounded-lg focus:border-red-600 focus:outline-none"
-                                               min="10" max="300" />
+                                        <label className="block text-sm font-bold mb-3">Dimensions personnalisées</label>
+                                        <div className="grid md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-xs text-gray-600 mb-2">Largeur (cm)</label>
+                                                <input type="number" value={config.largeur}
+                                                       onChange={(e) => setConfig({...config, largeur: parseInt(e.target.value) || 0})}
+                                                       className="w-full px-4 py-3 border-2 rounded-lg focus:border-red-600 focus:outline-none text-lg font-bold"
+                                                       min="10" max="300" />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs text-gray-600 mb-2">Hauteur (cm)</label>
+                                                <input type="number" value={config.hauteur}
+                                                       onChange={(e) => setConfig({...config, hauteur: parseInt(e.target.value) || 0})}
+                                                       className="w-full px-4 py-3 border-2 rounded-lg focus:border-red-600 focus:outline-none text-lg font-bold"
+                                                       min="10" max="300" />
+                                            </div>
+                                        </div>
+                                        <div className="mt-2 text-sm text-gray-600">
+                                            Surface: <strong>{surface.toFixed(2)} m²</strong> • Format max: <strong>{PRODUCT_DATA.formatMax} cm</strong>
+                                        </div>
                                     </div>
+
                                     <div>
-                                        <label className="block text-sm font-medium mb-2">Hauteur (cm)</label>
-                                        <input type="number" value={config.hauteur}
-                                               onChange={(e) => setConfig({...config, hauteur: parseInt(e.target.value) || 0})}
-                                               className="w-full px-4 py-3 border-2 rounded-lg focus:border-red-600 focus:outline-none"
-                                               min="10" max="300" />
+                                        <label className="block text-sm font-bold mb-3">Type d'impression</label>
+                                        <select value={config.impression}
+                                                onChange={(e) => setConfig({...config, impression: e.target.value})}
+                                                className="w-full px-4 py-3 border-2 rounded-lg focus:border-red-600 focus:outline-none font-medium">
+                                            <option>Simple face</option>
+                                            <option>Double face - même visuel</option>
+                                            <option>Double face - visuels différents</option>
+                                        </select>
                                     </div>
-                                </div>
-                                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                                    <strong>Surface:</strong> {surface.toFixed(2)} m² (Max: {PRODUCT_DATA.formatMax} cm)
+
+                                    <div>
+                                        <label className="block text-sm font-bold mb-3">Quantité</label>
+                                        <input type="number" value={config.quantite}
+                                               onChange={(e) => setConfig({...config, quantite: parseInt(e.target.value) || 1})}
+                                               className="w-full px-4 py-3 border-2 rounded-lg focus:border-red-600 focus:outline-none text-lg font-bold"
+                                               min="1" max="1000" />
+                                    </div>
+
+                                    <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+                                        <div className="text-sm">
+                                            <div className="font-bold text-blue-900 mb-2">✓ Caractéristiques incluses:</div>
+                                            <div className="grid md:grid-cols-2 gap-2 text-blue-800">
+                                                <div>• Épaisseur: <strong>{PRODUCT_DATA.epaisseur}</strong></div>
+                                                <div>• Finition: <strong>{PRODUCT_DATA.finition}</strong></div>
+                                                <div>• Certification: <strong>{PRODUCT_DATA.certification}</strong></div>
+                                                <div>• Durée de vie: <strong>{PRODUCT_DATA.dureeVie}</strong></div>
+                                                <div>• Usage: <strong>{PRODUCT_DATA.usage}</strong></div>
+                                                <div>• Délai: <strong>{PRODUCT_DATA.delai} jours ouvrés</strong></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-bold mb-3">Votre fichier d'impression</label>
+                                        <div onClick={() => fileInputRef.current?.click()}
+                                             className="border-2 border-dashed rounded-lg p-8 text-center cursor-pointer hover:border-red-600 hover:bg-red-50 transition">
+                                            {imagePreview ? (
+                                                <div>
+                                                    <img src={imagePreview} alt="Aperçu" className="max-h-48 mx-auto mb-3 rounded" />
+                                                    <p className="text-sm text-gray-600">✓ Fichier chargé - Cliquez pour changer</p>
+                                                    <p className="text-xs text-gray-500 mt-1">{config.fichier?.name}</p>
+                                                </div>
+                                            ) : (
+                                                <div>
+                                                    <div className="text-5xl mb-3">📁</div>
+                                                    <p className="text-base font-bold mb-1">Cliquez pour importer votre fichier</p>
+                                                    <p className="text-sm text-gray-600">PNG, JPG, PDF, AI, PSD (Max 50 MB)</p>
+                                                    <p className="text-xs text-gray-500 mt-2">Résolution min: 150 DPI • Profil couleur: CMJN</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <input ref={fileInputRef} type="file" onChange={handleFileChange}
+                                               accept="image/*,.pdf,.ai,.psd" className="hidden" />
+                                    </div>
+
                                 </div>
                             </div>
-                        )}
 
-                        {currentStep === 2 && (
-                            <div className="space-y-6">
-                                <h3 className="text-xl font-bold">Importez votre fichier</h3>
-                                <div onClick={() => fileInputRef.current?.click()}
-                                     className="border-2 border-dashed rounded-lg p-12 text-center cursor-pointer hover:border-red-600 transition">
-                                    {imagePreview ? (
-                                        <div>
-                                            <img src={imagePreview} alt="Aperçu" className="max-h-64 mx-auto mb-4 rounded" />
-                                            <p className="text-sm text-gray-600">Cliquez pour changer</p>
+                            <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 mt-8">
+                                <h2 className="text-2xl font-bold mb-4">Prix dégressifs</h2>
+                                <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                                    <div className="bg-gray-50 p-3 rounded-lg text-center border-2">
+                                        <div className="text-xs text-gray-600 mb-1">0-10 m²</div>
+                                        <div className="font-bold text-lg">{PRODUCT_DATA.prix['0-10']}€</div>
+                                        <div className="text-xs text-gray-500">/ m²</div>
+                                    </div>
+                                    <div className="bg-gray-50 p-3 rounded-lg text-center border-2">
+                                        <div className="text-xs text-gray-600 mb-1">11-50 m²</div>
+                                        <div className="font-bold text-lg text-green-600">{PRODUCT_DATA.prix['11-50']}€</div>
+                                        <div className="text-xs text-green-600">-{((1 - PRODUCT_DATA.prix['11-50'] / PRODUCT_DATA.prix['0-10']) * 100).toFixed(0)}%</div>
+                                    </div>
+                                    <div className="bg-gray-50 p-3 rounded-lg text-center border-2">
+                                        <div className="text-xs text-gray-600 mb-1">51-100 m²</div>
+                                        <div className="font-bold text-lg text-green-600">{PRODUCT_DATA.prix['51-100']}€</div>
+                                        <div className="text-xs text-green-600">-{((1 - PRODUCT_DATA.prix['51-100'] / PRODUCT_DATA.prix['0-10']) * 100).toFixed(0)}%</div>
+                                    </div>
+                                    <div className="bg-gray-50 p-3 rounded-lg text-center border-2">
+                                        <div className="text-xs text-gray-600 mb-1">101-300 m²</div>
+                                        <div className="font-bold text-lg text-green-600">{PRODUCT_DATA.prix['101-300']}€</div>
+                                        <div className="text-xs text-green-600">-{((1 - PRODUCT_DATA.prix['101-300'] / PRODUCT_DATA.prix['0-10']) * 100).toFixed(0)}%</div>
+                                    </div>
+                                    <div className="bg-green-50 p-3 rounded-lg text-center border-2 border-green-600">
+                                        <div className="text-xs text-green-900 mb-1 font-bold">300+ m²</div>
+                                        <div className="font-bold text-lg text-green-700">{PRODUCT_DATA.prix['300+']}€</div>
+                                        <div className="text-xs text-green-700">-{((1 - PRODUCT_DATA.prix['300+'] / PRODUCT_DATA.prix['0-10']) * 100).toFixed(0)}%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="lg:col-span-1">
+                            <div className="price-sidebar">
+                                <div className="bg-white rounded-xl shadow-xl p-6 border-2 border-gray-200">
+                                    <div className="text-center mb-6">
+                                        <div className="text-sm text-gray-600 mb-1">Prix unitaire / m²</div>
+                                        <div className="text-3xl font-black text-gray-900">{prixUnitaire.toFixed(2)}€</div>
+                                        <div className="text-xs text-gray-500">HT</div>
+                                    </div>
+
+                                    <div className="border-t-2 border-b-2 border-gray-200 py-4 mb-4 space-y-2">
+                                        <div className="flex justify-between text-sm">
+                                            <span className="text-gray-600">Surface totale</span>
+                                            <span className="font-bold">{(surface * config.quantite).toFixed(2)} m²</span>
                                         </div>
-                                    ) : (
-                                        <div>
-                                            <div className="text-6xl mb-4">📁</div>
-                                            <p className="text-lg font-medium mb-2">Cliquez pour importer votre fichier</p>
-                                            <p className="text-sm text-gray-600">PNG, JPG, PDF (50 MB max)</p>
+                                        <div className="flex justify-between text-sm">
+                                            <span className="text-gray-600">Quantité</span>
+                                            <span className="font-bold">{config.quantite} ex.</span>
+                                        </div>
+                                        <div className="flex justify-between text-sm">
+                                            <span className="text-gray-600">Impression</span>
+                                            <span className="font-bold text-xs">{config.impression}</span>
+                                        </div>
+                                        <div className="flex justify-between text-sm">
+                                            <span className="text-gray-600">Délai</span>
+                                            <span className="font-bold text-green-600">{PRODUCT_DATA.delai} jours</span>
+                                        </div>
+                                    </div>
+
+                                    {economie > 0 && (
+                                        <div className="bg-green-50 border-2 border-green-500 rounded-lg p-3 mb-4 text-center">
+                                            <div className="text-xs text-green-700 font-bold mb-1">Vous économisez</div>
+                                            <div className="text-xl font-black text-green-700">{economie.toFixed(2)}€</div>
                                         </div>
                                     )}
-                                </div>
-                                <input ref={fileInputRef} type="file" onChange={handleFileChange}
-                                       accept="image/*,.pdf" className="hidden" />
-                            </div>
-                        )}
 
-                        {currentStep === 3 && (
-                            <div className="space-y-6">
-                                <h3 className="text-xl font-bold">Options</h3>
-                                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                                    <div className="text-sm text-green-900">
-                                        ✓ <strong>Certification:</strong> {PRODUCT_DATA.certification}<br/>
-                                        ✓ <strong>Durée de vie:</strong> {PRODUCT_DATA.dureeVie}<br/>
-                                        ✓ <strong>Usage:</strong> {PRODUCT_DATA.usage}<br/>
-                                        ✓ <strong>Finition:</strong> {PRODUCT_DATA.finition}
+                                    <div className="mb-6">
+                                        <div className="text-xs text-gray-500 text-center mb-1">TOTAL HT</div>
+                                        <div className="text-5xl font-black text-red-600 text-center">{prixTotal.toFixed(2)}€</div>
+                                        <div className="text-sm text-gray-500 text-center mt-1">TVA: {(prixTotal * 0.2).toFixed(2)}€ • TTC: {(prixTotal * 1.2).toFixed(2)}€</div>
                                     </div>
-                                </div>
-                            </div>
-                        )}
 
-                        {currentStep === 4 && (
-                            <div className="space-y-6">
-                                <h3 className="text-xl font-bold">Quantité</h3>
-                                <input type="number" value={config.quantite}
-                                       onChange={(e) => setConfig({...config, quantite: parseInt(e.target.value) || 1})}
-                                       className="w-full px-4 py-3 border-2 rounded-lg focus:border-red-600 focus:outline-none text-xl font-bold"
-                                       min="1" />
-
-                                <div className="bg-gray-50 rounded-lg p-6">
-                                    <h4 className="font-bold mb-4">Prix dégressifs (par m²)</h4>
-                                    <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-                                        <div className="bg-white p-3 rounded text-center border-2">
-                                            <div className="text-xs text-gray-600 mb-1">0-10 m²</div>
-                                            <div className="font-bold">{PRODUCT_DATA.prix['0-10']}€</div>
-                                        </div>
-                                        <div className="bg-white p-3 rounded text-center border-2">
-                                            <div className="text-xs text-gray-600 mb-1">11-50 m²</div>
-                                            <div className="font-bold text-green-600">{PRODUCT_DATA.prix['11-50']}€</div>
-                                        </div>
-                                        <div className="bg-white p-3 rounded text-center border-2">
-                                            <div className="text-xs text-gray-600 mb-1">51-100 m²</div>
-                                            <div className="font-bold text-green-600">{PRODUCT_DATA.prix['51-100']}€</div>
-                                        </div>
-                                        <div className="bg-white p-3 rounded text-center border-2">
-                                            <div className="text-xs text-gray-600 mb-1">101-300 m²</div>
-                                            <div className="font-bold text-green-600">{PRODUCT_DATA.prix['101-300']}€</div>
-                                        </div>
-                                        <div className="bg-white p-3 rounded text-center border-2 border-green-600">
-                                            <div className="text-xs text-gray-600 mb-1">300+ m²</div>
-                                            <div className="font-bold text-green-600">{PRODUCT_DATA.prix['300+']}€</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {economie > 0 && (
-                                    <div className="bg-green-50 border-2 border-green-500 rounded-lg p-4 text-center">
-                                        <div className="text-2xl font-black text-green-700">
-                                            🎉 Vous économisez {economie.toFixed(2)}€/m² !
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-
-                        {currentStep === 5 && (
-                            <div className="space-y-6">
-                                <h3 className="text-xl font-bold">Récapitulatif</h3>
-                                <div className="bg-gray-50 rounded-lg p-6 space-y-4">
-                                    <div className="flex justify-between pb-3 border-b">
-                                        <span className="font-medium">Produit</span>
-                                        <span className="font-bold">{PRODUCT_DATA.nom}</span>
-                                    </div>
-                                    <div className="flex justify-between pb-3 border-b">
-                                        <span className="font-medium">Dimensions</span>
-                                        <span className="font-bold">{config.largeur} × {config.hauteur} cm</span>
-                                    </div>
-                                    <div className="flex justify-between pb-3 border-b">
-                                        <span className="font-medium">Surface</span>
-                                        <span className="font-bold">{surface.toFixed(2)} m²</span>
-                                    </div>
-                                    <div className="flex justify-between pb-3 border-b">
-                                        <span className="font-medium">Quantité</span>
-                                        <span className="font-bold">{config.quantite} ex.</span>
-                                    </div>
-                                    <div className="flex justify-between pb-3 border-b">
-                                        <span className="font-medium">Prix/m²</span>
-                                        <span className="font-bold">{prixUnitaire.toFixed(2)}€</span>
-                                    </div>
-                                    <div className="flex justify-between pt-3">
-                                        <span className="text-xl font-black">TOTAL</span>
-                                        <span className="text-3xl font-black text-red-600">{prixTotal.toFixed(2)}€</span>
-                                    </div>
                                     {prixTotal >= 200 && (
-                                        <div className="bg-green-100 border border-green-400 rounded-lg p-3 text-center">
-                                            <span className="text-green-800 font-bold">🎁 Livraison GRATUITE !</span>
+                                        <div className="bg-green-100 border border-green-400 rounded-lg p-2 mb-4 text-center">
+                                            <span className="text-green-800 font-bold text-sm">🎁 Livraison GRATUITE</span>
                                         </div>
                                     )}
+
+                                    <button onClick={addToCart}
+                                            className="w-full btn-primary text-white px-6 py-4 rounded-lg font-black text-lg shadow-xl mb-3">
+                                        🛒 AJOUTER AU PANIER
+                                    </button>
+
+                                    <button className="w-full bg-gray-100 hover:bg-gray-200 text-gray-900 px-6 py-3 rounded-lg font-bold text-sm transition">
+                                        💬 Demander un devis
+                                    </button>
+
+                                    <div className="mt-6 pt-6 border-t-2 border-gray-200">
+                                        <div className="grid grid-cols-2 gap-3 text-center text-xs">
+                                            <div>
+                                                <div className="text-2xl mb-1">⚡</div>
+                                                <div className="font-bold">Livraison</div>
+                                                <div className="text-gray-600">{PRODUCT_DATA.delai}j</div>
+                                            </div>
+                                            <div>
+                                                <div className="text-2xl mb-1">🔒</div>
+                                                <div className="font-bold">Paiement</div>
+                                                <div className="text-gray-600">Sécurisé</div>
+                                            </div>
+                                            <div>
+                                                <div className="text-2xl mb-1">↩️</div>
+                                                <div className="font-bold">Garantie</div>
+                                                <div className="text-gray-600">30j</div>
+                                            </div>
+                                            <div>
+                                                <div className="text-2xl mb-1">⭐</div>
+                                                <div className="font-bold">Note</div>
+                                                <div className="text-gray-600">{PRODUCT_DATA.rating}/5</div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        )}
-
-                        <div className="flex justify-between mt-8 pt-6 border-t">
-                            {currentStep > 1 && (
-                                <button onClick={() => setCurrentStep(currentStep - 1)}
-                                        className="px-6 py-3 bg-gray-200 hover:bg-gray-300 font-bold rounded-lg transition">
-                                    ← Retour
-                                </button>
-                            )}
-                            {currentStep < 5 && (
-                                <button onClick={() => setCurrentStep(currentStep + 1)}
-                                        className="ml-auto px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow-lg transition">
-                                    Continuer →
-                                </button>
-                            )}
-                            {currentStep === 5 && (
-                                <button onClick={addToCart}
-                                        className="ml-auto px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg shadow-lg text-lg transition">
-                                    🛒 Ajouter au panier
-                                </button>
-                            )}
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                    <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 mt-8">
                         <h2 className="text-3xl font-black mb-6">{PRODUCT_DATA.nom} : Guide Complet</h2>
 
                         <div className="prose max-w-none">
@@ -534,7 +513,6 @@
     ReactDOM.render(<ProductPage />, document.getElementById('root'));
     </script>
 
-    <!-- FOOTER -->
     <footer class="bg-gray-900 text-gray-300 py-16 mt-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-4 gap-10 mb-12">

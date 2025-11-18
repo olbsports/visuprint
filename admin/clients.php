@@ -201,6 +201,9 @@ $stats = [
         .section-header {
             padding: 20px 25px;
             border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         table {
@@ -365,6 +368,7 @@ $stats = [
         <div class="section">
             <div class="section-header">
                 <h2>👥 Liste des clients (<?php echo $total; ?>)</h2>
+                <a href="nouveau-client.php" class="btn btn-primary">+ Nouveau client</a>
             </div>
 
             <table>
@@ -376,12 +380,13 @@ $stats = [
                         <th>Commandes</th>
                         <th>CA Total</th>
                         <th>Inscription</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (empty($clients)): ?>
                         <tr>
-                            <td colspan="6" class="no-results">
+                            <td colspan="7" class="no-results">
                                 Aucun client trouvé
                             </td>
                         </tr>
@@ -415,6 +420,9 @@ $stats = [
                                 <td><strong><?php echo $clientStats['nb_commandes']; ?></strong> commande<?php echo $clientStats['nb_commandes'] > 1 ? 's' : ''; ?></td>
                                 <td><strong><?php echo number_format($clientStats['ca_total'], 2, ',', ' '); ?> €</strong></td>
                                 <td><?php echo date('d/m/Y', strtotime($client['created_at'])); ?></td>
+                                <td>
+                                    <a href="client.php?id=<?php echo $client['id']; ?>" class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;">✏️ Modifier</a>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     <?php endif; ?>

@@ -459,6 +459,7 @@ $stats = [
         <div class="section">
             <div class="section-header">
                 <h2>📋 Liste des commandes (<?php echo $total; ?>)</h2>
+                <a href="nouvelle-commande.php" class="btn btn-primary">+ Nouvelle commande</a>
             </div>
 
             <table>
