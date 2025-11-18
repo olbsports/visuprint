@@ -195,18 +195,6 @@ function isActive($page) {
                     📦 Catalogue
                 </a>
 
-                <div class="dropdown">
-                    <a href="#" class="nav-link">
-                        ℹ️ Informations ▼
-                    </a>
-                    <div class="dropdown-menu">
-                        <a href="/a-propos.html">À propos</a>
-                        <a href="/cgv.html">Conditions Générales</a>
-                        <a href="/mentions-legales.html">Mentions légales</a>
-                        <a href="/politique-confidentialite.html">Politique de confidentialité</a>
-                    </div>
-                </div>
-
                 <a href="/panier.html" class="nav-link <?php echo isActive('panier.html'); ?>">
                     🛒 Panier
                 </a>
@@ -245,13 +233,6 @@ function isActive($page) {
             <a href="/index.html" class="<?php echo isActive('index.html'); ?>">🏠 Accueil</a>
             <a href="/catalogue.html" class="<?php echo isActive('catalogue.html'); ?>">📦 Catalogue</a>
             <a href="/panier.html" class="<?php echo isActive('panier.html'); ?>">🛒 Panier</a>
-
-            <hr style="margin: 15px 0; border-color: #e0e0e0;">
-
-            <a href="/a-propos.html">ℹ️ À propos</a>
-            <a href="/cgv.html">📄 Conditions Générales</a>
-            <a href="/mentions-legales.html">⚖️ Mentions légales</a>
-            <a href="/politique-confidentialite.html">🔒 Confidentialité</a>
 
             <hr style="margin: 15px 0; border-color: #e0e0e0;">
 
