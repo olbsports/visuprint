@@ -102,25 +102,29 @@
 # Session sécurisée
 # ============================================
 
-php_value session.cookie_httponly 1
-php_value session.cookie_secure 1
-php_value session.use_only_cookies 1
-php_value session.cookie_samesite "Strict"
+# IMPORTANT: Directives PHP désactivées (incompatibles FastCGI/FPM)
+# Configurer dans php.ini ou .user.ini à la place
+# php_value session.cookie_httponly 1
+# php_value session.cookie_secure 1
+# php_value session.use_only_cookies 1
+# php_value session.cookie_samesite "Strict"
 
 # ============================================
 # Désactiver l'affichage des erreurs
 # ============================================
 
-php_flag display_errors off
-php_flag display_startup_errors off
-php_value error_reporting 0
+# IMPORTANT: Directives PHP désactivées (incompatibles FastCGI/FPM)
+# php_flag display_errors off
+# php_flag display_startup_errors off
+# php_value error_reporting 0
 
 # ============================================
 # Log des tentatives d'accès
 # ============================================
 
-php_flag log_errors on
-php_value error_log /home/votre_user/logs/admin_errors.log
+# IMPORTANT: Directives PHP désactivées (incompatibles FastCGI/FPM)
+# php_flag log_errors on
+# php_value error_log /home/votre_user/logs/admin_errors.log
 
 # ============================================
 # Désactiver l'index des répertoires
@@ -132,7 +136,8 @@ Options -Indexes
 # Timeout de session court (15 minutes)
 # ============================================
 
-php_value session.gc_maxlifetime 900
+# IMPORTANT: Directives PHP désactivées (incompatibles FastCGI/FPM)
+# php_value session.gc_maxlifetime 900
 
 # ============================================
 # RECOMMANDATIONS DE SÉCURITÉ
