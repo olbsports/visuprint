@@ -1,11 +1,17 @@
 -- ============================================
--- BASE DE DONNÉES E-COMMERCE VISUPRINT PRO
+-- BASE DE DONNÉES E-COMMERCE IMPRIXO
 -- À exécuter dans phpMyAdmin (O2Switch)
 -- ============================================
 
--- Créer la base de données
-CREATE DATABASE IF NOT EXISTS visuprint_ecommerce CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE visuprint_ecommerce;
+-- ⚠️ IMPORTANT : Créer d'abord la base via cPanel > "Bases de données MySQL"
+--    Nom de la base : imprixo_ecommerce (avec préfixe automatique)
+--
+-- Dans phpMyAdmin, sélectionner d'abord votre base dans le menu de gauche,
+-- puis importer ce fichier SQL
+--
+-- Les lignes CREATE DATABASE et USE ont été supprimées car :
+-- - Vous n'avez pas les droits de créer une base via phpMyAdmin
+-- - La base doit être sélectionnée manuellement dans phpMyAdmin
 
 -- ============================================
 -- TABLE : produits
