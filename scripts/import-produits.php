@@ -103,7 +103,7 @@ while (($row = fgetcsv($handle)) !== false) {
             "INSERT INTO produits (
                 code, nom, categorie, sous_titre,
                 description_courte, description_longue,
-                poids_m2, epaisseur, format_max, usage, duree_vie,
+                poids_m2, epaisseur, format_max, `usage`, duree_vie,
                 certification, finition, impression_faces,
                 prix_simple_face, prix_double_face,
                 prix_0_10, prix_11_50, prix_51_100, prix_101_300, prix_300_plus,
