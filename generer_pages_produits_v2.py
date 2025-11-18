@@ -321,7 +321,7 @@ for product in products:
                             <p className="text-lg text-gray-600 mt-2">{{PRODUCT_DATA.sous_titre}}</p>
                             <div className="flex items-center gap-4 mt-3">
                                 <div className="flex items-center gap-1">
-                                        {'★'.repeat(Math.floor(PRODUCT_DATA.rating)) + '☆'.repeat(5 - Math.floor(PRODUCT_DATA.rating))}
+                                    {{{{'★'.repeat(Math.floor(PRODUCT_DATA.rating)) + '☆'.repeat(5 - Math.floor(PRODUCT_DATA.rating))}}}}
                                     <span className="text-sm text-gray-600 ml-2">{{PRODUCT_DATA.rating}} / 5</span>
                                 </div>
                                 <span className="text-sm text-gray-500">({{PRODUCT_DATA.reviews}} avis)</span>
