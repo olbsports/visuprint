@@ -29,7 +29,7 @@ CREATE TABLE produits (
     poids_m2 DECIMAL(10,2),
     epaisseur VARCHAR(20),
     format_max VARCHAR(50),
-    usage VARCHAR(100),
+    `usage` VARCHAR(100),
     duree_vie VARCHAR(50),
     certification VARCHAR(50),
     finition VARCHAR(100),
