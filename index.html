@@ -3,29 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VisuPrint Pro - Impression Grand Format Professionnelle</title>
+
+    <!-- SEO PRIMAIRE -->
+    <title>Impression Grand Format Pas Cher | VisuPrint Pro - Panneau PVC, Dibond, Bâche</title>
+    <meta name="description" content="Impression professionnelle grand format ✓ Forex, Dibond, Bâches PVC ✓ Prix dégressifs -40% ✓ Livraison 48h ✓ +50 supports ✓ Devis gratuit en ligne ✓ Qualité garantie">
+    <meta name="keywords" content="impression grand format, panneau pvc, forex, dibond, bâche publicitaire, impression pas cher, enseigne, kakémono, panneau rigide, support impression">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <link rel="canonical" href="https://visuprintpro.fr/">
+
+    <!-- GEO TARGETING -->
+    <meta name="geo.region" content="FR">
+    <meta name="geo.placename" content="France">
+
+    <!-- OPEN GRAPH / FACEBOOK -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="VisuPrint Pro">
+    <meta property="og:title" content="Impression Grand Format Professionnelle | VisuPrint Pro">
+    <meta property="og:description" content="Spécialiste impression grand format ✓ +50 supports (Forex, Dibond, Bâches) ✓ Prix dégressifs ✓ Livraison 48h ✓ Qualité pro">
+    <meta property="og:url" content="https://visuprintpro.fr/">
+    <meta property="og:locale" content="fr_FR">
+
+    <!-- TWITTER CARD -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="VisuPrint Pro - Impression Grand Format">
+    <meta name="twitter:description" content="+50 supports d'impression professionnelle. Prix dégressifs. Livraison rapide.">
+
+    <!-- SCHEMA.ORG - ORGANISATION -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "VisuPrint Pro",
+        "url": "https://visuprintpro.fr",
+        "logo": "https://visuprintpro.fr/logo.png",
+        "description": "Impression professionnelle grand format - Panneaux rigides, bâches, textiles",
+        "address": {
+            "@type": "PostalAddress",
+            "@country": "FR"
+        },
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+33-1-23-45-67-89",
+            "contactType": "customer service",
+            "areaServed": "FR",
+            "availableLanguage": "French"
+        },
+        "sameAs": [
+            "https://www.facebook.com/visuprintpro",
+            "https://www.linkedin.com/company/visuprintpro"
+        ]
+    }
+    </script>
+
+    <!-- SCHEMA.ORG - WEBSITE -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "VisuPrint Pro",
+        "url": "https://visuprintpro.fr",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://visuprintpro.fr/recherche?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+
+    <!-- SCHEMA.ORG - BREADCRUMB -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Accueil",
+            "item": "https://visuprintpro.fr"
+        }]
+    }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 
         * {
             font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
-        }
-
-        .product-card {
-            transition: all 0.3s ease;
-        }
-
-        .product-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-        }
-
-        .price-tag {
-            background: linear-gradient(135deg, #e63946 0%, #d62839 100%);
         }
 
         .btn-primary {
@@ -34,46 +98,29 @@
         }
 
         .btn-primary:hover {
-            background: linear-gradient(135deg, #d62839 0%, #c21e2c 100%);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(230, 57, 70, 0.3);
+            box-shadow: 0 6px 20px rgba(230, 57, 70, 0.4);
         }
 
-        .btn-secondary {
-            background: #2b2d42;
+        .product-card {
             transition: all 0.3s ease;
         }
 
-        .btn-secondary:hover {
-            background: #1a1b2e;
-            transform: translateY(-2px);
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
         }
 
-        .nav-link {
-            position: relative;
-        }
-
-        .nav-link:after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #e63946;
-            transition: width 0.3s ease;
-        }
-
-        .nav-link:hover:after {
-            width: 100%;
+        .hero-gradient {
+            background: linear-gradient(135deg, #1a1b2e 0%, #2b2d42 50%, #1a1b2e 100%);
         }
 
         .badge {
             display: inline-block;
-            padding: 4px 12px;
+            padding: 6px 14px;
             font-size: 11px;
             font-weight: 700;
-            border-radius: 12px;
+            border-radius: 16px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -81,1345 +128,733 @@
         .badge-red {
             background: linear-gradient(135deg, #fee 0%, #fdd 100%);
             color: #e63946;
-            border: 1px solid #e63946;
+            border: 2px solid #e63946;
         }
 
         .badge-green {
             background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
             color: #059669;
-            border: 1px solid #059669;
+            border: 2px solid #059669;
         }
 
-        .badge-blue {
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-            color: #2563eb;
-            border: 1px solid #2563eb;
-        }
-
-        .category-btn {
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-
-        .category-btn:hover {
-            border-color: #e63946;
-            background: #fff1f2;
-        }
-
-        .category-btn.active {
-            background: linear-gradient(135deg, #e63946 0%, #d62839 100%);
-            color: white;
-            border-color: #e63946;
-        }
-
-        .cart-badge {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #e63946;
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            font-size: 11px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .loading {
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
         }
 
         @keyframes pulse {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+            50% { opacity: 0.7; }
         }
 
-        .configurator-step {
-            opacity: 0.5;
-            pointer-events: none;
-        }
-
-        .configurator-step.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .option-card {
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-
-        .option-card:hover {
-            border-color: #e63946;
-            background: #fff1f2;
-        }
-
-        .option-card.selected {
-            border-color: #e63946;
-            background: #fff1f2;
-            box-shadow: 0 0 0 2px #e63946;
-        }
-
-        .price-breakdown {
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-        }
-
-        input[type="file"] {
-            display: none;
-        }
-
-        .file-upload-label {
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .file-upload-label:hover {
-            background: #f8fafc;
+        .category-card:hover {
+            background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
         }
     </style>
 </head>
 <body class="bg-gray-50">
-    <div id="root"></div>
 
-    <script type="text/babel">
-        const { useState, useEffect } = React;
+    <!-- HEADER -->
+    <header class="bg-white border-b-2 border-gray-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Top Bar -->
+            <div class="flex items-center justify-between py-2 text-sm border-b border-gray-100">
+                <div class="flex items-center gap-4">
+                    <span class="text-gray-600">📧 contact@visuprintpro.fr</span>
+                    <span class="text-gray-600">⏰ Lun-Ven 9h-18h</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="badge badge-green pulse">✓ Livraison 48h</span>
+                    <span class="badge badge-red">-40% Volume</span>
+                </div>
+            </div>
 
-        // Fonction pour parser le CSV
-        function parseCSV(csv) {
-            const lines = csv.trim().split('\n');
-            const headers = lines[0].split(',');
-            const products = [];
+            <!-- Main Header -->
+            <div class="flex items-center justify-between py-4">
+                <div class="flex items-center">
+                    <a href="/" class="flex-shrink-0">
+                        <span class="text-3xl font-black text-gray-900">VisuPrint</span>
+                        <span class="text-3xl font-black text-red-600">Pro</span>
+                    </a>
+                    <nav class="hidden md:ml-12 md:flex md:space-x-8">
+                        <a href="/catalogue.html" class="text-gray-700 hover:text-red-600 px-3 py-2 text-sm font-bold transition">
+                            Catalogue
+                        </a>
+                        <a href="#categories" class="text-gray-700 hover:text-red-600 px-3 py-2 text-sm font-bold transition">
+                            Catégories
+                        </a>
+                        <a href="#avantages" class="text-gray-700 hover:text-red-600 px-3 py-2 text-sm font-bold transition">
+                            Nos Avantages
+                        </a>
+                        <a href="/mon-compte.php" class="text-gray-700 hover:text-red-600 px-3 py-2 text-sm font-bold transition">
+                            Mon Compte
+                        </a>
+                    </nav>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="hidden lg:block text-right">
+                        <div class="text-xs text-gray-500 font-semibold">☎️ Service client</div>
+                        <div class="text-lg font-black text-red-600">01 23 45 67 89</div>
+                    </div>
+                    <a href="/panier.html" class="bg-gray-900 hover:bg-gray-800 text-white px-6 py-3 rounded-lg text-sm font-bold shadow-lg transition">
+                        🛒 Panier
+                    </a>
+                    <a href="#contact" class="btn-primary text-white px-8 py-3 rounded-lg text-sm font-bold shadow-lg">
+                        📧 Contact
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
 
-            for (let i = 1; i < lines.length; i++) {
-                const values = lines[i].split(',');
-                if (values.length < headers.length) continue;
+    <!-- HERO SECTION -->
+    <section class="hero-gradient text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h1 class="text-5xl lg:text-6xl font-black mb-6 leading-tight">
+                        Impression <span class="text-red-500">Grand Format</span><br/>
+                        Professionnelle
+                    </h1>
+                    <p class="text-xl lg:text-2xl mb-8 text-gray-300 leading-relaxed">
+                        +50 supports d'impression • Forex • Dibond • Bâches PVC • Textiles<br/>
+                        <span class="text-red-400 font-bold">Prix dégressifs jusqu'à -40%</span> • Livraison 48-72h
+                    </p>
 
-                const product = {};
-                headers.forEach((header, index) => {
-                    product[header] = values[index];
-                });
-
-                // Construire l'objet produit formaté
-                const formattedProduct = {
-                    id: product.ID_PRODUIT,
-                    category: product.CATEGORIE,
-                    name: product.NOM_PRODUIT,
-                    subtitle: product.SOUS_TITRE,
-                    shortDesc: product.DESCRIPTION_COURTE,
-                    longDesc: product.DESCRIPTION_LONGUE,
-                    weight: product.POIDS_M2,
-                    thickness: product.EPAISSEUR,
-                    maxFormat: product.FORMAT_MAX_CM,
-                    usage: product.USAGE,
-                    lifespan: product.DUREE_VIE,
-                    certification: product.CERTIFICATION,
-                    finish: product.FINITION,
-                    printSides: product.IMPRESSION_FACES,
-                    cost: parseFloat(product.COUT_ACHAT_M2) || 0,
-                    priceSingle: parseFloat(product.PRIX_SIMPLE_FACE_M2) || 0,
-                    priceDouble: parseFloat(product.PRIX_DOUBLE_FACE_M2) || 0,
-                    minOrder: parseFloat(product.COMMANDE_MIN_EURO) || 25,
-                    deliveryDays: parseInt(product.DELAI_STANDARD_JOURS) || 3,
-                    unit: product.UNITE_VENTE,
-                    priceRanges: [
-                        { min: 0, max: 10, price: parseFloat(product.PRIX_0_10_M2) || 0 },
-                        { min: 11, max: 50, price: parseFloat(product.PRIX_11_50_M2) || 0 },
-                        { min: 51, max: 100, price: parseFloat(product.PRIX_51_100_M2) || 0 },
-                        { min: 101, max: 300, price: parseFloat(product.PRIX_101_300_M2) || 0 },
-                        { min: 301, max: 9999, price: parseFloat(product.PRIX_300_PLUS_M2) || 0 }
-                    ].filter(range => range.price > 0),
-                    hasDoubleFace: product.IMPRESSION_FACES?.includes('double')
-                };
-
-                products.push(formattedProduct);
-            }
-
-            return products;
-        }
-
-        // Chargement des produits depuis le CSV
-        function useProducts() {
-            const [products, setProducts] = useState([]);
-            const [loading, setLoading] = useState(true);
-
-            useEffect(() => {
-                fetch('CATALOGUE_COMPLET_VISUPRINT.csv')
-                    .then(response => response.text())
-                    .then(csv => {
-                        const parsedProducts = parseCSV(csv);
-                        setProducts(parsedProducts);
-                        setLoading(false);
-                    })
-                    .catch(error => {
-                        console.error('Erreur chargement CSV:', error);
-                        setLoading(false);
-                    });
-            }, []);
-
-            return { products, loading };
-        }
-
-        // Icônes pour les catégories
-        const categoryIcons = {
-            'Supports rigides PVC': '📄',
-            'Supports aluminium premium': '✨',
-            'Supports rigides économiques': '🏷️',
-            'Supports plastiques alternatifs': '🔲',
-            'Supports plastiques premium': '💎',
-            'Supports transparents': '🔍',
-            'Textiles imprimables standard': '🎨',
-            'Bâches et supports souples': '🎪',
-            'Textiles rétroéclairés': '💡',
-            'Textiles écologiques': '🌿'
-        };
-
-        // Composant Header
-        function Header({ cartCount, onCartClick }) {
-            return (
-                <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="flex items-center justify-between h-16">
-                            <div className="flex items-center">
-                                <div className="flex-shrink-0">
-                                    <span className="text-2xl font-black text-gray-900">VisuPrint</span>
-                                    <span className="text-2xl font-black text-red-600">Pro</span>
-                                </div>
-                                <nav className="hidden md:ml-10 md:flex md:space-x-8">
-                                    <a href="#produits" className="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">
-                                        Produits
-                                    </a>
-                                    <a href="#services" className="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">
-                                        Services
-                                    </a>
-                                    <a href="#devis" className="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">
-                                        Devis rapide
-                                    </a>
-                                    <a href="#contact" className="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">
-                                        Contact
-                                    </a>
-                                </nav>
+                    <!-- USPs -->
+                    <div class="grid sm:grid-cols-2 gap-4 mb-10">
+                        <div class="flex items-center gap-3 bg-white/10 rounded-lg p-4 backdrop-blur">
+                            <span class="text-3xl">✓</span>
+                            <div>
+                                <div class="font-bold text-lg">Tarifs Dégressifs</div>
+                                <div class="text-sm text-gray-300">Jusqu'à -40% en volume</div>
                             </div>
-                            <div className="flex items-center space-x-4">
-                                <div className="hidden md:block text-right">
-                                    <div className="text-xs text-gray-500">Service client</div>
-                                    <div className="text-sm font-bold text-gray-900">01 23 45 67 89</div>
-                                </div>
-                                <button
-                                    onClick={onCartClick}
-                                    className="relative btn-secondary text-white px-4 py-2 rounded text-sm font-semibold"
-                                >
-                                    🛒 Panier
-                                    {cartCount > 0 && (
-                                        <span className="cart-badge">{cartCount}</span>
-                                    )}
-                                </button>
-                                <button className="btn-primary text-white px-6 py-2 rounded text-sm font-semibold">
-                                    Devis gratuit
-                                </button>
+                        </div>
+                        <div class="flex items-center gap-3 bg-white/10 rounded-lg p-4 backdrop-blur">
+                            <span class="text-3xl">⚡</span>
+                            <div>
+                                <div class="font-bold text-lg">Livraison Rapide</div>
+                                <div class="text-sm text-gray-300">48-72h partout en France</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 bg-white/10 rounded-lg p-4 backdrop-blur">
+                            <span class="text-3xl">🏆</span>
+                            <div>
+                                <div class="font-bold text-lg">Qualité Certifiée</div>
+                                <div class="text-sm text-gray-300">Normes B1/M1</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 bg-white/10 rounded-lg p-4 backdrop-blur">
+                            <span class="text-3xl">💰</span>
+                            <div>
+                                <div class="font-bold text-lg">Devis Instantané</div>
+                                <div class="text-sm text-gray-300">Configurateur en ligne</div>
                             </div>
                         </div>
                     </div>
-                </header>
-            );
-        }
 
-        // Composant Hero
-        function Hero() {
-            return (
-                <section className="bg-white border-b border-gray-200">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-                        <div className="text-center max-w-4xl mx-auto">
-                            <h1 className="text-5xl font-black text-gray-900 mb-6 leading-tight">
-                                Impression professionnelle<br/>
-                                <span className="text-red-600">grand format</span>
-                            </h1>
-                            <p className="text-xl text-gray-600 mb-10">
-                                Plus de 50 supports d'impression - Panneaux rigides, bâches, textiles - Tarifs dégressifs en ligne
-                            </p>
-                            <div className="flex flex-wrap justify-center gap-8 text-sm">
-                                <div className="flex items-center">
-                                    <span className="text-green-600 text-2xl mr-2">✓</span>
-                                    <span className="text-gray-700 font-medium">Livraison 48-72h</span>
+                    <!-- CTAs -->
+                    <div class="flex flex-wrap gap-4">
+                        <a href="/catalogue.html" class="btn-primary text-white px-10 py-4 rounded-lg text-lg font-bold shadow-2xl">
+                            🛒 Voir le Catalogue
+                        </a>
+                        <a href="#contact" class="bg-white text-gray-900 px-10 py-4 rounded-lg text-lg font-bold hover:bg-gray-100 transition shadow-xl">
+                            📞 Nous Contacter
+                        </a>
+                    </div>
+
+                    <!-- Trust Signals -->
+                    <div class="flex items-center gap-6 mt-10 pt-8 border-t border-white/20">
+                        <div class="text-center">
+                            <div class="text-3xl font-black text-red-400">4.8/5</div>
+                            <div class="text-sm text-gray-300">★★★★★</div>
+                            <div class="text-xs text-gray-400">127 avis</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-black text-red-400">2 500+</div>
+                            <div class="text-sm text-gray-300">Clients satisfaits</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-black text-red-400">50+</div>
+                            <div class="text-sm text-gray-300">Supports disponibles</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Visual -->
+                <div class="hidden lg:block">
+                    <div class="bg-white/10 backdrop-blur rounded-2xl p-8 border-2 border-white/20">
+                        <div class="text-center mb-6">
+                            <div class="text-7xl mb-4">🎨</div>
+                            <h3 class="text-2xl font-bold mb-2">Configurateur Instantané</h3>
+                            <p class="text-gray-300">Prix en temps réel</p>
+                        </div>
+                        <div class="bg-white rounded-lg p-6 text-gray-900">
+                            <div class="mb-4">
+                                <label class="block text-sm font-bold mb-2">Format</label>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <button class="border-2 border-red-600 bg-red-50 rounded p-2 text-sm font-bold">100×150</button>
+                                    <button class="border border-gray-300 rounded p-2 text-sm">80×120</button>
+                                    <button class="border border-gray-300 rounded p-2 text-sm">Custom</button>
                                 </div>
-                                <div className="flex items-center">
-                                    <span className="text-green-600 text-2xl mr-2">✓</span>
-                                    <span className="text-gray-700 font-medium">Prix dégressifs jusqu'à -40%</span>
-                                </div>
-                                <div className="flex items-center">
-                                    <span className="text-green-600 text-2xl mr-2">✓</span>
-                                    <span className="text-gray-700 font-medium">Qualité certifiée B1/M1</span>
-                                </div>
-                                <div className="flex items-center">
-                                    <span className="text-green-600 text-2xl mr-2">✓</span>
-                                    <span className="text-gray-700 font-medium">Configurateur en ligne</span>
-                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-bold mb-2">Support</label>
+                                <select class="w-full border-2 border-gray-300 rounded p-2 font-bold">
+                                    <option>Forex 3mm</option>
+                                    <option>Dibond 3mm</option>
+                                    <option>Bâche PVC</option>
+                                </select>
+                            </div>
+                            <div class="bg-red-50 border-2 border-red-600 rounded-lg p-4 text-center">
+                                <div class="text-sm text-gray-600 mb-1">Prix à partir de</div>
+                                <div class="text-4xl font-black text-red-600">39,00€</div>
+                                <div class="text-sm text-gray-500">HT</div>
                             </div>
                         </div>
                     </div>
-                </section>
-            );
-        }
+                </div>
+            </div>
+        </div>
+    </section>
 
-        // Composant Catalogue
-        function Catalog({ products, onProductClick }) {
-            const [selectedCategory, setSelectedCategory] = useState('Tous');
-            const [searchTerm, setSearchTerm] = useState('');
+    <!-- CATÉGORIES POPULAIRES -->
+    <section id="categories" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <span class="badge badge-red mb-4">Nos Catégories</span>
+                <h2 class="text-4xl font-black text-gray-900 mb-4">
+                    Tous les Supports d'Impression
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Plus de 50 supports professionnels pour tous vos besoins d'impression grand format
+                </p>
+            </div>
 
-            // Extraire les catégories uniques
-            const categories = ['Tous', ...new Set(products.map(p => p.category))];
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Supports Rigides PVC -->
+                <a href="/categorie/supports-rigides-pvc.html" class="category-card group bg-gray-50 rounded-2xl p-8 border-2 border-gray-200 hover:border-red-600 transition cursor-pointer">
+                    <div class="text-5xl mb-4">📄</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-red-600 transition">
+                        Supports Rigides PVC
+                    </h3>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Forex, PVC expansé - Léger et économique
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-bold text-red-600">À partir de 13€/m²</span>
+                        <span class="text-gray-400 group-hover:text-red-600 transition">→</span>
+                    </div>
+                </a>
 
-            // Filtrer les produits
-            const filteredProducts = products.filter(product => {
-                const matchCategory = selectedCategory === 'Tous' || product.category === selectedCategory;
-                const matchSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                  product.shortDesc.toLowerCase().includes(searchTerm.toLowerCase());
-                return matchCategory && matchSearch;
-            });
+                <!-- Supports Aluminium -->
+                <a href="/categorie/supports-aluminium.html" class="category-card group bg-gray-50 rounded-2xl p-8 border-2 border-gray-200 hover:border-red-600 transition cursor-pointer">
+                    <div class="text-5xl mb-4">✨</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-red-600 transition">
+                        Aluminium Premium
+                    </h3>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Dibond - Durabilité 10+ ans extérieur
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-bold text-red-600">À partir de 40€/m²</span>
+                        <span class="text-gray-400 group-hover:text-red-600 transition">→</span>
+                    </div>
+                </a>
 
-            return (
-                <section id="produits" className="py-16 bg-gray-50">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        {/* En-tête */}
-                        <div className="mb-10">
-                            <h2 className="text-3xl font-black text-gray-900 mb-3">
-                                Notre catalogue complet
-                            </h2>
-                            <p className="text-lg text-gray-600">
-                                {products.length} produits disponibles - Cliquez pour configurer votre commande
-                            </p>
-                        </div>
+                <!-- Bâches -->
+                <a href="/categorie/baches-souples.html" class="category-card group bg-gray-50 rounded-2xl p-8 border-2 border-gray-200 hover:border-red-600 transition cursor-pointer">
+                    <div class="text-5xl mb-4">🎪</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-red-600 transition">
+                        Bâches & Souples
+                    </h3>
+                    <p class="text-gray-600 text-sm mb-4">
+                        PVC, Mesh - Grand format extérieur
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-bold text-red-600">À partir de 8€/m²</span>
+                        <span class="text-gray-400 group-hover:text-red-600 transition">→</span>
+                    </div>
+                </a>
 
-                        {/* Barre de recherche */}
-                        <div className="mb-8">
-                            <input
-                                type="text"
-                                placeholder="Rechercher un produit..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full max-w-md px-6 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-lg"
-                            />
-                        </div>
+                <!-- Textiles -->
+                <a href="/categorie/textiles.html" class="category-card group bg-gray-50 rounded-2xl p-8 border-2 border-gray-200 hover:border-red-600 transition cursor-pointer">
+                    <div class="text-5xl mb-4">🎨</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-red-600 transition">
+                        Textiles Imprimables
+                    </h3>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Polyester, Backlite - Stands & événements
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-bold text-red-600">À partir de 6€/m²</span>
+                        <span class="text-gray-400 group-hover:text-red-600 transition">→</span>
+                    </div>
+                </a>
+            </div>
 
-                        {/* Filtres par catégorie */}
-                        <div className="mb-10 overflow-x-auto">
-                            <div className="flex gap-3 pb-4">
-                                {categories.map((category) => (
-                                    <button
-                                        key={category}
-                                        onClick={() => setSelectedCategory(category)}
-                                        className={`category-btn px-6 py-3 rounded-lg font-semibold text-sm whitespace-nowrap ${
-                                            selectedCategory === category ? 'active' : 'bg-white text-gray-700'
-                                        }`}
-                                    >
-                                        {category === 'Tous' ? '📦' : categoryIcons[category] || '📄'} {category}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
+            <div class="text-center mt-10">
+                <a href="/produits.html" class="btn-primary text-white px-8 py-4 rounded-lg font-bold text-lg inline-block">
+                    Voir Tous les Produits →
+                </a>
+            </div>
+        </div>
+    </section>
 
-                        {/* Grille de produits */}
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {filteredProducts.map((product) => (
-                                <ProductCard
-                                    key={product.id}
-                                    product={product}
-                                    onClick={() => onProductClick(product)}
-                                />
-                            ))}
-                        </div>
+    <!-- PRODUITS POPULAIRES (SEO) -->
+    <section id="produits" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <span class="badge badge-green mb-4">Best-Sellers</span>
+                <h2 class="text-4xl font-black text-gray-900 mb-4">
+                    Nos Produits les Plus Populaires
+                </h2>
+                <p class="text-xl text-gray-600">
+                    Les supports d'impression préférés des professionnels
+                </p>
+            </div>
 
-                        {filteredProducts.length === 0 && (
-                            <div className="text-center py-16">
-                                <div className="text-6xl mb-4">🔍</div>
-                                <h3 className="text-xl font-bold text-gray-900 mb-2">
-                                    Aucun produit trouvé
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Forex 3mm -->
+                <a href="/produit/FX-3MM.html" class="product-card bg-white rounded-2xl border-2 border-gray-200 overflow-hidden">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <span class="badge badge-red mb-2">Best-Seller</span>
+                                <h3 class="text-2xl font-black text-gray-900">
+                                    Forex 3mm
                                 </h3>
-                                <p className="text-gray-600">
-                                    Essayez de modifier vos filtres ou votre recherche
-                                </p>
+                                <p class="text-sm text-gray-500 font-semibold">PVC Expansé Standard</p>
                             </div>
-                        )}
-                    </div>
-                </section>
-            );
-        }
-
-        // Composant Carte Produit
-        function ProductCard({ product, onClick }) {
-            const minPrice = product.priceRanges.length > 0
-                ? Math.min(...product.priceRanges.map(r => r.price))
-                : product.priceSingle;
-
-            const maxSavings = product.priceRanges.length > 1
-                ? Math.round((1 - minPrice / product.priceRanges[0].price) * 100)
-                : 0;
-
-            return (
-                <div
-                    className="product-card bg-white rounded-xl border-2 border-gray-200 overflow-hidden cursor-pointer"
-                    onClick={onClick}
-                >
-                    <div className="p-6">
-                        <div className="flex items-start justify-between mb-4">
-                            <div className="flex-1">
-                                <div className="text-4xl mb-3">{categoryIcons[product.category] || '📄'}</div>
-                                <h3 className="text-lg font-bold text-gray-900 mb-1 leading-tight">
-                                    {product.name}
-                                </h3>
-                                <p className="text-xs text-gray-500 uppercase tracking-wide font-bold mb-2">
-                                    {product.category}
-                                </p>
-                            </div>
-                            {maxSavings > 0 && (
-                                <span className="badge badge-red">
-                                    -{maxSavings}%
-                                </span>
-                            )}
+                            <span class="text-4xl">📄</span>
                         </div>
 
-                        <p className="text-sm text-gray-600 mb-4 line-clamp-2">
-                            {product.shortDesc}
+                        <p class="text-gray-600 mb-6">
+                            Le support le plus populaire pour enseignes et panneaux. Léger, rigide et économique.
                         </p>
 
-                        <div className="border-t border-gray-100 pt-4 mb-4">
-                            <div className="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                            <div class="grid grid-cols-2 gap-3 text-sm mb-4">
                                 <div>
-                                    <span className="text-gray-500">Épaisseur:</span>
-                                    <span className="ml-1 font-bold text-gray-900">{product.thickness}</span>
+                                    <span class="text-gray-500">Usage:</span>
+                                    <span class="ml-1 font-bold">Int/Ext</span>
                                 </div>
                                 <div>
-                                    <span className="text-gray-500">Usage:</span>
-                                    <span className="ml-1 font-bold text-gray-900">{product.usage.split('/')[0]}</span>
+                                    <span class="text-gray-500">Durée:</span>
+                                    <span class="ml-1 font-bold">2-3 ans</span>
                                 </div>
                                 <div>
-                                    <span className="text-gray-500">Durée:</span>
-                                    <span className="ml-1 font-bold text-gray-900">{product.lifespan}</span>
+                                    <span class="text-gray-500">Certif:</span>
+                                    <span class="ml-1 font-bold">M1</span>
                                 </div>
                                 <div>
-                                    <span className="text-gray-500">Délai:</span>
-                                    <span className="ml-1 font-bold text-gray-900">{product.deliveryDays}j</span>
+                                    <span class="text-gray-500">Délai:</span>
+                                    <span class="ml-1 font-bold">3 jours</span>
                                 </div>
                             </div>
                         </div>
 
-                        {product.certification && product.certification !== 'Non classé' && (
-                            <div className="mb-4">
-                                <span className="badge badge-blue">
-                                    {product.certification}
-                                </span>
-                            </div>
-                        )}
-
-                        <div className="flex items-end justify-between pt-2">
+                        <div class="flex items-end justify-between">
                             <div>
-                                <div className="text-xs text-gray-500 mb-1">À partir de</div>
-                                <div className="text-2xl font-black text-gray-900">
-                                    {minPrice.toFixed(2)}€
-                                    <span className="text-sm font-normal text-gray-500">/m²</span>
+                                <div class="text-sm text-gray-500 mb-1">À partir de</div>
+                                <div class="text-3xl font-black text-red-600">
+                                    20<span class="text-xl">€</span><span class="text-sm font-normal text-gray-500">/m²</span>
                                 </div>
                             </div>
-                            <button className="btn-primary text-white px-5 py-2 rounded-lg text-sm font-bold">
+                            <button class="btn-primary text-white px-6 py-3 rounded-lg font-bold">
                                 Configurer →
                             </button>
                         </div>
                     </div>
-                </div>
-            );
-        }
+                </a>
 
-        // Composant Configurateur (partie 1/2)
-        function ProductConfigurator({ product, onClose, onAddToCart }) {
-            // États
-            const [step, setStep] = useState(1);
-            const [config, setConfig] = useState({
-                surface: 1,
-                width: 100,
-                height: 100,
-                useCustomDimensions: false,
-                printSide: 'simple',
-                quantity: 1,
-                finish: 'standard',
-                hasEyelets: false,
-                hasCutting: false,
-                hasLamination: false,
-                file: null
-            });
+                <!-- Dibond 3mm -->
+                <a href="/produit/DB-3MM.html" class="product-card bg-white rounded-2xl border-2 border-gray-200 overflow-hidden">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <span class="badge badge-green mb-2">Premium</span>
+                                <h3 class="text-2xl font-black text-gray-900">
+                                    Dibond Alu 3mm
+                                </h3>
+                                <p class="text-sm text-gray-500 font-semibold">Composite Aluminium</p>
+                            </div>
+                            <span class="text-4xl">✨</span>
+                        </div>
 
-            // Formats standards
-            const standardFormats = [
-                { name: 'A4', width: 21, height: 29.7, surface: 0.062 },
-                { name: 'A3', width: 29.7, height: 42, surface: 0.125 },
-                { name: 'A2', width: 42, height: 59.4, surface: 0.25 },
-                { name: 'A1', width: 59.4, height: 84.1, surface: 0.5 },
-                { name: 'A0', width: 84.1, height: 118.9, surface: 1 },
-                { name: '40x60cm', width: 40, height: 60, surface: 0.24 },
-                { name: '60x80cm', width: 60, height: 80, surface: 0.48 },
-                { name: '80x120cm', width: 80, height: 120, surface: 0.96 },
-                { name: '100x150cm', width: 100, height: 150, surface: 1.5 },
-                { name: '120x176cm', width: 120, height: 176, surface: 2.11 }
-            ];
+                        <p class="text-gray-600 mb-6">
+                            Qualité premium pour enseignes durables. Résistance extrême UV et intempéries.
+                        </p>
 
-            // Calculs
-            const area = config.useCustomDimensions
-                ? (config.width * config.height / 10000)
-                : config.surface;
-
-            const totalArea = area * config.quantity;
-
-            const priceRange = product.priceRanges.find(r => totalArea >= r.min && totalArea <= r.max)
-                || product.priceRanges[product.priceRanges.length - 1];
-
-            const basePrice = config.printSide === 'double' && product.priceDouble > 0
-                ? product.priceDouble
-                : (priceRange?.price || product.priceSingle);
-
-            let totalPrice = area * basePrice * config.quantity;
-
-            // Options supplémentaires
-            if (config.hasEyelets) totalPrice += area * 2 * config.quantity;
-            if (config.hasCutting) totalPrice += area * 1.5 * config.quantity;
-            if (config.hasLamination) totalPrice += area * 5 * config.quantity;
-
-            const totalHT = totalPrice;
-            const totalTTC = totalHT * 1.20;
-
-            const handleFormatSelect = (format) => {
-                setConfig({
-                    ...config,
-                    surface: format.surface,
-                    width: format.width,
-                    height: format.height,
-                    useCustomDimensions: false
-                });
-            };
-
-            const handleFileUpload = (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    setConfig({ ...config, file });
-                }
-            };
-
-            const handleAddToCart = () => {
-                onAddToCart({
-                    product,
-                    config,
-                    area,
-                    totalArea,
-                    basePrice,
-                    totalHT,
-                    totalTTC
-                });
-                onClose();
-            };
-
-            return (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-                    <div className="bg-white rounded-2xl max-w-6xl w-full my-8 shadow-2xl">
-                        {/* Header */}
-                        <div className="sticky top-0 bg-white border-b-2 border-gray-200 px-8 py-6 flex items-center justify-between rounded-t-2xl">
-                            <div className="flex-1">
-                                <div className="flex items-center gap-3 mb-2">
-                                    <span className="text-4xl">{categoryIcons[product.category] || '📄'}</span>
-                                    <div>
-                                        <h2 className="text-2xl font-black text-gray-900">{product.name}</h2>
-                                        <p className="text-sm text-gray-600">{product.shortDesc}</p>
-                                    </div>
+                        <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                            <div class="grid grid-cols-2 gap-3 text-sm mb-4">
+                                <div>
+                                    <span class="text-gray-500">Usage:</span>
+                                    <span class="ml-1 font-bold">Extérieur</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500">Durée:</span>
+                                    <span class="ml-1 font-bold">10+ ans</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500">Certif:</span>
+                                    <span class="ml-1 font-bold">M1</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500">Délai:</span>
+                                    <span class="ml-1 font-bold">3 jours</span>
                                 </div>
                             </div>
-                            <button
-                                onClick={onClose}
-                                className="text-gray-400 hover:text-gray-600 text-3xl font-bold ml-4"
-                            >
-                                ×
+                        </div>
+
+                        <div class="flex items-end justify-between">
+                            <div>
+                                <div class="text-sm text-gray-500 mb-1">À partir de</div>
+                                <div class="text-3xl font-black text-red-600">
+                                    40<span class="text-xl">€</span><span class="text-sm font-normal text-gray-500">/m²</span>
+                                </div>
+                            </div>
+                            <button class="btn-primary text-white px-6 py-3 rounded-lg font-bold">
+                                Configurer →
                             </button>
                         </div>
-
-                        {/* Progress Steps */}
-                        <div className="px-8 py-6 bg-gray-50 border-b border-gray-200">
-                            <div className="flex items-center justify-between max-w-3xl mx-auto">
-                                {[
-                                    { num: 1, name: 'Format' },
-                                    { num: 2, name: 'Options' },
-                                    { num: 3, name: 'Fichier' },
-                                    { num: 4, name: 'Récapitulatif' }
-                                ].map((s, idx) => (
-                                    <div key={s.num} className="flex items-center flex-1">
-                                        <div className="flex flex-col items-center">
-                                            <div
-                                                className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${
-                                                    step >= s.num
-                                                        ? 'bg-red-600 text-white'
-                                                        : 'bg-gray-300 text-gray-600'
-                                                }`}
-                                            >
-                                                {s.num}
-                                            </div>
-                                            <div className={`text-xs mt-2 font-semibold ${
-                                                step >= s.num ? 'text-red-600' : 'text-gray-500'
-                                            }`}>
-                                                {s.name}
-                                            </div>
-                                        </div>
-                                        {idx < 3 && (
-                                            <div className={`flex-1 h-1 mx-2 ${
-                                                step > s.num ? 'bg-red-600' : 'bg-gray-300'
-                                            }`} />
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="p-8">
-                            <div className="grid lg:grid-cols-3 gap-8">
-                                {/* Colonne principale - Configuration */}
-                                <div className="lg:col-span-2">
-                                    {/* Étape 1: Format */}
-                                    {step === 1 && (
-                                        <div>
-                                            <h3 className="text-xl font-bold text-gray-900 mb-6">
-                                                1. Choisissez votre format
-                                            </h3>
-
-                                            {/* Formats standards */}
-                                            <div className="mb-8">
-                                                <label className="block text-sm font-bold text-gray-700 mb-4">
-                                                    Formats standards
-                                                </label>
-                                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-                                                    {standardFormats.map((format) => (
-                                                        <button
-                                                            key={format.name}
-                                                            onClick={() => handleFormatSelect(format)}
-                                                            className={`option-card border-2 rounded-lg px-4 py-3 text-center ${
-                                                                !config.useCustomDimensions && config.surface === format.surface
-                                                                    ? 'selected'
-                                                                    : 'border-gray-300'
-                                                            }`}
-                                                        >
-                                                            <div className="font-bold text-gray-900">{format.name}</div>
-                                                            <div className="text-xs text-gray-500 mt-1">
-                                                                {format.width}×{format.height}cm
-                                                            </div>
-                                                            <div className="text-xs font-bold text-red-600 mt-1">
-                                                                {format.surface.toFixed(2)}m²
-                                                            </div>
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            {/* Dimensions personnalisées */}
-                                            <div className="mb-6">
-                                                <label className="block text-sm font-bold text-gray-700 mb-4">
-                                                    Ou dimensions personnalisées
-                                                </label>
-                                                <div className="grid grid-cols-2 gap-4">
-                                                    <div>
-                                                        <label className="block text-xs text-gray-600 mb-2">Largeur (cm)</label>
-                                                        <input
-                                                            type="number"
-                                                            value={config.width}
-                                                            onChange={(e) => setConfig({
-                                                                ...config,
-                                                                width: parseFloat(e.target.value) || 0,
-                                                                useCustomDimensions: true
-                                                            })}
-                                                            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-lg font-bold"
-                                                            step="0.1"
-                                                            min="0"
-                                                        />
-                                                    </div>
-                                                    <div>
-                                                        <label className="block text-xs text-gray-600 mb-2">Hauteur (cm)</label>
-                                                        <input
-                                                            type="number"
-                                                            value={config.height}
-                                                            onChange={(e) => setConfig({
-                                                                ...config,
-                                                                height: parseFloat(e.target.value) || 0,
-                                                                useCustomDimensions: true
-                                                            })}
-                                                            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-lg font-bold"
-                                                            step="0.1"
-                                                            min="0"
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="mt-3 text-center">
-                                                    <span className="text-sm text-gray-600">Surface: </span>
-                                                    <span className="text-lg font-black text-red-600">
-                                                        {area.toFixed(3)} m²
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            {/* Quantité */}
-                                            <div className="mb-6">
-                                                <label className="block text-sm font-bold text-gray-700 mb-4">
-                                                    Quantité
-                                                </label>
-                                                <input
-                                                    type="number"
-                                                    value={config.quantity}
-                                                    onChange={(e) => setConfig({
-                                                        ...config,
-                                                        quantity: parseInt(e.target.value) || 1
-                                                    })}
-                                                    className="w-full max-w-xs px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-lg font-bold"
-                                                    min="1"
-                                                />
-                                                <p className="text-sm text-gray-600 mt-2">
-                                                    Surface totale: <span className="font-bold text-gray-900">{totalArea.toFixed(2)} m²</span>
-                                                </p>
-                                            </div>
-
-                                            <button
-                                                onClick={() => setStep(2)}
-                                                className="w-full btn-primary text-white py-4 rounded-lg font-bold text-lg"
-                                            >
-                                                Continuer →
-                                            </button>
-                                        </div>
-                                    )}
-
-                                    {/* Étape 2: Options */}
-                                    {step === 2 && (
-                                        <div>
-                                            <h3 className="text-xl font-bold text-gray-900 mb-6">
-                                                2. Choisissez vos options
-                                            </h3>
-
-                                            {/* Face d'impression */}
-                                            {product.hasDoubleFace && (
-                                                <div className="mb-6">
-                                                    <label className="block text-sm font-bold text-gray-700 mb-4">
-                                                        Face d'impression
-                                                    </label>
-                                                    <div className="grid grid-cols-2 gap-4">
-                                                        <button
-                                                            onClick={() => setConfig({ ...config, printSide: 'simple' })}
-                                                            className={`option-card border-2 rounded-lg p-4 ${
-                                                                config.printSide === 'simple' ? 'selected' : 'border-gray-300'
-                                                            }`}
-                                                        >
-                                                            <div className="text-2xl mb-2">📄</div>
-                                                            <div className="font-bold text-gray-900">Simple face</div>
-                                                            <div className="text-xs text-gray-600 mt-1">Impression recto</div>
-                                                        </button>
-                                                        <button
-                                                            onClick={() => setConfig({ ...config, printSide: 'double' })}
-                                                            className={`option-card border-2 rounded-lg p-4 ${
-                                                                config.printSide === 'double' ? 'selected' : 'border-gray-300'
-                                                            }`}
-                                                        >
-                                                            <div className="text-2xl mb-2">📋</div>
-                                                            <div className="font-bold text-gray-900">Double face</div>
-                                                            <div className="text-xs text-gray-600 mt-1">Impression recto-verso</div>
-                                                            <div className="text-xs font-bold text-red-600 mt-1">
-                                                                +{((product.priceDouble - product.priceSingle) * area).toFixed(2)}€
-                                                            </div>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            )}
-
-                                            {/* Finitions */}
-                                            <div className="mb-6">
-                                                <label className="block text-sm font-bold text-gray-700 mb-4">
-                                                    Finitions & Options
-                                                </label>
-
-                                                {/* Œillets */}
-                                                <label className="flex items-center justify-between p-4 border-2 border-gray-300 rounded-lg mb-3 cursor-pointer hover:border-red-600 hover:bg-red-50">
-                                                    <div className="flex items-center gap-3">
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={config.hasEyelets}
-                                                            onChange={(e) => setConfig({ ...config, hasEyelets: e.target.checked })}
-                                                            className="w-5 h-5"
-                                                        />
-                                                        <div>
-                                                            <div className="font-bold text-gray-900">Œillets de fixation</div>
-                                                            <div className="text-xs text-gray-600">Œillets tous les 50cm</div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="text-sm font-bold text-red-600">
-                                                        +{(area * 2 * config.quantity).toFixed(2)}€
-                                                    </div>
-                                                </label>
-
-                                                {/* Découpe de forme */}
-                                                <label className="flex items-center justify-between p-4 border-2 border-gray-300 rounded-lg mb-3 cursor-pointer hover:border-red-600 hover:bg-red-50">
-                                                    <div className="flex items-center gap-3">
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={config.hasCutting}
-                                                            onChange={(e) => setConfig({ ...config, hasCutting: e.target.checked })}
-                                                            className="w-5 h-5"
-                                                        />
-                                                        <div>
-                                                            <div className="font-bold text-gray-900">Découpe de forme</div>
-                                                            <div className="text-xs text-gray-600">Découpe personnalisée selon fichier</div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="text-sm font-bold text-red-600">
-                                                        +{(area * 1.5 * config.quantity).toFixed(2)}€
-                                                    </div>
-                                                </label>
-
-                                                {/* Lamination */}
-                                                <label className="flex items-center justify-between p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-red-600 hover:bg-red-50">
-                                                    <div className="flex items-center gap-3">
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={config.hasLamination}
-                                                            onChange={(e) => setConfig({ ...config, hasLamination: e.target.checked })}
-                                                            className="w-5 h-5"
-                                                        />
-                                                        <div>
-                                                            <div className="font-bold text-gray-900">Lamination protectrice</div>
-                                                            <div className="text-xs text-gray-600">Film de protection anti-UV mat ou brillant</div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="text-sm font-bold text-red-600">
-                                                        +{(area * 5 * config.quantity).toFixed(2)}€
-                                                    </div>
-                                                </label>
-                                            </div>
-
-                                            <div className="flex gap-4">
-                                                <button
-                                                    onClick={() => setStep(1)}
-                                                    className="flex-1 btn-secondary text-white py-4 rounded-lg font-bold text-lg"
-                                                >
-                                                    ← Retour
-                                                </button>
-                                                <button
-                                                    onClick={() => setStep(3)}
-                                                    className="flex-1 btn-primary text-white py-4 rounded-lg font-bold text-lg"
-                                                >
-                                                    Continuer →
-                                                </button>
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {/* Étape 3: Fichier */}
-                                    {step === 3 && (
-                                        <div>
-                                            <h3 className="text-xl font-bold text-gray-900 mb-6">
-                                                3. Téléchargez votre fichier
-                                            </h3>
-
-                                            <div className="mb-6">
-                                                <label className="file-upload-label block border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                                                    <input
-                                                        type="file"
-                                                        accept=".pdf,.ai,.eps,.png,.jpg,.jpeg"
-                                                        onChange={handleFileUpload}
-                                                    />
-                                                    <div className="text-5xl mb-4">📁</div>
-                                                    <div className="font-bold text-gray-900 mb-2">
-                                                        {config.file ? config.file.name : 'Cliquez pour sélectionner un fichier'}
-                                                    </div>
-                                                    <div className="text-sm text-gray-600">
-                                                        Formats acceptés: PDF, AI, EPS, PNG, JPG (max 100MB)
-                                                    </div>
-                                                    {config.file && (
-                                                        <div className="mt-4 inline-block bg-green-100 text-green-800 px-4 py-2 rounded-lg font-bold">
-                                                            ✓ Fichier ajouté
-                                                        </div>
-                                                    )}
-                                                </label>
-                                            </div>
-
-                                            <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-6 mb-6">
-                                                <h4 className="font-bold text-gray-900 mb-3">📋 Consignes techniques</h4>
-                                                <ul className="text-sm text-gray-700 space-y-2">
-                                                    <li>• Format PDF recommandé avec fonds perdus de 3mm</li>
-                                                    <li>• Résolution minimale: 100 DPI (150 DPI recommandé)</li>
-                                                    <li>• Profil couleur: CMJN</li>
-                                                    <li>• Polices vectorisées ou incorporées</li>
-                                                    <li>• Images en haute résolution</li>
-                                                </ul>
-                                            </div>
-
-                                            <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 mb-6">
-                                                <p className="text-sm text-gray-700">
-                                                    <span className="font-bold">💡 Astuce:</span> Vous pouvez aussi télécharger votre fichier plus tard. Un lien vous sera envoyé par email.
-                                                </p>
-                                            </div>
-
-                                            <div className="flex gap-4">
-                                                <button
-                                                    onClick={() => setStep(2)}
-                                                    className="flex-1 btn-secondary text-white py-4 rounded-lg font-bold text-lg"
-                                                >
-                                                    ← Retour
-                                                </button>
-                                                <button
-                                                    onClick={() => setStep(4)}
-                                                    className="flex-1 btn-primary text-white py-4 rounded-lg font-bold text-lg"
-                                                >
-                                                    Continuer →
-                                                </button>
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {/* Étape 4: Récapitulatif */}
-                                    {step === 4 && (
-                                        <div>
-                                            <h3 className="text-xl font-bold text-gray-900 mb-6">
-                                                4. Récapitulatif de votre commande
-                                            </h3>
-
-                                            <div className="space-y-4 mb-6">
-                                                <div className="bg-white border-2 border-gray-200 rounded-lg p-4">
-                                                    <div className="font-bold text-gray-700 mb-2">📐 Dimensions</div>
-                                                    <div className="text-gray-900">
-                                                        {config.useCustomDimensions
-                                                            ? `${config.width} × ${config.height} cm`
-                                                            : `Surface: ${config.surface} m²`
-                                                        } - {area.toFixed(3)} m² × {config.quantity} = {totalArea.toFixed(2)} m²
-                                                    </div>
-                                                </div>
-
-                                                {config.printSide === 'double' && (
-                                                    <div className="bg-white border-2 border-gray-200 rounded-lg p-4">
-                                                        <div className="font-bold text-gray-700 mb-2">🖨️ Impression</div>
-                                                        <div className="text-gray-900">Double face (recto-verso)</div>
-                                                    </div>
-                                                )}
-
-                                                {(config.hasEyelets || config.hasCutting || config.hasLamination) && (
-                                                    <div className="bg-white border-2 border-gray-200 rounded-lg p-4">
-                                                        <div className="font-bold text-gray-700 mb-2">⚙️ Options</div>
-                                                        <ul className="text-gray-900 space-y-1">
-                                                            {config.hasEyelets && <li>• Œillets de fixation</li>}
-                                                            {config.hasCutting && <li>• Découpe de forme</li>}
-                                                            {config.hasLamination && <li>• Lamination protectrice</li>}
-                                                        </ul>
-                                                    </div>
-                                                )}
-
-                                                {config.file && (
-                                                    <div className="bg-white border-2 border-gray-200 rounded-lg p-4">
-                                                        <div className="font-bold text-gray-700 mb-2">📁 Fichier</div>
-                                                        <div className="text-gray-900">{config.file.name}</div>
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                            <div className="flex gap-4">
-                                                <button
-                                                    onClick={() => setStep(3)}
-                                                    className="flex-1 btn-secondary text-white py-4 rounded-lg font-bold text-lg"
-                                                >
-                                                    ← Retour
-                                                </button>
-                                                <button
-                                                    onClick={handleAddToCart}
-                                                    className="flex-1 btn-primary text-white py-4 rounded-lg font-bold text-lg"
-                                                >
-                                                    Ajouter au panier 🛒
-                                                </button>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-
-                                {/* Colonne droite - Récapitulatif prix */}
-                                <div className="lg:col-span-1">
-                                    <div className="sticky top-24 price-breakdown rounded-xl p-6 border-2 border-gray-200">
-                                        <h4 className="font-bold text-gray-900 mb-4 text-lg">💰 Votre devis</h4>
-
-                                        <div className="space-y-3 mb-4 pb-4 border-b border-gray-300">
-                                            <div className="flex justify-between text-sm">
-                                                <span className="text-gray-600">Surface unitaire:</span>
-                                                <span className="font-bold text-gray-900">{area.toFixed(3)} m²</span>
-                                            </div>
-                                            <div className="flex justify-between text-sm">
-                                                <span className="text-gray-600">Quantité:</span>
-                                                <span className="font-bold text-gray-900">×{config.quantity}</span>
-                                            </div>
-                                            <div className="flex justify-between text-sm">
-                                                <span className="text-gray-600">Surface totale:</span>
-                                                <span className="font-bold text-red-600">{totalArea.toFixed(2)} m²</span>
-                                            </div>
-                                            <div className="flex justify-between text-sm">
-                                                <span className="text-gray-600">Prix/m²:</span>
-                                                <span className="font-bold text-gray-900">{basePrice.toFixed(2)} €</span>
-                                            </div>
-                                        </div>
-
-                                        <div className="space-y-2 mb-4 pb-4 border-b border-gray-300">
-                                            <div className="flex justify-between text-sm">
-                                                <span className="text-gray-600">Base:</span>
-                                                <span className="text-gray-900">{(area * basePrice * config.quantity).toFixed(2)} €</span>
-                                            </div>
-                                            {config.hasEyelets && (
-                                                <div className="flex justify-between text-sm">
-                                                    <span className="text-gray-600">Œillets:</span>
-                                                    <span className="text-gray-900">+{(area * 2 * config.quantity).toFixed(2)} €</span>
-                                                </div>
-                                            )}
-                                            {config.hasCutting && (
-                                                <div className="flex justify-between text-sm">
-                                                    <span className="text-gray-600">Découpe:</span>
-                                                    <span className="text-gray-900">+{(area * 1.5 * config.quantity).toFixed(2)} €</span>
-                                                </div>
-                                            )}
-                                            {config.hasLamination && (
-                                                <div className="flex justify-between text-sm">
-                                                    <span className="text-gray-600">Lamination:</span>
-                                                    <span className="text-gray-900">+{(area * 5 * config.quantity).toFixed(2)} €</span>
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        <div className="space-y-3">
-                                            <div className="flex justify-between items-center">
-                                                <span className="font-bold text-gray-700">Total HT:</span>
-                                                <span className="text-xl font-black text-gray-900">{totalHT.toFixed(2)} €</span>
-                                            </div>
-                                            <div className="flex justify-between items-center">
-                                                <span className="font-bold text-gray-700">Total TTC:</span>
-                                                <span className="text-2xl font-black text-red-600">{totalTTC.toFixed(2)} €</span>
-                                            </div>
-                                        </div>
-
-                                        <div className="mt-6 pt-4 border-t border-gray-300">
-                                            <div className="text-xs text-gray-600 space-y-1">
-                                                <div>✓ Livraison en {product.deliveryDays} jours ouvrés</div>
-                                                <div>✓ Garantie qualité professionnelle</div>
-                                                <div>✓ Service client disponible</div>
-                                            </div>
-                                        </div>
-
-                                        {/* Tarifs dégressifs */}
-                                        {product.priceRanges.length > 1 && (
-                                            <div className="mt-6 pt-4 border-t border-gray-300">
-                                                <div className="font-bold text-gray-700 mb-3 text-sm">📊 Tarifs dégressifs</div>
-                                                <div className="space-y-2">
-                                                    {product.priceRanges.map((range, idx) => {
-                                                        const isActive = totalArea >= range.min && totalArea <= range.max;
-                                                        return (
-                                                            <div
-                                                                key={idx}
-                                                                className={`flex justify-between text-xs p-2 rounded ${
-                                                                    isActive ? 'bg-red-100 font-bold' : 'bg-white'
-                                                                }`}
-                                                            >
-                                                                <span>{range.max === 9999 ? `${range.min}+ m²` : `${range.min}-${range.max} m²`}</span>
-                                                                <span>{range.price.toFixed(2)} €/m²</span>
-                                                            </div>
-                                                        );
-                                                    })}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-                </div>
-            );
-        }
+                </a>
 
-        // Composant Panier
-        function Cart({ items, onClose, onRemoveItem, onClearCart }) {
-            const totalHT = items.reduce((sum, item) => sum + item.totalHT, 0);
-            const totalTTC = items.reduce((sum, item) => sum + item.totalTTC, 0);
+                <!-- Bâche PVC -->
+                <a href="/produit/FRONTLIT-COATED-500G-B1.html" class="product-card bg-white rounded-2xl border-2 border-gray-200 overflow-hidden">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <span class="badge badge-green mb-2">Économique</span>
+                                <h3 class="text-2xl font-black text-gray-900">
+                                    Bâche PVC 500g
+                                </h3>
+                                <p class="text-sm text-gray-500 font-semibold">Frontlit Coated B1</p>
+                            </div>
+                            <span class="text-4xl">🎪</span>
+                        </div>
 
-            return (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-                        <div className="sticky top-0 bg-white border-b-2 border-gray-200 px-8 py-6 flex items-center justify-between rounded-t-2xl">
-                            <h2 className="text-2xl font-black text-gray-900">
-                                🛒 Votre panier ({items.length})
-                            </h2>
-                            <button
-                                onClick={onClose}
-                                className="text-gray-400 hover:text-gray-600 text-3xl font-bold"
-                            >
-                                ×
+                        <p class="text-gray-600 mb-6">
+                            Bâche standard pour affichage grand format extérieur. Excellent rapport qualité/prix.
+                        </p>
+
+                        <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                            <div class="grid grid-cols-2 gap-3 text-sm mb-4">
+                                <div>
+                                    <span class="text-gray-500">Usage:</span>
+                                    <span class="ml-1 font-bold">Extérieur</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500">Durée:</span>
+                                    <span class="ml-1 font-bold">2-5 ans</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500">Certif:</span>
+                                    <span class="ml-1 font-bold">B1</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500">Délai:</span>
+                                    <span class="ml-1 font-bold">3 jours</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-end justify-between">
+                            <div>
+                                <div class="text-sm text-gray-500 mb-1">À partir de</div>
+                                <div class="text-3xl font-black text-red-600">
+                                    6<span class="text-xl">€</span><span class="text-sm font-normal text-gray-500">/m²</span>
+                                </div>
+                            </div>
+                            <button class="btn-primary text-white px-6 py-3 rounded-lg font-bold">
+                                Configurer →
                             </button>
                         </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
 
-                        <div className="p-8">
-                            {items.length === 0 ? (
-                                <div className="text-center py-16">
-                                    <div className="text-6xl mb-4">🛒</div>
-                                    <h3 className="text-xl font-bold text-gray-900 mb-2">
-                                        Votre panier est vide
-                                    </h3>
-                                    <p className="text-gray-600 mb-6">
-                                        Ajoutez des produits pour commencer
-                                    </p>
-                                    <button
-                                        onClick={onClose}
-                                        className="btn-primary text-white px-8 py-3 rounded-lg font-bold"
-                                    >
-                                        Continuer mes achats
-                                    </button>
-                                </div>
-                            ) : (
-                                <>
-                                    <div className="space-y-4 mb-8">
-                                        {items.map((item, index) => (
-                                            <div key={index} className="bg-gray-50 rounded-lg p-6 border-2 border-gray-200">
-                                                <div className="flex items-start justify-between mb-4">
-                                                    <div className="flex-1">
-                                                        <h3 className="font-bold text-gray-900 text-lg mb-1">
-                                                            {item.product.name}
-                                                        </h3>
-                                                        <p className="text-sm text-gray-600 mb-3">
-                                                            {item.config.useCustomDimensions
-                                                                ? `${item.config.width} × ${item.config.height} cm`
-                                                                : `${item.area.toFixed(2)} m²`
-                                                            } × {item.config.quantity} = {item.totalArea.toFixed(2)} m²
-                                                        </p>
-                                                        <div className="flex flex-wrap gap-2">
-                                                            {item.config.printSide === 'double' && (
-                                                                <span className="badge badge-blue">Double face</span>
-                                                            )}
-                                                            {item.config.hasEyelets && (
-                                                                <span className="badge badge-green">Œillets</span>
-                                                            )}
-                                                            {item.config.hasCutting && (
-                                                                <span className="badge badge-green">Découpe</span>
-                                                            )}
-                                                            {item.config.hasLamination && (
-                                                                <span className="badge badge-green">Lamination</span>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                    <div className="text-right ml-4">
-                                                        <div className="text-2xl font-black text-gray-900 mb-2">
-                                                            {item.totalTTC.toFixed(2)} €
-                                                        </div>
-                                                        <div className="text-xs text-gray-500 mb-3">
-                                                            TTC
-                                                        </div>
-                                                        <button
-                                                            onClick={() => onRemoveItem(index)}
-                                                            className="text-red-600 hover:text-red-800 text-sm font-bold"
-                                                        >
-                                                            Supprimer
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
+    <!-- AVANTAGES -->
+    <section id="avantages" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="badge badge-red mb-4">Pourquoi Nous Choisir</span>
+                <h2 class="text-4xl font-black text-gray-900 mb-4">
+                    VisuPrint Pro, Votre Partenaire Impression
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Qualité professionnelle, prix compétitifs et service expert depuis 2010
+                </p>
+            </div>
 
-                                    <div className="bg-gradient-to-r from-gray-100 to-gray-50 rounded-xl p-6 mb-6 border-2 border-gray-200">
-                                        <div className="flex justify-between items-center mb-3">
-                                            <span className="text-lg font-bold text-gray-700">Total HT:</span>
-                                            <span className="text-2xl font-black text-gray-900">
-                                                {totalHT.toFixed(2)} €
-                                            </span>
-                                        </div>
-                                        <div className="flex justify-between items-center">
-                                            <span className="text-xl font-black text-gray-900">Total TTC:</span>
-                                            <span className="text-3xl font-black text-red-600">
-                                                {totalTTC.toFixed(2)} €
-                                            </span>
-                                        </div>
-                                    </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center p-8">
+                    <div class="text-6xl mb-6">📦</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Livraison 48-72h</h3>
+                    <p class="text-gray-600">
+                        Production rapide et livraison partout en France. Express disponible.
+                    </p>
+                </div>
 
-                                    <div className="flex gap-4">
-                                        <button
-                                            onClick={onClearCart}
-                                            className="btn-secondary text-white px-6 py-4 rounded-lg font-bold text-lg"
-                                        >
-                                            Vider le panier
-                                        </button>
-                                        <button
-                                            className="flex-1 btn-primary text-white py-4 rounded-lg font-bold text-lg"
-                                        >
-                                            Demander un devis 📧
-                                        </button>
-                                    </div>
-                                </>
-                            )}
-                        </div>
+                <div class="text-center p-8">
+                    <div class="text-6xl mb-6">💰</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Prix Dégressifs</h3>
+                    <p class="text-gray-600">
+                        Jusqu'à -40% sur les grandes quantités. Devis immédiat en ligne.
+                    </p>
+                </div>
+
+                <div class="text-center p-8">
+                    <div class="text-6xl mb-6">🏆</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Qualité Certifiée</h3>
+                    <p class="text-gray-600">
+                        Matériaux certifiés B1/M1. Impression HD haute résolution garantie.
+                    </p>
+                </div>
+
+                <div class="text-center p-8">
+                    <div class="text-6xl mb-6">💬</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Service Expert</h3>
+                    <p class="text-gray-600">
+                        Conseils techniques et accompagnement projet par des professionnels.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA DEVIS -->
+    <section id="devis" class="py-20 hero-gradient text-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl lg:text-5xl font-black mb-6">
+                Besoin d'un Devis Personnalisé ?
+            </h2>
+            <p class="text-xl mb-10 text-gray-300">
+                Obtenez votre devis gratuit en moins de 2 minutes avec notre configurateur
+            </p>
+
+            <div class="flex flex-wrap justify-center gap-4 mb-10">
+                <a href="/configurateur.html" class="bg-red-600 hover:bg-red-700 text-white px-10 py-4 rounded-lg font-bold text-lg transition shadow-2xl">
+                    🛒 Configurateur en Ligne
+                </a>
+                <a href="tel:0123456789" class="bg-white text-gray-900 px-10 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition shadow-xl">
+                    📞 01 23 45 67 89
+                </a>
+            </div>
+
+            <div class="text-sm text-gray-300">
+                ✓ Réponse sous 1h • ✓ Sans engagement • ✓ Conseils gratuits
+            </div>
+        </div>
+    </section>
+
+    <!-- SEO CONTENT -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 prose prose-lg">
+            <h2 class="text-3xl font-black text-gray-900 mb-6">
+                Impression Grand Format : Le Guide Complet 2025
+            </h2>
+
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                Qu'est-ce que l'impression grand format ?
+            </h3>
+            <p class="text-gray-700 leading-relaxed mb-6">
+                L'<strong>impression grand format</strong> désigne toutes les techniques d'impression sur supports de grande taille, généralement supérieurs au format A3. Chez VisuPrint Pro, nous proposons plus de <strong>50 supports différents</strong> pour tous vos besoins d'<strong>affichage professionnel</strong> : enseignes, panneaux, bâches, kakémonos, roll-ups, habillage de façade, PLV et bien plus.
+            </p>
+
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                Quels supports choisir pour votre impression grand format ?
+            </h3>
+
+            <h4 class="text-xl font-bold text-gray-900 mb-3">1. Panneaux rigides PVC (Forex)</h4>
+            <p class="text-gray-700 mb-4">
+                Le <strong>Forex</strong> (ou <strong>PVC expansé</strong>) est le support le plus polyvalent et économique pour l'affichage intérieur et extérieur abrité. Disponible en plusieurs épaisseurs (2mm, 3mm, 5mm, 8mm, 10mm), il convient parfaitement aux <strong>enseignes de magasin</strong>, <strong>panneaux de chantier</strong>, <strong>PLV</strong> et <strong>signalétique d'entreprise</strong>. Prix dégressifs à partir de 13€/m².
+            </p>
+
+            <h4 class="text-xl font-bold text-gray-900 mb-3">2. Dibond (Composite aluminium)</h4>
+            <p class="text-gray-700 mb-4">
+                Le <strong>Dibond</strong> est le support premium par excellence pour les <strong>enseignes extérieures haut de gamme</strong>. Composé de 2 feuilles d'aluminium avec âme polyéthylène, il offre une <strong>durabilité exceptionnelle de 10+ ans</strong> en extérieur. Idéal pour les <strong>plaques professionnelles</strong>, <strong>façades de magasin</strong> et <strong>signalétique urbaine</strong>. À partir de 40€/m².
+            </p>
+
+            <h4 class="text-xl font-bold text-gray-900 mb-3">3. Bâches PVC et Mesh</h4>
+            <p class="text-gray-700 mb-4">
+                Les <strong>bâches PVC</strong> sont parfaites pour l'<strong>affichage grand format extérieur</strong> : façades d'immeubles, échafaudages, banderoles, événements. La <strong>bâche mesh micro-perforée</strong> est recommandée pour les zones ventées. Certifications B1 ignifuge disponibles. Prix ultra-compétitifs à partir de 6€/m².
+            </p>
+
+            <h4 class="text-xl font-bold text-gray-900 mb-3">4. Textiles imprimés</h4>
+            <p class="text-gray-700 mb-4">
+                Les <strong>textiles imprimés</strong> (polyester, polyglans) sont incontournables pour les <strong>stands de salon</strong>, <strong>murs d'images</strong>, <strong>kakémonos</strong> et <strong>cloisons textiles</strong>. Légers, élégants et faciles à transporter. Options rétroéclairées disponibles pour un effet premium. À partir de 6€/m².
+            </p>
+
+            <h3 class="text-2xl font-bold text-gray-900 mb-4 mt-8">
+                Tarifs impression grand format : Prix dégressifs
+            </h3>
+            <p class="text-gray-700 mb-4">
+                Chez VisuPrint Pro, nous appliquons des <strong>tarifs dégressifs jusqu'à -40%</strong> selon les quantités commandées. Plus vous commandez, plus vous économisez !
+            </p>
+
+            <h3 class="text-2xl font-bold text-gray-900 mb-4 mt-8">
+                Pourquoi choisir VisuPrint Pro ?
+            </h3>
+            <ul class="list-disc pl-6 text-gray-700 space-y-2 mb-6">
+                <li><strong>+50 supports disponibles</strong> - Tous types d'impression</li>
+                <li><strong>Prix dégressifs</strong> - Jusqu'à -40% sur volumes</li>
+                <li><strong>Livraison 48-72h</strong> - Production rapide garantie</li>
+                <li><strong>Qualité certifiée</strong> - Matériaux B1/M1</li>
+                <li><strong>Configurateur en ligne</strong> - Devis instantané</li>
+                <li><strong>Service expert</strong> - Conseils techniques gratuits</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-gray-900 mb-4 mt-8">
+                FAQ Impression Grand Format
+            </h3>
+
+            <div class="bg-white rounded-lg p-6 mb-4 border-2 border-gray-200">
+                <h4 class="font-bold text-gray-900 mb-2">Quel est le délai de livraison pour une impression grand format ?</h4>
+                <p class="text-gray-700">
+                    Le délai standard est de <strong>48 à 72 heures</strong> pour la plupart de nos supports (Forex, Dibond, bâches). Un service express 24h est disponible sur demande pour les urgences.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-lg p-6 mb-4 border-2 border-gray-200">
+                <h4 class="font-bold text-gray-900 mb-2">Quel format de fichier fournir pour l'impression ?</h4>
+                <p class="text-gray-700">
+                    Nous acceptons les formats <strong>PDF, AI, EPS, PNG et JPG</strong>. Pour une qualité optimale, fournissez un fichier en <strong>300 DPI minimum</strong>, profil couleur CMJN, avec 3mm de fond perdu.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-lg p-6 mb-4 border-2 border-gray-200">
+                <h4 class="font-bold text-gray-900 mb-2">Quelle différence entre Forex et Dibond ?</h4>
+                <p class="text-gray-700">
+                    Le <strong>Forex (PVC)</strong> est plus léger et économique (à partir de 13€/m²), idéal pour l'intérieur et extérieur abrité (2-3 ans). Le <strong>Dibond (aluminium)</strong> est ultra-résistant (10+ ans extérieur), parfait pour les enseignes durables mais plus cher (à partir de 40€/m²).
+                </p>
+            </div>
+
+            <div class="bg-white rounded-lg p-6 mb-4 border-2 border-gray-200">
+                <h4 class="font-bold text-gray-900 mb-2">Quelle est la taille maximum pour l'impression ?</h4>
+                <p class="text-gray-700">
+                    Cela dépend du support. Pour le <strong>Forex et Dibond</strong>, jusqu'à <strong>200×300 cm</strong>. Pour les <strong>bâches et textiles</strong>, les dimensions sont <strong>illimitées</strong> (assemblage possible pour très grands formats).
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 text-gray-300 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-10 mb-12">
+                <div>
+                    <div class="text-3xl font-black text-white mb-4">
+                        VisuPrint<span class="text-red-600">Pro</span>
+                    </div>
+                    <p class="text-sm text-gray-400 mb-4">
+                        Spécialiste de l'impression professionnelle grand format depuis 2010. Plus de 50 supports disponibles.
+                    </p>
+                    <div class="flex gap-3">
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600 transition">
+                            F
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600 transition">
+                            L
+                        </a>
                     </div>
                 </div>
-            );
-        }
 
-        // Composant Services
-        function Services() {
-            return (
-                <section id="services" className="bg-white border-y border-gray-200 py-16">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="text-center mb-12">
-                            <h2 className="text-3xl font-black text-gray-900 mb-3">
-                                Nos services professionnels
-                            </h2>
-                            <p className="text-lg text-gray-600">
-                                Un accompagnement complet pour vos projets
-                            </p>
-                        </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4 text-sm uppercase tracking-wide">Produits</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/categorie/supports-rigides-pvc.html" class="hover:text-white transition">Panneaux PVC Forex</a></li>
+                        <li><a href="/categorie/supports-aluminium.html" class="hover:text-white transition">Dibond Aluminium</a></li>
+                        <li><a href="/categorie/baches-souples.html" class="hover:text-white transition">Bâches & Mesh</a></li>
+                        <li><a href="/categorie/textiles.html" class="hover:text-white transition">Textiles Imprimés</a></li>
+                        <li><a href="/produits.html" class="hover:text-white transition font-bold">Tous les produits →</a></li>
+                    </ul>
+                </div>
 
-                        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                            <div className="text-center">
-                                <div className="text-5xl mb-4">📦</div>
-                                <h3 className="font-bold text-gray-900 mb-2 text-lg">Livraison rapide</h3>
-                                <p className="text-sm text-gray-600">
-                                    Express 48-72h partout en France. Livraison soignée et sécurisée.
-                                </p>
-                            </div>
-                            <div className="text-center">
-                                <div className="text-5xl mb-4">💰</div>
-                                <h3 className="font-bold text-gray-900 mb-2 text-lg">Prix dégressifs</h3>
-                                <p className="text-sm text-gray-600">
-                                    Jusqu'à -40% en volume. Plus vous commandez, plus vous économisez.
-                                </p>
-                            </div>
-                            <div className="text-center">
-                                <div className="text-5xl mb-4">✓</div>
-                                <h3 className="font-bold text-gray-900 mb-2 text-lg">Qualité garantie</h3>
-                                <p className="text-sm text-gray-600">
-                                    Certifications B1/M1. Matériaux premium et impression HD.
-                                </p>
-                            </div>
-                            <div className="text-center">
-                                <div className="text-5xl mb-4">🎨</div>
-                                <h3 className="font-bold text-gray-900 mb-2 text-lg">Service complet</h3>
-                                <p className="text-sm text-gray-600">
-                                    Conception graphique, installation et SAV disponibles.
-                                </p>
-                            </div>
-                        </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4 text-sm uppercase tracking-wide">Services</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/configurateur.html" class="hover:text-white transition">Configurateur en ligne</a></li>
+                        <li><a href="/devis.html" class="hover:text-white transition">Devis gratuit</a></li>
+                        <li><a href="/livraison.html" class="hover:text-white transition">Livraison express</a></li>
+                        <li><a href="/conception.html" class="hover:text-white transition">Conception graphique</a></li>
+                        <li><a href="/installation.html" class="hover:text-white transition">Installation</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-white mb-4 text-sm uppercase tracking-wide">Contact</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-center gap-2">
+                            <span>📞</span>
+                            <a href="tel:0123456789" class="hover:text-white transition font-bold text-lg">01 23 45 67 89</a>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span>📧</span>
+                            <a href="mailto:contact@visuprintpro.fr" class="hover:text-white transition">contact@visuprintpro.fr</a>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span>⏰</span>
+                            <span>Lun-Ven : 9h-18h</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-8">
+                <div class="flex flex-wrap justify-between items-center">
+                    <div class="text-sm text-gray-500">
+                        © 2025 VisuPrint Pro - Tous droits réservés
                     </div>
-                </section>
-            );
-        }
-
-        // Composant Footer
-        function Footer() {
-            return (
-                <footer className="bg-gray-900 text-gray-300 py-12">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="grid md:grid-cols-4 gap-8 mb-8">
-                            <div>
-                                <div className="text-2xl font-black text-white mb-4">
-                                    VisuPrint<span className="text-red-600">Pro</span>
-                                </div>
-                                <p className="text-sm text-gray-400">
-                                    Impression professionnelle grand format. Plus de 50 supports disponibles.
-                                </p>
-                            </div>
-                            <div>
-                                <h4 className="font-bold text-white mb-4 text-sm">Produits</h4>
-                                <ul className="space-y-2 text-sm">
-                                    <li><a href="#" className="hover:text-white">Panneaux rigides</a></li>
-                                    <li><a href="#" className="hover:text-white">Bâches & textiles</a></li>
-                                    <li><a href="#" className="hover:text-white">Supports aluminium</a></li>
-                                    <li><a href="#" className="hover:text-white">Textiles écologiques</a></li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h4 className="font-bold text-white mb-4 text-sm">Services</h4>
-                                <ul className="space-y-2 text-sm">
-                                    <li><a href="#" className="hover:text-white">Conception graphique</a></li>
-                                    <li><a href="#" className="hover:text-white">Installation</a></li>
-                                    <li><a href="#" className="hover:text-white">Livraison express</a></li>
-                                    <li><a href="#" className="hover:text-white">Devis en ligne</a></li>
-                                </ul>
-                            </div>
-                            <div id="contact">
-                                <h4 className="font-bold text-white mb-4 text-sm">Contact</h4>
-                                <ul className="space-y-2 text-sm">
-                                    <li className="font-bold text-white">01 23 45 67 89</li>
-                                    <li>contact@visuprintpro.fr</li>
-                                    <li className="text-gray-400">Du lundi au vendredi<br/>9h-18h</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-500">
-                            © 2025 VisuPrint Pro - Tous droits réservés - Impression professionnelle grand format
-                        </div>
+                    <div class="flex gap-6 text-sm">
+                        <a href="/mentions-legales.html" class="hover:text-white transition">Mentions légales</a>
+                        <a href="/cgv.html" class="hover:text-white transition">CGV</a>
+                        <a href="/politique-confidentialite.html" class="hover:text-white transition">Confidentialité</a>
+                        <a href="/sitemap.xml" class="hover:text-white transition">Plan du site</a>
                     </div>
-                </footer>
-            );
-        }
+                </div>
+            </div>
+        </div>
+    </footer>
 
-        // Composant Principal
-        function App() {
-            const { products, loading } = useProducts();
-            const [selectedProduct, setSelectedProduct] = useState(null);
-            const [cart, setCart] = useState([]);
-            const [showCart, setShowCart] = useState(false);
-
-            const handleAddToCart = (item) => {
-                setCart([...cart, item]);
-            };
-
-            const handleRemoveItem = (index) => {
-                setCart(cart.filter((_, i) => i !== index));
-            };
-
-            const handleClearCart = () => {
-                if (confirm('Êtes-vous sûr de vouloir vider le panier ?')) {
-                    setCart([]);
-                }
-            };
-
-            if (loading) {
-                return (
-                    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-                        <div className="text-center">
-                            <div className="text-6xl mb-4 loading">📦</div>
-                            <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                                Chargement du catalogue...
-                            </h2>
-                            <p className="text-gray-600">
-                                Préparation de nos {products.length || '50+'} produits
-                            </p>
-                        </div>
-                    </div>
-                );
+    <!-- Schema.org FAQ -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "Quel est le délai de livraison pour une impression grand format ?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Le délai standard est de 48 à 72 heures pour la plupart de nos supports (Forex, Dibond, bâches). Un service express 24h est disponible sur demande pour les urgences."
             }
-
-            return (
-                <div className="min-h-screen bg-gray-50">
-                    <Header cartCount={cart.length} onCartClick={() => setShowCart(true)} />
-                    <Hero />
-                    <Catalog products={products} onProductClick={setSelectedProduct} />
-                    <Services />
-                    <Footer />
-
-                    {selectedProduct && (
-                        <ProductConfigurator
-                            product={selectedProduct}
-                            onClose={() => setSelectedProduct(null)}
-                            onAddToCart={handleAddToCart}
-                        />
-                    )}
-
-                    {showCart && (
-                        <Cart
-                            items={cart}
-                            onClose={() => setShowCart(false)}
-                            onRemoveItem={handleRemoveItem}
-                            onClearCart={handleClearCart}
-                        />
-                    )}
-                </div>
-            );
-        }
-
-        ReactDOM.render(<App />, document.getElementById('root'));
+        }, {
+            "@type": "Question",
+            "name": "Quel format de fichier fournir pour l'impression ?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Nous acceptons les formats PDF, AI, EPS, PNG et JPG. Pour une qualité optimale, fournissez un fichier en 300 DPI minimum, profil couleur CMJN, avec 3mm de fond perdu."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Quelle différence entre Forex et Dibond ?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Le Forex (PVC) est plus léger et économique (à partir de 13€/m²), idéal pour l'intérieur et extérieur abrité (2-3 ans). Le Dibond (aluminium) est ultra-résistant (10+ ans extérieur), parfait pour les enseignes durables mais plus cher (à partir de 40€/m²)."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Quelle est la taille maximum pour l'impression ?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Cela dépend du support. Pour le Forex et Dibond, jusqu'à 200×300 cm. Pour les bâches et textiles, les dimensions sont illimitées (assemblage possible pour très grands formats)."
+            }
+        }]
+    }
     </script>
+
 </body>
 </html>
