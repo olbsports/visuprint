@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merci pour votre commande - Imprixo</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="/"><h1>🎨 <span class="brand">Imprixo</span></h1></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section style="padding: 100px 0; text-align: center;">
+        <div class="container" style="max-width: 600px;">
+            <div style="font-size: 100px; margin-bottom: 30px;">🎉</div>
+
+            <h1 style="font-size: 48px; margin-bottom: 20px; color: #27ae60;">Commande validée !</h1>
+
+            <p style="font-size: 20px; color: #666; margin-bottom: 40px;">
+                Merci pour votre confiance. Votre commande a bien été enregistrée.
+            </p>
+
+            <div style="background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-bottom: 40px; text-align: left;">
+                <h3 style="margin-bottom: 20px;">📧 Email de confirmation envoyé</h3>
+                <p style="color: #666; margin-bottom: 30px;">
+                    Vous recevrez un email de confirmation avec tous les détails de votre commande dans quelques instants.
+                </p>
+
+                <h3 style="margin-bottom: 20px;">📦 Prochaines étapes</h3>
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div style="display: flex; align-items: flex-start; gap: 15px;">
+                        <div style="min-width: 30px; height: 30px; border-radius: 50%; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700;">1</div>
+                        <div>
+                            <strong>Validation</strong><br>
+                            <span style="color: #666; font-size: 14px;">Nous vérifions votre commande sous 2h</span>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: flex-start; gap: 15px;">
+                        <div style="min-width: 30px; height: 30px; border-radius: 50%; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700;">2</div>
+                        <div>
+                            <strong>Production</strong><br>
+                            <span style="color: #666; font-size: 14px;">Impression haute qualité sous 24-48h</span>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: flex-start; gap: 15px;">
+                        <div style="min-width: 30px; height: 30px; border-radius: 50%; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700;">3</div>
+                        <div>
+                            <strong>Expédition</strong><br>
+                            <span style="color: #666; font-size: 14px;">Livraison express 48-72h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 20px; justify-content: center;">
+                <a href="/mon-compte.php" class="btn btn-primary">Suivre ma commande</a>
+                <a href="/catalogue.html" class="btn btn-outline">Continuer mes achats</a>
+            </div>
+
+            <div style="margin-top: 50px; padding: 30px; background: #f8f9fa; border-radius: 12px;">
+                <h4 style="margin-bottom: 15px;">Besoin d'aide ?</h4>
+                <p style="color: #666;">
+                    Notre équipe est disponible du lundi au vendredi de 9h à 18h<br>
+                    <strong>Email:</strong> contact@imprixo.fr<br>
+                    <strong>Téléphone:</strong> 01 XX XX XX XX
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script src="/js/app.js"></script>
+    <script>
+        // Vider le panier
+        Imprixo.cart.clear();
+    </script>
+</body>
+</html>
