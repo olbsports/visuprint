@@ -1,9 +1,45 @@
+<?php
+// Script pour générer toutes les pages produits avec configurateur Canva
+
+$_SERVER['SERVER_NAME'] = 'localhost';
+require_once __DIR__ . '/api/config.php';
+
+try {
+    $pdo = Database::getInstance()->getConnection();
+    $stmt = $pdo->query("SELECT * FROM produits ORDER BY nom");
+    $produits = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $created = 0;
+
+    foreach ($produits as $produit) {
+        $code = $produit['code_produit'];
+        $nom = htmlspecialchars($produit['nom']);
+        $categorie = htmlspecialchars($produit['categorie']);
+        $description = htmlspecialchars($produit['description_longue']);
+        $epaisseur = htmlspecialchars($produit['epaisseur'] ?? 'N/A');
+        $usage = htmlspecialchars($produit['usage'] ?? 'Voir description');
+
+        // Prix par défaut
+        $prix_base = $produit['prix_0_10'];
+        $prix_11_50 = $produit['prix_11_50'];
+        $prix_51_100 = $produit['prix_51_100'];
+        $prix_101_300 = $produit['prix_101_300'];
+        $prix_300_plus = $produit['prix_300_plus'];
+
+        // Emoji par catégorie
+        $emoji = '📄';
+        if (strpos($categorie, 'Aluminium') !== false || strpos($categorie, 'Dibond') !== false) $emoji = '✨';
+        elseif (strpos($categorie, 'Bâche') !== false || strpos($categorie, 'Mesh') !== false) $emoji = '🎪';
+        elseif (strpos($categorie, 'Textile') !== false) $emoji = '🎨';
+        elseif (strpos($categorie, 'Acryl') !== false) $emoji = '💎';
+
+        $html = <<<HTML
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dibond Alu 3mm - Composite Aluminium | Imprixo</title>
+    <title>$nom - Imprixo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -83,16 +119,16 @@
             const surface = (config.width * config.height) / 10000;
             const totalSurface = surface * config.quantity;
 
-            let pricePerM2 = 40;
-            if (totalSurface > 300) pricePerM2 = 35;
-            else if (totalSurface > 100) pricePerM2 = 37;
-            else if (totalSurface > 50) pricePerM2 = 38;
-            else if (totalSurface > 10) pricePerM2 = 39;
+            let pricePerM2 = $prix_base;
+            if (totalSurface > 300) pricePerM2 = $prix_300_plus;
+            else if (totalSurface > 100) pricePerM2 = $prix_101_300;
+            else if (totalSurface > 50) pricePerM2 = $prix_51_100;
+            else if (totalSurface > 10) pricePerM2 = $prix_11_50;
 
             let totalPrice = surface * pricePerM2 * config.quantity;
             if (config.printSide === 'double') totalPrice *= 1.3;
             if (config.hasEyelets) totalPrice += surface * 2 * config.quantity;
-            if (config.hasCutting) totalPrice += surface * 2 * config.quantity;
+            if (config.hasCutting) totalPrice += surface * 1.5 * config.quantity;
             if (config.hasLamination) totalPrice += surface * 5 * config.quantity;
 
             const handleFileUpload = (e) => {
@@ -109,8 +145,8 @@
             const addToCart = () => {
                 const cart = getCart();
                 cart.push({
-                    name: 'Dibond Alu 3mm',
-                    code: 'DB-3MM',
+                    name: '$nom',
+                    code: '$code',
                     surface,
                     width: config.width,
                     height: config.height,
@@ -129,6 +165,7 @@
                 <div className="min-h-screen bg-gray-50">
                     <Header cartCount={cartCount} />
 
+                    {/* Breadcrumb */}
                     <div className="bg-white border-b border-gray-200 py-3">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                             <div className="flex items-center text-sm text-gray-600">
@@ -136,7 +173,7 @@
                                 <span className="mx-2">›</span>
                                 <a href="/catalogue.html" className="hover:text-red-600">Catalogue</a>
                                 <span className="mx-2">›</span>
-                                <span className="text-gray-900 font-bold">Dibond Alu 3mm</span>
+                                <span className="text-gray-900 font-bold">$nom</span>
                             </div>
                         </div>
                     </div>
@@ -144,12 +181,14 @@
                     <section className="py-8">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                             <div className="grid lg:grid-cols-3 gap-8">
+                                {/* CANVAS PREVIEW */}
                                 <div className="lg:col-span-2">
                                     <div className="bg-white rounded-2xl border-2 border-gray-200 overflow-hidden shadow-lg">
+                                        {/* Toolbar */}
                                         <div className="bg-gray-900 text-white p-4 flex items-center justify-between">
                                             <div>
-                                                <h2 className="text-xl font-black">Dibond Alu 3mm</h2>
-                                                <p className="text-sm text-gray-400">Composite Aluminium Premium</p>
+                                                <h2 className="text-xl font-black">$nom</h2>
+                                                <p className="text-sm text-gray-400">$categorie</p>
                                             </div>
                                             <div className="flex gap-2">
                                                 <button onClick={() => fileInputRef.current?.click()} className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded font-bold text-sm">
@@ -159,13 +198,14 @@
                                             </div>
                                         </div>
 
+                                        {/* Canvas Area */}
                                         <div className="p-8 bg-gray-100">
                                             <div className="canvas-area bg-white rounded-lg shadow-inner" style={{ height: '500px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                                 {config.filePreview ? (
                                                     <img src={config.filePreview} alt="Preview" className="max-w-full max-h-full object-contain" />
                                                 ) : (
                                                     <div className="text-center">
-                                                        <div className="text-8xl mb-4">✨</div>
+                                                        <div className="text-8xl mb-4">$emoji</div>
                                                         <p className="text-xl font-bold text-gray-900 mb-2">{config.width} × {config.height} cm</p>
                                                         <p className="text-gray-500">Surface: {surface.toFixed(3)} m²</p>
                                                         <button onClick={() => fileInputRef.current?.click()} className="mt-6 bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-bold">
@@ -175,6 +215,7 @@
                                                 )}
                                             </div>
 
+                                            {/* Dimensions */}
                                             <div className="mt-4 grid grid-cols-2 gap-3">
                                                 <div className="bg-white rounded-lg p-4 border-2 border-gray-200">
                                                     <label className="block text-sm font-bold text-gray-700 mb-2">📏 Largeur (cm)</label>
@@ -187,25 +228,29 @@
                                             </div>
                                         </div>
 
+                                        {/* Options */}
                                         <div className="p-6 bg-white border-t-2 border-gray-200">
                                             <h3 className="text-lg font-black text-gray-900 mb-4">⚙️ Options d'impression</h3>
                                             <div className="grid grid-cols-2 gap-4">
-                                                <button onClick={() => setConfig({...config, printSide: config.printSide === 'simple' ? 'double' : 'simple'})} className={`option-card p-4 rounded-lg bg-white cursor-pointer ${config.printSide === 'double' ? 'selected' : ''}`}>
+                                                <button onClick={() => setConfig({...config, printSide: config.printSide === 'simple' ? 'double' : 'simple'})} className={\`option-card p-4 rounded-lg bg-white cursor-pointer \${config.printSide === 'double' ? 'selected' : ''}\`}>
                                                     <div className="text-3xl mb-2">🔄</div>
                                                     <div className="font-bold text-gray-900">Double face</div>
                                                     <div className="text-sm text-gray-600">+30% du prix</div>
                                                 </button>
-                                                <button onClick={() => setConfig({...config, hasEyelets: !config.hasEyelets})} className={`option-card p-4 rounded-lg bg-white cursor-pointer ${config.hasEyelets ? 'selected' : ''}`}>
+
+                                                <button onClick={() => setConfig({...config, hasEyelets: !config.hasEyelets})} className={\`option-card p-4 rounded-lg bg-white cursor-pointer \${config.hasEyelets ? 'selected' : ''}\`}>
                                                     <div className="text-3xl mb-2">⭕</div>
                                                     <div className="font-bold text-gray-900">Œillets</div>
                                                     <div className="text-sm text-gray-600">+2€/m²</div>
                                                 </button>
-                                                <button onClick={() => setConfig({...config, hasCutting: !config.hasCutting})} className={`option-card p-4 rounded-lg bg-white cursor-pointer ${config.hasCutting ? 'selected' : ''}`}>
+
+                                                <button onClick={() => setConfig({...config, hasCutting: !config.hasCutting})} className={\`option-card p-4 rounded-lg bg-white cursor-pointer \${config.hasCutting ? 'selected' : ''}\`}>
                                                     <div className="text-3xl mb-2">✂️</div>
                                                     <div className="font-bold text-gray-900">Découpe</div>
-                                                    <div className="text-sm text-gray-600">+2€/m²</div>
+                                                    <div className="text-sm text-gray-600">+1.5€/m²</div>
                                                 </button>
-                                                <button onClick={() => setConfig({...config, hasLamination: !config.hasLamination})} className={`option-card p-4 rounded-lg bg-white cursor-pointer ${config.hasLamination ? 'selected' : ''}`}>
+
+                                                <button onClick={() => setConfig({...config, hasLamination: !config.hasLamination})} className={\`option-card p-4 rounded-lg bg-white cursor-pointer \${config.hasLamination ? 'selected' : ''}\`}>
                                                     <div className="text-3xl mb-2">✨</div>
                                                     <div className="font-bold text-gray-900">Lamination</div>
                                                     <div className="text-sm text-gray-600">+5€/m²</div>
@@ -215,6 +260,7 @@
                                     </div>
                                 </div>
 
+                                {/* SIDEBAR */}
                                 <div className="lg:col-span-1">
                                     <div className="bg-white rounded-2xl border-2 border-gray-200 overflow-hidden shadow-lg sticky top-24">
                                         <div className="preview-panel p-6 text-white">
@@ -259,29 +305,26 @@
 
                                         <div className="p-6 bg-gray-50 text-sm text-gray-600 space-y-2">
                                             <div className="flex items-center gap-2"><span>✓</span><span>Livraison 48-72h</span></div>
-                                            <div className="flex items-center gap-2"><span>✓</span><span>Durabilité 10+ ans</span></div>
+                                            <div className="flex items-center gap-2"><span>✓</span><span>Qualité certifiée</span></div>
                                             <div className="flex items-center gap-2"><span>✓</span><span>Prix dégressifs</span></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
+                            {/* Description */}
                             <div className="mt-12 bg-white rounded-2xl p-8 border-2 border-gray-200">
                                 <h2 className="text-2xl font-black text-gray-900 mb-4">📝 Description</h2>
-                                <p className="text-gray-700 leading-relaxed mb-6">
-                                    Le <strong>Dibond 3mm</strong> est le support premium par excellence pour les <strong>enseignes extérieures haut de gamme</strong>. 
-                                    Composé de 2 feuilles d'aluminium avec âme polyéthylène, il offre une <strong>durabilité exceptionnelle de 10+ ans</strong> en extérieur. 
-                                    Idéal pour les <strong>plaques professionnelles</strong>, <strong>façades de magasin</strong> et <strong>signalétique urbaine</strong>.
-                                </p>
+                                <p className="text-gray-700 leading-relaxed mb-6">$description</p>
 
                                 <div className="grid md:grid-cols-3 gap-6 mt-8">
                                     <div className="bg-gray-50 rounded-lg p-6">
                                         <h4 className="font-bold text-gray-900 mb-2">📏 Épaisseur</h4>
-                                        <p className="text-gray-600">3mm</p>
+                                        <p className="text-gray-600">$epaisseur</p>
                                     </div>
                                     <div className="bg-gray-50 rounded-lg p-6">
                                         <h4 className="font-bold text-gray-900 mb-2">🏠 Usage</h4>
-                                        <p className="text-gray-600">Extérieur</p>
+                                        <p className="text-gray-600">$usage</p>
                                     </div>
                                     <div className="bg-gray-50 rounded-lg p-6">
                                         <h4 className="font-bold text-gray-900 mb-2">⏱️ Délai</h4>
@@ -299,3 +342,16 @@
     </script>
 </body>
 </html>
+HTML;
+
+        $filepath = __DIR__ . "/produit/$code.html";
+        file_put_contents($filepath, $html);
+        $created++;
+        echo "✓ Créé: $filepath\n";
+    }
+
+    echo "\n✅ $created pages produits générées avec succès!\n";
+
+} catch (Exception $e) {
+    die("❌ Erreur: " . $e->getMessage() . "\n");
+}
