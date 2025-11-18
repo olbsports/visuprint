@@ -50,6 +50,9 @@
 
 RewriteEngine On
 
+# Bloquer l'accès aux répertoires sensibles couramment scannés par les bots
+RewriteRule ^(cgi-bin|\.git|\.svn|\.env|wp-admin|phpmyadmin|pma|admin/config)(/.*)?$ - [F,L]
+
 # Forcer HTTPS (décommenter si certificat SSL installé)
 # RewriteCond %{HTTPS} off
 # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
