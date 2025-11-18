@@ -1,9 +1,45 @@
+<?php
+// Script pour générer toutes les pages produits avec configurateur Canva
+
+$_SERVER['SERVER_NAME'] = 'localhost';
+require_once __DIR__ . '/api/config.php';
+
+try {
+    $pdo = Database::getInstance()->getConnection();
+    $stmt = $pdo->query("SELECT * FROM produits ORDER BY nom");
+    $produits = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $created = 0;
+
+    foreach ($produits as $produit) {
+        $code = $produit['code_produit'];
+        $nom = htmlspecialchars($produit['nom']);
+        $categorie = htmlspecialchars($produit['categorie']);
+        $description = htmlspecialchars($produit['description_longue']);
+        $epaisseur = htmlspecialchars($produit['epaisseur'] ?? 'N/A');
+        $usage = htmlspecialchars($produit['usage'] ?? 'Voir description');
+
+        // Prix par défaut
+        $prix_base = $produit['prix_0_10'];
+        $prix_11_50 = $produit['prix_11_50'];
+        $prix_51_100 = $produit['prix_51_100'];
+        $prix_101_300 = $produit['prix_101_300'];
+        $prix_300_plus = $produit['prix_300_plus'];
+
+        // Emoji par catégorie
+        $emoji = '📄';
+        if (strpos($categorie, 'Aluminium') !== false || strpos($categorie, 'Dibond') !== false) $emoji = '✨';
+        elseif (strpos($categorie, 'Bâche') !== false || strpos($categorie, 'Mesh') !== false) $emoji = '🎪';
+        elseif (strpos($categorie, 'Textile') !== false) $emoji = '🎨';
+        elseif (strpos($categorie, 'Acryl') !== false) $emoji = '💎';
+
+        $html = <<<HTML
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configurateur Produit - Imprixo</title>
+    <title>$nom - Imprixo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -11,36 +47,22 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
         * { font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif; }
-
         .btn-primary { background: linear-gradient(135deg, #e63946 0%, #d62839 100%); transition: all 0.3s ease; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(230, 57, 70, 0.4); }
-
         .btn-secondary { background: #2b2d42; transition: all 0.2s ease; }
         .btn-secondary:hover { background: #1a1b2e; }
-
         .nav-link { position: relative; }
         .nav-link:after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: #e63946; transition: width 0.2s ease; }
         .nav-link:hover:after { width: 100%; }
-
         .cart-badge { position: absolute; top: -8px; right: -8px; background: #e63946; color: white; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
-
         .canvas-area { background: repeating-conic-gradient(#f0f0f0 0% 25%, transparent 0% 50%) 50% / 20px 20px; position: relative; overflow: hidden; }
-
-        .ruler { background: #fff; border: 1px solid #ddd; }
-        .ruler-horizontal { height: 30px; background: linear-gradient(to right, #fff 0%, #fff 80%, #e63946 80%, #e63946 100%); }
-        .ruler-vertical { width: 30px; background: linear-gradient(to bottom, #fff 0%, #fff 80%, #e63946 80%, #e63946 100%); }
-
         .dimension-input { border: 2px solid #e63946; border-radius: 8px; padding: 12px; font-size: 18px; font-weight: 700; text-align: center; }
         .dimension-input:focus { outline: none; box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.2); }
-
         .preview-panel { background: linear-gradient(135deg, #1a1b2e 0%, #2b2d42 100%); }
-
         .option-card { transition: all 0.3s ease; border: 3px solid transparent; }
         .option-card:hover { border-color: #e63946; transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
         .option-card.selected { border-color: #e63946; background: #fff1f2; }
-
         .price-badge { background: linear-gradient(135deg, #e63946 0%, #d62839 100%); color: white; padding: 16px 24px; border-radius: 12px; box-shadow: 0 8px 24px rgba(230, 57, 70, 0.4); }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .fade-in { animation: fadeIn 0.4s ease-out; }
     </style>
@@ -61,7 +83,7 @@
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="flex items-center justify-between h-16">
                             <div className="flex items-center">
-                                <a href="/"><span className="text-2xl font-black text-gray-900">Imprixo</span><span className="text-2xl font-black text-red-600">Pro</span></a>
+                                <a href="/"><span className="text-2xl font-black text-gray-900">Imprixo</span></a>
                                 <nav className="hidden md:ml-10 md:flex md:space-x-8">
                                     <a href="/" className="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Accueil</a>
                                     <a href="/catalogue.html" className="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Catalogue</a>
@@ -81,42 +103,27 @@
         }
 
         function App() {
-            const [product, setProduct] = useState(null);
-            const [loading, setLoading] = useState(true);
             const [config, setConfig] = useState({
-                width: 100, height: 100, quantity: 1,
+                width: 100, height: 150, quantity: 1,
                 printSide: 'simple', hasEyelets: false,
                 hasCutting: false, hasLamination: false,
                 uploadedFile: null, filePreview: null
             });
             const [cartCount, setCartCount] = useState(0);
-            const [activeTab, setActiveTab] = useState('dimensions'); // dimensions, options, file
-            const canvasRef = useRef(null);
             const fileInputRef = useRef(null);
 
             useEffect(() => {
-                const params = new URLSearchParams(window.location.search);
-                const code = params.get('code');
-                if (code) {
-                    fetch(`/api/produits.php?code=${code}`)
-                        .then(res => res.json())
-                        .then(data => { setProduct(data.produit); setLoading(false); })
-                        .catch(() => setLoading(false));
-                }
                 setCartCount(getCart().length);
             }, []);
 
             const surface = (config.width * config.height) / 10000;
             const totalSurface = surface * config.quantity;
 
-            let pricePerM2 = 0;
-            if (product) {
-                if (totalSurface > 300) pricePerM2 = parseFloat(product.prix_300_plus);
-                else if (totalSurface > 100) pricePerM2 = parseFloat(product.prix_101_300);
-                else if (totalSurface > 50) pricePerM2 = parseFloat(product.prix_51_100);
-                else if (totalSurface > 10) pricePerM2 = parseFloat(product.prix_11_50);
-                else pricePerM2 = parseFloat(product.prix_0_10);
-            }
+            let pricePerM2 = $prix_base;
+            if (totalSurface > 300) pricePerM2 = $prix_300_plus;
+            else if (totalSurface > 100) pricePerM2 = $prix_101_300;
+            else if (totalSurface > 50) pricePerM2 = $prix_51_100;
+            else if (totalSurface > 10) pricePerM2 = $prix_11_50;
 
             let totalPrice = surface * pricePerM2 * config.quantity;
             if (config.printSide === 'double') totalPrice *= 1.3;
@@ -138,8 +145,8 @@
             const addToCart = () => {
                 const cart = getCart();
                 cart.push({
-                    name: product.nom,
-                    code: product.code_produit,
+                    name: '$nom',
+                    code: '$code',
                     surface,
                     width: config.width,
                     height: config.height,
@@ -154,9 +161,6 @@
                 window.location.href = '/panier.html';
             };
 
-            if (loading) return <div className="min-h-screen bg-gray-50 flex items-center justify-center"><div className="text-6xl mb-4">📦</div><h2 className="text-2xl font-bold text-gray-900">Chargement...</h2></div>;
-            if (!product) return <div className="min-h-screen bg-gray-50 flex items-center justify-center"><h2 className="text-2xl font-bold text-gray-900">Produit introuvable</h2><a href="/catalogue.html" className="btn-primary text-white px-6 py-3 rounded mt-4 inline-block">Retour au catalogue</a></div>;
-
             return (
                 <div className="min-h-screen bg-gray-50">
                     <Header cartCount={cartCount} />
@@ -169,7 +173,7 @@
                                 <span className="mx-2">›</span>
                                 <a href="/catalogue.html" className="hover:text-red-600">Catalogue</a>
                                 <span className="mx-2">›</span>
-                                <span className="text-gray-900 font-bold">{product.nom}</span>
+                                <span className="text-gray-900 font-bold">$nom</span>
                             </div>
                         </div>
                     </div>
@@ -177,14 +181,14 @@
                     <section className="py-8">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                             <div className="grid lg:grid-cols-3 gap-8">
-                                {/* CANVAS PREVIEW - Style Canva */}
+                                {/* CANVAS PREVIEW */}
                                 <div className="lg:col-span-2">
                                     <div className="bg-white rounded-2xl border-2 border-gray-200 overflow-hidden shadow-lg">
                                         {/* Toolbar */}
                                         <div className="bg-gray-900 text-white p-4 flex items-center justify-between">
                                             <div>
-                                                <h2 className="text-xl font-black">{product.nom}</h2>
-                                                <p className="text-sm text-gray-400">{product.categorie}</p>
+                                                <h2 className="text-xl font-black">$nom</h2>
+                                                <p className="text-sm text-gray-400">$categorie</p>
                                             </div>
                                             <div className="flex gap-2">
                                                 <button onClick={() => fileInputRef.current?.click()} className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded font-bold text-sm">
@@ -201,7 +205,7 @@
                                                     <img src={config.filePreview} alt="Preview" className="max-w-full max-h-full object-contain" />
                                                 ) : (
                                                     <div className="text-center">
-                                                        <div className="text-8xl mb-4">📋</div>
+                                                        <div className="text-8xl mb-4">$emoji</div>
                                                         <p className="text-xl font-bold text-gray-900 mb-2">{config.width} × {config.height} cm</p>
                                                         <p className="text-gray-500">Surface: {surface.toFixed(3)} m²</p>
                                                         <button onClick={() => fileInputRef.current?.click()} className="mt-6 bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-bold">
@@ -211,7 +215,7 @@
                                                 )}
                                             </div>
 
-                                            {/* Dimensions rapides */}
+                                            {/* Dimensions */}
                                             <div className="mt-4 grid grid-cols-2 gap-3">
                                                 <div className="bg-white rounded-lg p-4 border-2 border-gray-200">
                                                     <label className="block text-sm font-bold text-gray-700 mb-2">📏 Largeur (cm)</label>
@@ -224,29 +228,29 @@
                                             </div>
                                         </div>
 
-                                        {/* Options visuelles */}
+                                        {/* Options */}
                                         <div className="p-6 bg-white border-t-2 border-gray-200">
                                             <h3 className="text-lg font-black text-gray-900 mb-4">⚙️ Options d'impression</h3>
                                             <div className="grid grid-cols-2 gap-4">
-                                                <button onClick={() => setConfig({...config, printSide: config.printSide === 'simple' ? 'double' : 'simple'})} className={`option-card p-4 rounded-lg bg-white cursor-pointer ${config.printSide === 'double' ? 'selected' : ''}`}>
+                                                <button onClick={() => setConfig({...config, printSide: config.printSide === 'simple' ? 'double' : 'simple'})} className={\`option-card p-4 rounded-lg bg-white cursor-pointer \${config.printSide === 'double' ? 'selected' : ''}\`}>
                                                     <div className="text-3xl mb-2">🔄</div>
                                                     <div className="font-bold text-gray-900">Double face</div>
                                                     <div className="text-sm text-gray-600">+30% du prix</div>
                                                 </button>
 
-                                                <button onClick={() => setConfig({...config, hasEyelets: !config.hasEyelets})} className={`option-card p-4 rounded-lg bg-white cursor-pointer ${config.hasEyelets ? 'selected' : ''}`}>
+                                                <button onClick={() => setConfig({...config, hasEyelets: !config.hasEyelets})} className={\`option-card p-4 rounded-lg bg-white cursor-pointer \${config.hasEyelets ? 'selected' : ''}\`}>
                                                     <div className="text-3xl mb-2">⭕</div>
                                                     <div className="font-bold text-gray-900">Œillets</div>
                                                     <div className="text-sm text-gray-600">+2€/m²</div>
                                                 </button>
 
-                                                <button onClick={() => setConfig({...config, hasCutting: !config.hasCutting})} className={`option-card p-4 rounded-lg bg-white cursor-pointer ${config.hasCutting ? 'selected' : ''}`}>
+                                                <button onClick={() => setConfig({...config, hasCutting: !config.hasCutting})} className={\`option-card p-4 rounded-lg bg-white cursor-pointer \${config.hasCutting ? 'selected' : ''}\`}>
                                                     <div className="text-3xl mb-2">✂️</div>
                                                     <div className="font-bold text-gray-900">Découpe</div>
                                                     <div className="text-sm text-gray-600">+1.5€/m²</div>
                                                 </button>
 
-                                                <button onClick={() => setConfig({...config, hasLamination: !config.hasLamination})} className={`option-card p-4 rounded-lg bg-white cursor-pointer ${config.hasLamination ? 'selected' : ''}`}>
+                                                <button onClick={() => setConfig({...config, hasLamination: !config.hasLamination})} className={\`option-card p-4 rounded-lg bg-white cursor-pointer \${config.hasLamination ? 'selected' : ''}\`}>
                                                     <div className="text-3xl mb-2">✨</div>
                                                     <div className="font-bold text-gray-900">Lamination</div>
                                                     <div className="text-sm text-gray-600">+5€/m²</div>
@@ -256,10 +260,9 @@
                                     </div>
                                 </div>
 
-                                {/* SIDEBAR - Prix & Commande */}
+                                {/* SIDEBAR */}
                                 <div className="lg:col-span-1">
                                     <div className="bg-white rounded-2xl border-2 border-gray-200 overflow-hidden shadow-lg sticky top-24">
-                                        {/* Prix */}
                                         <div className="preview-panel p-6 text-white">
                                             <h3 className="text-lg font-bold mb-4">💰 Récapitulatif</h3>
                                             <div className="space-y-3 mb-6">
@@ -282,7 +285,6 @@
                                             </div>
                                         </div>
 
-                                        {/* Quantité */}
                                         <div className="p-6 border-t-2 border-gray-200">
                                             <label className="block text-sm font-bold text-gray-700 mb-3">📦 Quantité</label>
                                             <div className="flex items-center gap-3">
@@ -292,7 +294,6 @@
                                             </div>
                                         </div>
 
-                                        {/* Actions */}
                                         <div className="p-6 border-t-2 border-gray-200 space-y-3">
                                             <button onClick={addToCart} className="w-full btn-primary text-white py-4 rounded-lg font-black text-lg">
                                                 🛒 Ajouter au Panier
@@ -302,42 +303,32 @@
                                             </button>
                                         </div>
 
-                                        {/* Infos */}
                                         <div className="p-6 bg-gray-50 text-sm text-gray-600 space-y-2">
-                                            <div className="flex items-center gap-2">
-                                                <span>✓</span>
-                                                <span>Livraison 48-72h</span>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <span>✓</span>
-                                                <span>Qualité certifiée</span>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <span>✓</span>
-                                                <span>Prix dégressifs</span>
-                                            </div>
+                                            <div className="flex items-center gap-2"><span>✓</span><span>Livraison 48-72h</span></div>
+                                            <div className="flex items-center gap-2"><span>✓</span><span>Qualité certifiée</span></div>
+                                            <div className="flex items-center gap-2"><span>✓</span><span>Prix dégressifs</span></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Description produit */}
+                            {/* Description */}
                             <div className="mt-12 bg-white rounded-2xl p-8 border-2 border-gray-200">
                                 <h2 className="text-2xl font-black text-gray-900 mb-4">📝 Description</h2>
-                                <p className="text-gray-700 leading-relaxed mb-6">{product.description_longue}</p>
+                                <p className="text-gray-700 leading-relaxed mb-6">$description</p>
 
                                 <div className="grid md:grid-cols-3 gap-6 mt-8">
                                     <div className="bg-gray-50 rounded-lg p-6">
                                         <h4 className="font-bold text-gray-900 mb-2">📏 Épaisseur</h4>
-                                        <p className="text-gray-600">{product.epaisseur}</p>
+                                        <p className="text-gray-600">$epaisseur</p>
                                     </div>
                                     <div className="bg-gray-50 rounded-lg p-6">
                                         <h4 className="font-bold text-gray-900 mb-2">🏠 Usage</h4>
-                                        <p className="text-gray-600">{product.usage}</p>
+                                        <p className="text-gray-600">$usage</p>
                                     </div>
                                     <div className="bg-gray-50 rounded-lg p-6">
                                         <h4 className="font-bold text-gray-900 mb-2">⏱️ Délai</h4>
-                                        <p className="text-gray-600">3 jours</p>
+                                        <p className="text-gray-600">3 jours ouvrés</p>
                                     </div>
                                 </div>
                             </div>
@@ -351,3 +342,16 @@
     </script>
 </body>
 </html>
+HTML;
+
+        $filepath = __DIR__ . "/produit/$code.html";
+        file_put_contents($filepath, $html);
+        $created++;
+        echo "✓ Créé: $filepath\n";
+    }
+
+    echo "\n✅ $created pages produits générées avec succès!\n";
+
+} catch (Exception $e) {
+    die("❌ Erreur: " . $e->getMessage() . "\n");
+}
