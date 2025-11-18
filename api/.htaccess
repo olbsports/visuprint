@@ -1,0 +1,100 @@
+# ============================================
+# Protection API - VisuPrint Pro
+# ============================================
+
+# Activer le moteur de réécriture
+RewriteEngine On
+
+# ============================================
+# CORS Headers (si besoin d'accès depuis autre domaine)
+# ============================================
+
+<IfModule mod_headers.c>
+    # Autoriser les requêtes depuis votre domaine uniquement
+    Header set Access-Control-Allow-Origin "https://visuprintpro.fr"
+    Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+
+    # Pour développement local (décommenter si nécessaire):
+    # Header set Access-Control-Allow-Origin "*"
+</IfModule>
+
+# ============================================
+# Bloquer l'accès direct au fichier config.php
+# ============================================
+
+<Files "config.php">
+    Require all denied
+</Files>
+
+# ============================================
+# Limiter les méthodes HTTP autorisées
+# ============================================
+
+<LimitExcept GET POST PUT DELETE OPTIONS>
+    Require all denied
+</LimitExcept>
+
+# ============================================
+# Protection contre le hotlinking
+# ============================================
+
+RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^https?://(www\.)?visuprintpro\.fr [NC]
+RewriteRule \.(jpg|jpeg|png|gif|pdf)$ - [F,L]
+
+# ============================================
+# Rate limiting basique (protection contre spam)
+# ============================================
+
+# Bloquer trop de requêtes rapides
+# Note: Pour un vrai rate limiting, utiliser mod_evasive ou Fail2Ban
+
+<IfModule mod_rewrite.c>
+    # Bloquer les user agents suspects
+    RewriteCond %{HTTP_USER_AGENT} ^$ [OR]
+    RewriteCond %{HTTP_USER_AGENT} (libwww-perl|wget|python|nikto|curl|scan|java|winhttp|clshttp|loader) [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} (<|>|'|%0A|%0D|%27|%3C|%3E|%00) [NC]
+    RewriteRule .* - [F,L]
+</IfModule>
+
+# ============================================
+# Protection injection SQL dans URL
+# ============================================
+
+<IfModule mod_rewrite.c>
+    RewriteCond %{QUERY_STRING} union.*select [NC,OR]
+    RewriteCond %{QUERY_STRING} concat.*\( [NC,OR]
+    RewriteCond %{QUERY_STRING} (\<|%3C).*script.*(\>|%3E) [NC,OR]
+    RewriteCond %{QUERY_STRING} base64_encode.*\(.*\) [NC,OR]
+    RewriteCond %{QUERY_STRING} (\.\./|\.\.\\) [NC]
+    RewriteRule .* - [F,L]
+</IfModule>
+
+# ============================================
+# Headers de sécurité API
+# ============================================
+
+<IfModule mod_headers.c>
+    # Pas de cache pour les APIs
+    Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+
+    # Type de contenu JSON
+    Header set Content-Type "application/json; charset=UTF-8"
+</IfModule>
+
+# ============================================
+# Désactiver l'affichage des erreurs PHP (production)
+# ============================================
+
+php_flag display_errors off
+php_flag display_startup_errors off
+php_value error_reporting 0
+
+# ============================================
+# Log des erreurs
+# ============================================
+
+php_flag log_errors on
+php_value error_log /home/votre_user/logs/php_errors.log

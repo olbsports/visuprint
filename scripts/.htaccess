@@ -1,0 +1,83 @@
+# ============================================
+# Protection Scripts - VisuPrint Pro
+# ============================================
+
+# ============================================
+# IMPORTANT: Bloquer l'accès public
+# ============================================
+
+# Option 1: Bloquer tout accès (RECOMMANDÉ après import)
+# Décommenter après avoir exécuté l'import:
+# Require all denied
+
+# Option 2: Autoriser uniquement votre IP
+# <RequireAll>
+#     Require all denied
+#     Require ip 123.456.789.0
+# </RequireAll>
+
+# ============================================
+# Double authentification (RECOMMANDÉ)
+# ============================================
+
+# AuthType Basic
+# AuthName "Zone de Scripts - Accès Restreint"
+# AuthUserFile /home/votre_user/.htpasswd_scripts
+# Require valid-user
+
+# Pour créer le fichier .htpasswd_scripts:
+# htpasswd -c /home/votre_user/.htpasswd_scripts admin_scripts
+
+# ============================================
+# Headers de sécurité
+# ============================================
+
+<IfModule mod_headers.c>
+    # Pas de cache
+    Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+
+    # Protection XSS
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+</IfModule>
+
+# ============================================
+# Bloquer les bots
+# ============================================
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Bloquer tous les bots
+    RewriteCond %{HTTP_USER_AGENT} (bot|crawl|spider|slurp|mediapartners) [NC]
+    RewriteRule .* - [F,L]
+</IfModule>
+
+# ============================================
+# Désactiver l'index
+# ============================================
+
+Options -Indexes
+
+# ============================================
+# Log des accès
+# ============================================
+
+php_flag log_errors on
+php_value error_log /home/votre_user/logs/scripts_access.log
+
+# ============================================
+# INSTRUCTIONS IMPORTANTES
+# ============================================
+
+# 1. ✅ Exécuter l'import-produits.php UNE SEULE FOIS
+
+# 2. ✅ Vérifier que $IMPORT_ENABLED = false dans import-produits.php
+
+# 3. ✅ Bloquer l'accès en décommentant "Require all denied" ci-dessus
+
+# 4. ✅ Ou supprimer complètement ce dossier /scripts/ après import
+
+# 5. ✅ Ne JAMAIS laisser des scripts d'import accessibles en production
