@@ -3,84 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Merci pour votre commande - Imprixo</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <title>Commande confirmée - VisuPrint Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+        * { font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif; }
+        .btn-primary { background: #e63946; transition: all 0.2s ease; }
+        .btn-primary:hover { background: #d62839; }
+        .btn-secondary { background: #2b2d42; transition: all 0.2s ease; }
+        .btn-secondary:hover { background: #1a1b2e; }
+    </style>
 </head>
-<body>
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <a href="/"><h1>🎨 <span class="brand">Imprixo</span></h1></a>
-                </div>
+<body class="bg-gray-50">
+    <header class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="/"><span class="text-2xl font-black text-gray-900">VisuPrint</span><span class="text-2xl font-black text-red-600">Pro</span></a>
             </div>
         </div>
     </header>
 
-    <section style="padding: 100px 0; text-align: center;">
-        <div class="container" style="max-width: 600px;">
-            <div style="font-size: 100px; margin-bottom: 30px;">🎉</div>
+    <section class="py-12">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-lg p-12 text-center border border-gray-200">
+                <div class="text-8xl mb-6">✅</div>
+                <h1 class="text-4xl font-black text-gray-900 mb-4">Commande confirmée !</h1>
+                <p class="text-xl text-gray-600 mb-8">Merci pour votre confiance. Votre commande a bien été enregistrée.</p>
 
-            <h1 style="font-size: 48px; margin-bottom: 20px; color: #27ae60;">Commande validée !</h1>
+                <div class="bg-gray-50 rounded-lg p-6 mb-8 text-left">
+                    <h2 class="font-bold text-gray-900 mb-4">Prochaines étapes</h2>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-3">
+                            <span class="text-2xl">📧</span>
+                            <div>
+                                <div class="font-semibold">Confirmation par email</div>
+                                <div class="text-sm text-gray-600">Vous allez recevoir un email de confirmation avec tous les détails de votre commande</div>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-2xl">📁</span>
+                            <div>
+                                <div class="font-semibold">Envoi de vos fichiers</div>
+                                <div class="text-sm text-gray-600">Vous pouvez envoyer vos fichiers d'impression via le lien dans l'email</div>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-2xl">🖨️</span>
+                            <div>
+                                <div class="font-semibold">Production</div>
+                                <div class="text-sm text-gray-600">Nous lançons la production sous 24-48h après réception de vos fichiers</div>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-2xl">📦</span>
+                            <div>
+                                <div class="font-semibold">Livraison</div>
+                                <div class="text-sm text-gray-600">Livraison express en 48-72h ouvrés</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
 
-            <p style="font-size: 20px; color: #666; margin-bottom: 40px;">
-                Merci pour votre confiance. Votre commande a bien été enregistrée.
-            </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="/mon-compte.php" class="btn-primary text-white px-8 py-4 rounded font-bold text-lg inline-block">
+                        Suivre ma commande
+                    </a>
+                    <a href="/catalogue.html" class="btn-secondary text-white px-8 py-4 rounded font-bold text-lg inline-block">
+                        Continuer mes achats
+                    </a>
+                </div>
+            </div>
 
-            <div style="background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-bottom: 40px; text-align: left;">
-                <h3 style="margin-bottom: 20px;">📧 Email de confirmation envoyé</h3>
-                <p style="color: #666; margin-bottom: 30px;">
-                    Vous recevrez un email de confirmation avec tous les détails de votre commande dans quelques instants.
-                </p>
-
-                <h3 style="margin-bottom: 20px;">📦 Prochaines étapes</h3>
-                <div style="display: flex; flex-direction: column; gap: 15px;">
-                    <div style="display: flex; align-items: flex-start; gap: 15px;">
-                        <div style="min-width: 30px; height: 30px; border-radius: 50%; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700;">1</div>
+            <div class="mt-8 bg-blue-50 border-2 border-blue-200 rounded-lg p-6">
+                <h3 class="font-bold text-gray-900 mb-3">Besoin d'aide ?</h3>
+                <p class="text-gray-700 mb-4">Notre équipe est à votre disposition pour toute question sur votre commande.</p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl">📞</span>
                         <div>
-                            <strong>Validation</strong><br>
-                            <span style="color: #666; font-size: 14px;">Nous vérifions votre commande sous 2h</span>
+                            <div class="text-sm text-gray-600">Téléphone</div>
+                            <div class="font-bold text-gray-900">01 23 45 67 89</div>
                         </div>
                     </div>
-
-                    <div style="display: flex; align-items: flex-start; gap: 15px;">
-                        <div style="min-width: 30px; height: 30px; border-radius: 50%; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700;">2</div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl">📧</span>
                         <div>
-                            <strong>Production</strong><br>
-                            <span style="color: #666; font-size: 14px;">Impression haute qualité sous 24-48h</span>
-                        </div>
-                    </div>
-
-                    <div style="display: flex; align-items: flex-start; gap: 15px;">
-                        <div style="min-width: 30px; height: 30px; border-radius: 50%; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700;">3</div>
-                        <div>
-                            <strong>Expédition</strong><br>
-                            <span style="color: #666; font-size: 14px;">Livraison express 48-72h</span>
+                            <div class="text-sm text-gray-600">Email</div>
+                            <div class="font-bold text-gray-900">contact@visuprintpro.fr</div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div style="display: flex; gap: 20px; justify-content: center;">
-                <a href="/mon-compte.php" class="btn btn-primary">Suivre ma commande</a>
-                <a href="/catalogue.html" class="btn btn-outline">Continuer mes achats</a>
-            </div>
-
-            <div style="margin-top: 50px; padding: 30px; background: #f8f9fa; border-radius: 12px;">
-                <h4 style="margin-bottom: 15px;">Besoin d'aide ?</h4>
-                <p style="color: #666;">
-                    Notre équipe est disponible du lundi au vendredi de 9h à 18h<br>
-                    <strong>Email:</strong> contact@imprixo.fr<br>
-                    <strong>Téléphone:</strong> 01 XX XX XX XX
-                </p>
-            </div>
         </div>
     </section>
 
-    <script src="/js/app.js"></script>
+    <footer class="bg-gray-900 text-gray-300 py-12 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="text-2xl font-black text-white mb-4">VisuPrint<span class="text-red-600">Pro</span></div>
+                    <p class="text-sm text-gray-400">Impression professionnelle grand format</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4 text-sm">Produits</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white">Panneaux rigides</a></li>
+                        <li><a href="#" class="hover:text-white">Bâches & textiles</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4 text-sm">Services</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white">Conception graphique</a></li>
+                        <li><a href="#" class="hover:text-white">Installation</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4 text-sm">Contact</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="font-bold text-white">01 23 45 67 89</li>
+                        <li>contact@visuprintpro.fr</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-sm text-gray-500">© 2025 VisuPrint Pro - Tous droits réservés</div>
+        </div>
+    </footer>
+
     <script>
-        // Vider le panier
-        Imprixo.cart.clear();
+        // Nettoyer le panier au chargement
+        localStorage.removeItem('visuprint_cart');
     </script>
 </body>
 </html>
