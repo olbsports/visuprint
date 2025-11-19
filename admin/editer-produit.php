@@ -257,10 +257,14 @@ include __DIR__ . '/includes/header.php';
     </div>
 </div>
 
-<div class="card">
-    <form method="POST" action="">
-                <div class="section-title">📋 Informations de base</div>
-                <div class="form-grid">
+<form method="POST" action="">
+    <!-- Informations de base -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">📋 Informations de base</h2>
+        </div>
+        <div class="card-body">
+            <div class="form-grid">
                     <div class="form-group">
                         <label>Code Produit <span class="required">*</span></label>
                         <input type="text" name="CODE" required value="<?php echo htmlspecialchars($produit['code']); ?>" readonly style="background: #f5f5f5;">
@@ -305,11 +309,19 @@ include __DIR__ . '/includes/header.php';
                 <div class="form-group">
                     <label>Image URL</label>
                     <input type="url" name="IMAGE_URL" value="<?php echo htmlspecialchars($produit['image_url'] ?? ''); ?>" placeholder="https://...">
-                    <small>URL de l'image du produit (Unsplash, CDN, etc.)</small>
+                    <small>URL de l'image du produit</small>
                 </div>
+            </div>
+        </div>
+    </div>
 
-                <div class="section-title">⚙️ Caractéristiques techniques</div>
-                <div class="form-grid">
+    <!-- Caractéristiques techniques -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">⚙️ Caractéristiques techniques</h2>
+        </div>
+        <div class="card-body">
+            <div class="form-grid">
                     <div class="form-group">
                         <label>Poids (kg/m²)</label>
                         <input type="text" name="POIDS_M2" value="<?php echo htmlspecialchars($produit['poids_m2'] ?? ''); ?>">
@@ -355,9 +367,18 @@ include __DIR__ . '/includes/header.php';
                         </select>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
 
-                <div class="section-title">💰 Prix et tarification</div>
-                <div class="form-grid">
+    <!-- Prix et tarification -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">💰 Prix et tarification</h2>
+            <p style="color: var(--text-muted); font-size: 14px; margin: 8px 0 0 0;">Définissez les prix dégressifs en fonction de la surface commandée</p>
+        </div>
+        <div class="card-body">
+            <div class="form-grid">
                     <div class="form-group">
                         <label>Prix simple face (€/m²)</label>
                         <input type="number" step="0.01" name="PRIX_SIMPLE_FACE" value="<?php echo htmlspecialchars($produit['prix_simple_face'] ?? ''); ?>">
@@ -395,9 +416,17 @@ include __DIR__ . '/includes/header.php';
                         <input type="number" step="0.01" name="PRIX_300_PLUS_M2" value="<?php echo htmlspecialchars($produit['prix_300_plus'] ?? ''); ?>">
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
 
-                <div class="section-title">📦 Logistique</div>
-                <div class="form-grid">
+    <!-- Logistique -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">📦 Logistique</h2>
+        </div>
+        <div class="card-body">
+            <div class="form-grid">
                     <div class="form-group">
                         <label>Commande minimum (€)</label>
                         <input type="number" step="0.01" name="COMMANDE_MIN_EURO" value="<?php echo htmlspecialchars($produit['commande_min'] ?? ''); ?>">
@@ -417,15 +446,21 @@ include __DIR__ . '/includes/header.php';
                         </select>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
 
-                <div class="section-title">🎨 Finitions et options</div>
-                <p style="color: var(--text-secondary); margin-bottom: 15px;">
-                    ✓ Cochez les finitions à activer pour ce produit depuis le catalogue global.<br>
-                    💡 Vous pouvez personnaliser le prix par produit si besoin.
-                    <a href="/admin/finitions-catalogue.php" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: 600;">→ Gérer le catalogue</a>
-                </p>
-
-                <div id="finitions-container" style="max-height: 500px; overflow-y: auto; border: 2px solid var(--border); border-radius: var(--radius-md); padding: 20px; background: var(--bg-hover);">
+    <!-- Finitions et options -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">🎨 Finitions et options</h2>
+            <p style="color: var(--text-muted); font-size: 14px; margin: 8px 0 0 0;">
+                Sélectionnez les finitions disponibles pour ce produit ·
+                <a href="/admin/finitions-catalogue.php" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: 600;">→ Gérer le catalogue</a>
+            </p>
+        </div>
+        <div class="card-body">
+            <div id="finitions-container" style="max-height: 450px; overflow-y: auto; border: 2px solid var(--border); border-radius: var(--radius-md); padding: 20px; background: var(--bg-hover);">
                     <?php
                     $currentCategorie = '';
                     foreach ($catalogueFinitions as $catalogueFin):
@@ -485,18 +520,25 @@ include __DIR__ . '/includes/header.php';
                     endforeach;
                     if ($currentCategorie !== '') echo '</div>';
                     ?>
-                </div>
-                <p style="color: var(--text-muted); font-size: 12px; margin-top: 10px;">
-                    💡 Le prix affiché est celui du catalogue. Modifiez-le pour personnaliser le prix pour ce produit uniquement.
-                </p>
+            </div>
+            <p style="color: var(--text-muted); font-size: 12px; margin-top: 10px;">
+                💡 Le prix affiché est celui du catalogue. Modifiez-le pour personnaliser le prix pour ce produit uniquement.
+            </p>
+        </div>
+    </div>
 
-                <div class="section-title">🎁 Promotion</div>
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" name="promo_actif" value="1" <?php echo ($produit['promo_actif'] ?? 0) ? 'checked' : ''; ?>>
-                        Activer une promotion sur ce produit
-                    </label>
-                </div>
+    <!-- Promotion -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">🎁 Promotion</h2>
+        </div>
+        <div class="card-body">
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 16px; background: var(--bg-hover); border-radius: var(--radius-md); border: 2px solid var(--border); transition: all 0.2s;">
+                    <input type="checkbox" name="promo_actif" value="1" <?php echo ($produit['promo_actif'] ?? 0) ? 'checked' : ''; ?> style="width: 20px; height: 20px; cursor: pointer;">
+                    <span style="font-weight: 600;">Activer une promotion sur ce produit</span>
+                </label>
+            </div>
 
                 <div id="promo-fields" style="display: <?php echo ($produit['promo_actif'] ?? 0) ? 'block' : 'none'; ?>;">
                     <div class="form-grid">
@@ -547,41 +589,138 @@ include __DIR__ . '/includes/header.php';
                         </label>
                     </div>
                 </div>
-
-                <script>
-                // Toggle promo fields
-                document.querySelector('input[name="promo_actif"]').addEventListener('change', function(e) {
-                    document.getElementById('promo-fields').style.display = e.target.checked ? 'block' : 'none';
-                });
-                </script>
-
-        <div style="display: flex; gap: 12px; margin-top: 30px; padding-top: 20px; border-top: 2px solid var(--border);">
-            <button type="submit" class="btn btn-primary">💾 Enregistrer les modifications</button>
-            <a href="/admin/produits.php" class="btn btn-secondary">✖ Annuler</a>
-            <a href="/admin/supprimer-produit.php?id=<?php echo urlencode($produit['code']); ?>" class="btn btn-danger" onclick="return confirm('Supprimer définitivement ce produit ?')" style="margin-left: auto;">🗑️ Supprimer le produit</a>
+            </div>
         </div>
-    </form>
-</div>
+    </div>
+
+    <!-- Actions -->
+    <div class="card" style="background: linear-gradient(135deg, var(--bg) 0%, var(--bg-hover) 100%);">
+        <div class="card-body">
+            <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                <button type="submit" class="btn btn-primary" style="padding: 14px 32px; font-size: 16px;">
+                    💾 Enregistrer les modifications
+                </button>
+                <a href="/admin/produits.php" class="btn btn-secondary" style="padding: 14px 32px;">
+                    ✖ Annuler
+                </a>
+                <a href="/admin/supprimer-produit.php?id=<?php echo urlencode($produit['code']); ?>"
+                   class="btn btn-danger"
+                   onclick="return confirm('Supprimer définitivement ce produit ?')"
+                   style="margin-left: auto; padding: 14px 32px;">
+                    🗑️ Supprimer
+                </a>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+// Toggle promo fields
+document.querySelector('input[name="promo_actif"]').addEventListener('change', function(e) {
+    document.getElementById('promo-fields').style.display = e.target.checked ? 'block' : 'none';
+});
+</script>
 
 <style>
-.section-title {
-    font-size: 18px;
+.card {
+    margin-bottom: 24px;
+}
+
+.card-header {
+    padding: 20px 24px;
+    border-bottom: 2px solid var(--border);
+    background: linear-gradient(135deg, var(--bg-hover) 0%, var(--bg) 100%);
+}
+
+.card-title {
+    font-size: 20px;
     font-weight: 700;
     color: var(--primary);
-    margin: 30px 0 15px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid var(--primary);
+    margin: 0;
+}
+
+.card-body {
+    padding: 24px;
 }
 
 .form-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
     margin-bottom: 20px;
 }
 
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group:last-child {
+    margin-bottom: 0;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.2s;
+    background: var(--bg);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.1);
+}
+
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 6px;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
 .required {
     color: var(--danger);
+    margin-left: 2px;
+}
+
+/* Finitions styling */
+#finitions-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+#finitions-container::-webkit-scrollbar-track {
+    background: var(--bg-hover);
+    border-radius: 4px;
+}
+
+#finitions-container::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+}
+
+#finitions-container::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
 }
 </style>
 
