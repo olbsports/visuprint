@@ -1,0 +1,195 @@
+<!-- Footer Imprixo - Complet et Responsive -->
+<style>
+    .footer-imprixo {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        color: white;
+        margin-top: 80px;
+    }
+
+    .footer-section h3 {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 16px;
+        color: white;
+        position: relative;
+        padding-bottom: 10px;
+    }
+
+    .footer-section h3::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 40px;
+        height: 3px;
+        background: linear-gradient(135deg, #e63946 0%, #f1a442 100%);
+        border-radius: 2px;
+    }
+
+    .footer-link {
+        color: #b8b8d4;
+        text-decoration: none;
+        display: block;
+        padding: 8px 0;
+        transition: all 0.2s;
+        font-size: 14px;
+    }
+
+    .footer-link:hover {
+        color: white;
+        padding-left: 8px;
+    }
+
+    .social-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 50%;
+        color: white;
+        text-decoration: none;
+        font-size: 20px;
+        transition: all 0.3s;
+        margin-right: 10px;
+    }
+
+    .social-icon:hover {
+        background: linear-gradient(135deg, #e63946 0%, #f1a442 100%);
+        transform: translateY(-3px);
+    }
+
+    .footer-bottom {
+        border-top: 1px solid rgba(255,255,255,0.1);
+        padding-top: 20px;
+        margin-top: 40px;
+        text-align: center;
+        color: #b8b8d4;
+        font-size: 14px;
+    }
+
+    .trust-badge-footer {
+        background: rgba(255,255,255,0.05);
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        transition: all 0.3s;
+    }
+
+    .trust-badge-footer:hover {
+        background: rgba(255,255,255,0.1);
+        transform: translateY(-3px);
+    }
+
+    .trust-badge-footer .icon {
+        font-size: 36px;
+        margin-bottom: 10px;
+    }
+
+    .trust-badge-footer .title {
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .trust-badge-footer .desc {
+        font-size: 13px;
+        color: #b8b8d4;
+    }
+
+    @media (max-width: 768px) {
+        .footer-grid {
+            grid-template-columns: 1fr !important;
+            gap: 30px !important;
+        }
+    }
+</style>
+
+<footer class="footer-imprixo">
+    <div class="max-w-7xl mx-auto px-4 py-12">
+        <!-- Trust Badges -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+            <div class="trust-badge-footer">
+                <div class="icon">🚚</div>
+                <div class="title">Livraison Rapide</div>
+                <div class="desc">Expédition 24-48h</div>
+            </div>
+            <div class="trust-badge-footer">
+                <div class="icon">✓</div>
+                <div class="title">Qualité Pro</div>
+                <div class="desc">Garantie satisfait</div>
+            </div>
+            <div class="trust-badge-footer">
+                <div class="icon">🔒</div>
+                <div class="title">Paiement Sécurisé</div>
+                <div class="desc">SSL & 3D Secure</div>
+            </div>
+            <div class="trust-badge-footer">
+                <div class="icon">📞</div>
+                <div class="title">Support 7j/7</div>
+                <div class="desc">Réponse rapide</div>
+            </div>
+        </div>
+
+        <!-- Footer Links -->
+        <div class="footer-grid grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <!-- Produits -->
+            <div class="footer-section">
+                <h3>📦 Nos Produits</h3>
+                <a href="/catalogue.html#rigides" class="footer-link">Supports Rigides</a>
+                <a href="/catalogue.html#baches" class="footer-link">Bâches & Textiles</a>
+                <a href="/catalogue.html#adhesifs" class="footer-link">Adhésifs & Stickers</a>
+                <a href="/catalogue.html#papiers" class="footer-link">Papiers & Affiches</a>
+                <a href="/catalogue.html" class="footer-link">Voir tout le catalogue</a>
+            </div>
+
+            <!-- Informations -->
+            <div class="footer-section">
+                <h3>ℹ️ Informations</h3>
+                <a href="/a-propos.html" class="footer-link">À propos d'Imprixo</a>
+                <a href="/contact.html" class="footer-link">Nous contacter</a>
+                <a href="/faq.html" class="footer-link">Questions fréquentes</a>
+                <a href="/tarifs.html" class="footer-link">Nos tarifs</a>
+                <a href="/livraison.html" class="footer-link">Livraison & Retours</a>
+            </div>
+
+            <!-- Légal -->
+            <div class="footer-section">
+                <h3>⚖️ Mentions Légales</h3>
+                <a href="/cgv.html" class="footer-link">Conditions Générales</a>
+                <a href="/mentions-legales.html" class="footer-link">Mentions légales</a>
+                <a href="/politique-confidentialite.html" class="footer-link">Politique de confidentialité</a>
+                <a href="/cookies.html" class="footer-link">Gestion des cookies</a>
+            </div>
+
+            <!-- Contact & Social -->
+            <div class="footer-section">
+                <h3>✉️ Suivez-nous</h3>
+                <p class="text-sm mb-4" style="color: #b8b8d4;">
+                    📧 contact@imprixo.fr<br>
+                    📞 01 23 45 67 89<br>
+                    🕒 Lun-Ven 9h-18h
+                </p>
+                <div class="mt-4">
+                    <a href="https://facebook.com/imprixo" class="social-icon" target="_blank" rel="noopener">f</a>
+                    <a href="https://instagram.com/imprixo" class="social-icon" target="_blank" rel="noopener">📷</a>
+                    <a href="https://linkedin.com/company/imprixo" class="social-icon" target="_blank" rel="noopener">in</a>
+                    <a href="https://twitter.com/imprixo" class="social-icon" target="_blank" rel="noopener">𝕏</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <p>© 2024 Imprixo - Impression grand format professionnelle. Tous droits réservés.</p>
+            <p class="mt-2 text-xs">
+                Impression Forex • Dibond • Bâches PVC • Kakémonos • Panneaux publicitaires • Adhésifs • Roll-ups
+            </p>
+        </div>
+    </div>
+</footer>
+
+<script>
+// Analytics placeholder
+console.log('Imprixo - Site chargé');
+</script>

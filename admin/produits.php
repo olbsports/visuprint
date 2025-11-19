@@ -9,8 +9,8 @@ require_once __DIR__ . '/auth.php';
 verifierAdminConnecte();
 $admin = getAdminInfo();
 
-$success = '';
-$error = '';
+$success = isset($_GET['success']) ? $_GET['success'] : '';
+$error = isset($_GET['error']) ? $_GET['error'] : '';
 
 // Charger les produits depuis CSV
 $produits = [];
@@ -31,13 +31,44 @@ if (file_exists($csvFile)) {
     fclose($file);
 }
 
-// Stats
+// Liste de toutes les catégories pour le filtre (avant filtrage)
+$tousLesProduits = $produits;
+$listeCategoriesUniques = array_unique(array_column($tousLesProduits, 'CATEGORIE'));
+sort($listeCategoriesUniques);
+
+// Filtrage et recherche
+$recherche = isset($_GET['q']) ? trim($_GET['q']) : '';
+$filtreCategorie = isset($_GET['cat']) ? $_GET['cat'] : '';
+
+if ($recherche || $filtreCategorie) {
+    $produits = array_filter($produits, function($p) use ($recherche, $filtreCategorie) {
+        $matchRecherche = true;
+        $matchCategorie = true;
+
+        if ($recherche) {
+            $matchRecherche = (
+                stripos($p['ID_PRODUIT'], $recherche) !== false ||
+                stripos($p['NOM_PRODUIT'], $recherche) !== false ||
+                stripos($p['SOUS_TITRE'], $recherche) !== false ||
+                stripos($p['DESCRIPTION_COURTE'], $recherche) !== false
+            );
+        }
+
+        if ($filtreCategorie) {
+            $matchCategorie = ($p['CATEGORIE'] === $filtreCategorie);
+        }
+
+        return $matchRecherche && $matchCategorie;
+    });
+}
+
+// Stats (après filtrage)
 $stats = [
     'total' => count($produits),
     'categories' => count(array_unique(array_column($produits, 'CATEGORIE')))
 ];
 
-// Grouper par catégorie
+// Grouper par catégorie (après filtrage)
 $categories = [];
 foreach ($produits as $produit) {
     $cat = $produit['CATEGORIE'];
@@ -264,6 +295,88 @@ ksort($categories);
             background: #27ae60;
             color: white;
         }
+
+        .btn-success:hover {
+            background: #229954;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .search-box {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .filter-select {
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .actions-cell {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #dc3545;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
     </style>
 </head>
 <body>
@@ -290,14 +403,41 @@ ksort($categories);
             <div class="success-message">✓ <?php echo htmlspecialchars($success); ?></div>
         <?php endif; ?>
 
+        <?php if ($error): ?>
+            <div class="error-message">✗ <?php echo htmlspecialchars($error); ?></div>
+        <?php endif; ?>
+
         <div class="page-header">
             <h1 class="page-title">🏷️ Gestion des produits</h1>
-            <a href="javascript:regenererPages()" class="btn btn-success">🔄 Régénérer les pages produits</a>
+            <div class="header-actions">
+                <a href="nouveau-produit.php" class="btn btn-primary">➕ Ajouter un produit</a>
+                <a href="generer-pages-produits-html.php" class="btn btn-success" onclick="return confirm('Régénérer toutes les pages HTML des produits ?')">🔄 Régénérer toutes les pages</a>
+            </div>
         </div>
 
-        <div class="alert-info">
-            ℹ️ <strong>Information:</strong> Les produits sont stockés dans le fichier CSV <code>CATALOGUE_COMPLET_VISUPRINT.csv</code>.
-            Pour modifier un produit, éditez le CSV puis régénérez les pages avec le bouton ci-dessus.
+        <!-- Recherche et filtres -->
+        <div class="search-box">
+            <form method="GET" action="" style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                <input
+                    type="text"
+                    name="q"
+                    class="search-input"
+                    placeholder="🔍 Rechercher un produit (ID, nom, description...)"
+                    value="<?php echo htmlspecialchars($recherche); ?>"
+                >
+                <select name="cat" class="filter-select" onchange="this.form.submit()">
+                    <option value="">📁 Toutes les catégories</option>
+                    <?php foreach ($listeCategoriesUniques as $cat): ?>
+                        <option value="<?php echo htmlspecialchars($cat); ?>" <?php echo $filtreCategorie === $cat ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($cat); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <button type="submit" class="btn btn-primary btn-small">Rechercher</button>
+                <?php if ($recherche || $filtreCategorie): ?>
+                    <a href="produits.php" class="btn btn-secondary btn-small">✖ Effacer les filtres</a>
+                <?php endif; ?>
+            </form>
         </div>
 
         <div class="stats-grid">
@@ -343,9 +483,17 @@ ksort($categories);
                             </td>
                             <td><?php echo htmlspecialchars($p['DELAI_STANDARD_JOURS']); ?> jours</td>
                             <td>
-                                <a href="/produit/<?php echo $p['ID_PRODUIT']; ?>.php" target="_blank" class="btn btn-primary btn-small">
-                                    👁️ Voir la page
-                                </a>
+                                <div class="actions-cell">
+                                    <a href="/produit/<?php echo $p['ID_PRODUIT']; ?>.html" target="_blank" class="btn btn-secondary btn-small" title="Voir la page HTML">
+                                        👁️
+                                    </a>
+                                    <a href="editer-produit.php?id=<?php echo urlencode($p['ID_PRODUIT']); ?>" class="btn btn-primary btn-small" title="Éditer">
+                                        ✏️
+                                    </a>
+                                    <a href="supprimer-produit.php?id=<?php echo urlencode($p['ID_PRODUIT']); ?>" class="btn btn-danger btn-small" onclick="return confirm('Supprimer le produit <?php echo htmlspecialchars($p['NOM_PRODUIT']); ?> ?')" title="Supprimer">
+                                        🗑️
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -355,12 +503,5 @@ ksort($categories);
         </div>
     </div>
 
-    <script>
-        function regenererPages() {
-            if (confirm('Voulez-vous régénérer toutes les pages produits ?\n\nCela va recréer les 54 pages PHP à partir du fichier CSV.')) {
-                alert('Pour régénérer les pages produits, exécutez cette commande sur le serveur:\n\npython3 generer_pages_produits_v2.py\n\nOu utilisez le terminal Claude Code.');
-            }
-        }
-    </script>
 </body>
 </html>
