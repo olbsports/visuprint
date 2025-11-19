@@ -1,22 +1,19 @@
 <?php
 /**
- * Générateur Autonome de Pages Produits HTML
- * ATTENTION: À supprimer après utilisation pour raisons de sécurité
+ * Générateur Autonome de Pages Produits HTML avec CONFIGURATEUR COMPLET
+ * Site e-commerce Imprixo - OLB SPORTS OOD (Bulgarie)
  */
 
 // Configuration
 $csvFile = __DIR__ . '/CATALOGUE_COMPLET_VISUPRINT.csv';
 $outputDir = __DIR__ . '/produit/';
 
-// Créer le dossier si nécessaire
 if (!is_dir($outputDir)) {
     mkdir($outputDir, 0755, true);
 }
 
-// Statistiques
 $stats = ['generated' => 0, 'errors' => 0];
 
-// Charger les produits
 if (!file_exists($csvFile)) {
     die("ERREUR: Le fichier CSV n'existe pas: $csvFile");
 }
@@ -24,7 +21,7 @@ if (!file_exists($csvFile)) {
 $file = fopen($csvFile, 'r');
 $headers = fgetcsv($file);
 
-echo "=== GÉNÉRATION DES PAGES PRODUITS HTML ===\n\n";
+echo "=== GÉNÉRATION PAGES PRODUITS AVEC CONFIGURATEUR ===\n\n";
 
 while (($row = fgetcsv($file)) !== false) {
     if (count($row) !== count($headers)) continue;
@@ -58,6 +55,7 @@ function genererPageProduitHTML($p) {
     $descCourte = htmlspecialchars($p['DESCRIPTION_COURTE']);
     $descLongue = htmlspecialchars($p['DESCRIPTION_LONGUE']);
     $id = htmlspecialchars($p['ID_PRODUIT']);
+    $categorie = htmlspecialchars($p['CATEGORIE']);
 
     $prix010 = floatval($p['PRIX_0_10_M2']);
     $prix1150 = floatval($p['PRIX_11_50_M2']);
@@ -74,29 +72,68 @@ function genererPageProduitHTML($p) {
     $finition = htmlspecialchars($p['FINITION']);
     $delai = intval($p['DELAI_STANDARD_JOURS']);
 
+    // Formats standards COMPLETS selon catégorie
+    $formatsStandards = [
+        // Formats ISO
+        'A0 (84×119 cm)' => ['w' => 84, 'h' => 119, 'cat' => 'iso'],
+        'A1 (59×84 cm)' => ['w' => 59, 'h' => 84, 'cat' => 'iso'],
+        'A2 (42×59 cm)' => ['w' => 42, 'h' => 59, 'cat' => 'iso'],
+        'A3 (30×42 cm)' => ['w' => 30, 'h' => 42, 'cat' => 'iso'],
+        'A4 (21×30 cm)' => ['w' => 21, 'h' => 30, 'cat' => 'iso'],
+
+        // Kakémonos & Roll-ups
+        'Kakemono 85×200 cm' => ['w' => 85, 'h' => 200, 'cat' => 'kakemono'],
+        'Kakemono 100×200 cm' => ['w' => 100, 'h' => 200, 'cat' => 'kakemono'],
+        'Roll-up 85×200 cm' => ['w' => 85, 'h' => 200, 'cat' => 'rollup'],
+        'Roll-up 100×200 cm' => ['w' => 100, 'h' => 200, 'cat' => 'rollup'],
+        'Roll-up 120×200 cm' => ['w' => 120, 'h' => 200, 'cat' => 'rollup'],
+
+        // X-Banner & L-Banner
+        'X-Banner 60×160 cm' => ['w' => 60, 'h' => 160, 'cat' => 'banner'],
+        'X-Banner 80×180 cm' => ['w' => 80, 'h' => 180, 'cat' => 'banner'],
+        'L-Banner 80×200 cm' => ['w' => 80, 'h' => 200, 'cat' => 'banner'],
+
+        // Panneaux publicitaires
+        'Panneau 40×60 cm' => ['w' => 40, 'h' => 60, 'cat' => 'panneau'],
+        'Panneau 60×80 cm' => ['w' => 60, 'h' => 80, 'cat' => 'panneau'],
+        'Panneau 80×120 cm' => ['w' => 80, 'h' => 120, 'cat' => 'panneau'],
+        'Panneau 100×150 cm' => ['w' => 100, 'h' => 150, 'cat' => 'panneau'],
+
+        // Formats carrés
+        'Carré 50×50 cm' => ['w' => 50, 'h' => 50, 'cat' => 'carre'],
+        'Carré 80×80 cm' => ['w' => 80, 'h' => 80, 'cat' => 'carre'],
+        'Carré 100×100 cm' => ['w' => 100, 'h' => 100, 'cat' => 'carre'],
+
+        // Grands formats
+        '200×100 cm' => ['w' => 200, 'h' => 100, 'cat' => 'grand'],
+        '300×100 cm' => ['w' => 300, 'h' => 100, 'cat' => 'grand'],
+        '300×200 cm' => ['w' => 300, 'h' => 200, 'cat' => 'grand'],
+        '400×200 cm' => ['w' => 400, 'h' => 200, 'cat' => 'grand'],
+
+        // Personnalisé
+        'Personnalisé' => ['w' => 100, 'h' => 100, 'cat' => 'custom']
+    ];
+
     return <<<HTML
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>$nom - $soustitre | Imprixo</title>
-    <meta name="description" content="$descCourte ✓ Prix dégressifs {$prix300plus}€→{$prix010}€/m² ✓ Livraison {$delai}j ✓ $certification">
+    <title>$nom - Impression Europe | Imprixo</title>
+    <meta name="description" content="$descCourte ✓ Prix {$prix300plus}€-{$prix010}€/m² ✓ Livraison Europe {$delai}j ✓ $certification ✓ Fabrication UE">
     <link rel="canonical" href="https://imprixo.fr/produit/$id.html">
-    <meta property="og:title" content="$nom - Imprixo">
-    <meta property="og:description" content="$descCourte">
-    <meta property="og:type" content="product">
-    <script type="application/ld+json">
-    {"@context":"https://schema.org/","@type":"Product","name":"$nom","description":"$descCourte","brand":{"@type":"Brand","name":"Imprixo"},"offers":{"@type":"AggregateOffer","lowPrice":"$prix300plus","highPrice":"$prix010","priceCurrency":"EUR","availability":"https://schema.org/InStock"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.7","reviewCount":"183"}}
-    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
         *{font-family:'Roboto',sans-serif}
-        .price-sidebar{position:sticky;top:120px}
-        .spec-badge{background:linear-gradient(135deg,#dbeafe 0%,#bfdbfe 100%);border-left:4px solid #3b82f6}
         .btn-primary{background:linear-gradient(135deg,#e63946 0%,#d62839 100%);transition:all 0.3s}
         .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(230,57,70,0.3)}
+        .config-option{border:2px solid #e5e7eb;transition:all 0.2s;cursor:pointer}
+        .config-option:hover{border-color:#e63946;background:#fff5f5}
+        .config-option.selected{border-color:#e63946;background:#fff1f2;font-weight:700}
+        .price-badge{animation:pulse 2s infinite}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.8}}
     </style>
 </head>
 <body class="bg-gray-50">
@@ -105,7 +142,7 @@ function genererPageProduitHTML($p) {
 
     <div class="max-w-7xl mx-auto px-4 py-8">
         <nav class="text-sm mb-6">
-            <a href="/" class="text-gray-600 hover:text-red-600">Accueil</a>
+            <a href="/index.html" class="text-gray-600 hover:text-red-600">Accueil</a>
             <span class="mx-2 text-gray-400">›</span>
             <a href="/catalogue.html" class="text-gray-600 hover:text-red-600">Catalogue</a>
             <span class="mx-2 text-gray-400">›</span>
@@ -116,81 +153,258 @@ function genererPageProduitHTML($p) {
             <h1 class="text-4xl font-black text-gray-900 mb-2">$nom</h1>
             <p class="text-xl text-gray-600 mb-4">$soustitre</p>
             <div class="flex flex-wrap items-center gap-4">
-                <div class="flex items-center gap-2">
-                    <span class="text-yellow-500 text-xl">★★★★★</span>
-                    <span class="text-sm text-gray-600">4.7/5 (183 avis)</span>
-                </div>
-                <div class="bg-green-100 text-green-800 px-4 py-2 rounded-full font-semibold text-sm">✓ En stock - Livraison {$delai}j</div>
-                <div class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-semibold text-sm">🔥 Prix dégressifs</div>
+                <div class="bg-green-100 text-green-800 px-4 py-2 rounded-full font-semibold text-sm">✓ Fabrication UE</div>
+                <div class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-semibold text-sm">🇪🇺 Livraison Europe {$delai}j</div>
+                <div class="bg-red-100 text-red-800 px-4 py-2 rounded-full font-semibold text-sm">🔥 Prix dégressifs</div>
             </div>
         </div>
 
         <div class="grid lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2 space-y-6">
-                <div class="bg-white rounded-xl shadow-lg p-6">
-                    <img src="/assets/products/$id.jpg" alt="$nom" class="w-full h-96 object-cover rounded-lg mb-4" onerror="this.src='https://placehold.co/800x600/e63946/white?text='+encodeURIComponent('$nom')">
-                    <div class="grid grid-cols-4 gap-2">
-                        <img src="/assets/products/$id-1.jpg" alt="Vue 1" class="w-full h-20 object-cover rounded" onerror="this.style.display='none'">
-                        <img src="/assets/products/$id-2.jpg" alt="Vue 2" class="w-full h-20 object-cover rounded" onerror="this.style.display='none'">
-                        <img src="/assets/products/$id-3.jpg" alt="Vue 3" class="w-full h-20 object-cover rounded" onerror="this.style.display='none'">
-                        <img src="/assets/products/$id-4.jpg" alt="Vue 4" class="w-full h-20 object-cover rounded" onerror="this.style.display='none'">
+            <!-- CONFIGURATEUR PRINCIPAL -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-6">
+                    <h2 class="text-2xl font-black text-gray-900 mb-6 flex items-center gap-3">
+                        <span class="text-3xl">⚙️</span> Configurez votre produit
+                    </h2>
+
+                    <!-- Format -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-bold text-gray-700 mb-3">📐 Format</label>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="format-selector">
+HTML;
+
+    foreach ($formatsStandards as $label => $dims) {
+        $isPersonnalise = $label === 'Personnalisé' ? 'true' : 'false';
+        $html .= <<<HTML
+                            <div class="config-option rounded-lg p-3 text-center" data-format="$label" data-w="{$dims['w']}" data-h="{$dims['h']}" data-custom="$isPersonnalise">
+                                <div class="font-semibold text-sm">$label</div>
+                            </div>
+HTML;
+    }
+
+    $html .= <<<HTML
+                        </div>
+                    </div>
+
+                    <!-- Dimensions personnalisées -->
+                    <div class="grid grid-cols-2 gap-4 mb-6" id="custom-dimensions" style="display:none">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Largeur (cm)</label>
+                            <input type="number" id="largeur" value="100" min="10" max="500" step="1" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none font-bold text-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Hauteur (cm)</label>
+                            <input type="number" id="hauteur" value="100" min="10" max="500" step="1" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none font-bold text-lg">
+                        </div>
+                    </div>
+
+                    <!-- Quantité -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">📦 Quantité</label>
+                        <input type="number" id="quantite" value="1" min="1" max="1000" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none font-bold text-lg">
+                        <p class="text-xs text-gray-500 mt-1">Prix dégressifs selon quantité</p>
+                    </div>
+
+                    <!-- Options -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-bold text-gray-700 mb-3">🎨 Finition</label>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div class="config-option rounded-lg p-4 selected" data-option="standard" data-prix="0">
+                                <div class="font-bold">Standard</div>
+                                <div class="text-sm text-gray-600">Inclus</div>
+                            </div>
+                            <div class="config-option rounded-lg p-4" data-option="oeillets" data-prix="5">
+                                <div class="font-bold">Avec œillets</div>
+                                <div class="text-sm text-gray-600">+5€</div>
+                            </div>
+                            <div class="config-option rounded-lg p-4" data-option="support" data-prix="12">
+                                <div class="font-bold">Sur support</div>
+                                <div class="text-sm text-gray-600">+12€/m²</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upload fichier -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-bold text-gray-700 mb-3">📁 Votre fichier (optionnel)</label>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-red-600 transition cursor-pointer" id="upload-zone">
+                            <div class="text-4xl mb-3">📤</div>
+                            <div class="font-bold text-gray-900 mb-2">Glissez votre fichier ici</div>
+                            <div class="text-sm text-gray-600 mb-3">ou cliquez pour parcourir</div>
+                            <div class="text-xs text-gray-500">PDF, AI, EPS, PNG, JPG • Max 100 Mo • 300 DPI recommandé</div>
+                            <input type="file" id="file-input" class="hidden" accept=".pdf,.ai,.eps,.png,.jpg,.jpeg">
+                        </div>
+                        <p class="text-sm text-gray-600 mt-2">💡 Vous pouvez aussi commander maintenant et envoyer votre fichier plus tard</p>
+                    </div>
+
+                    <!-- Notice technique fichier -->
+                    <div class="bg-yellow-50 border-2 border-yellow-400 rounded-lg p-6 mb-6">
+                        <h3 class="font-bold text-yellow-900 mb-4 flex items-center gap-2 text-lg">
+                            <span class="text-2xl">📐</span> Spécifications techniques du fichier
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4">
+                            <div class="bg-white p-3 rounded border border-yellow-300">
+                                <div class="text-yellow-800 font-semibold mb-1">📏 Format fini (après coupe)</div>
+                                <div class="text-xl font-black text-gray-900" id="spec-format-fini">100 × 100 cm</div>
+                            </div>
+                            <div class="bg-white p-3 rounded border border-red-300">
+                                <div class="text-red-700 font-semibold mb-1">📐 Format à fournir (avec fond perdu)</div>
+                                <div class="text-xl font-black text-red-600" id="spec-format-fourni">100.6 × 100.6 cm</div>
+                            </div>
+                            <div class="bg-white p-3 rounded border border-green-300">
+                                <div class="text-green-700 font-semibold mb-1">✓ Zone de sécurité (textes/logos)</div>
+                                <div class="text-lg font-bold text-green-600" id="spec-zone-securite">94 × 94 cm</div>
+                            </div>
+                            <div class="bg-white p-3 rounded border border-blue-300">
+                                <div class="text-blue-700 font-semibold mb-1">🖨️ Résolution minimale</div>
+                                <div class="text-lg font-bold text-gray-900">300 DPI (haute qualité)</div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded border-2 border-yellow-300 p-4">
+                            <div class="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                                <span>💡</span> Informations importantes pour votre fichier
+                            </div>
+                            <ul class="text-xs text-gray-700 space-y-2">
+                                <li class="flex items-start gap-2">
+                                    <span class="text-red-600 font-bold">•</span>
+                                    <span><strong>Fond perdu (3mm):</strong> Prolongez vos visuels de 3mm de chaque côté pour éviter les liserés blancs après découpe</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-green-600 font-bold">•</span>
+                                    <span><strong>Zone de sécurité:</strong> Placez vos textes et logos importants à minimum 3mm du bord de coupe</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-blue-600 font-bold">•</span>
+                                    <span><strong>Formats acceptés:</strong> PDF (vectoriel recommandé), AI, EPS, PNG, JPG, TIFF</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-purple-600 font-bold">•</span>
+                                    <span><strong>Profil couleur:</strong> CMJN (CMYK) obligatoire pour l'impression professionnelle</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-orange-600 font-bold">•</span>
+                                    <span><strong>Résolution:</strong> 300 DPI minimum pour une qualité optimale • 150 DPI acceptable pour grands formats (>2m)</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Résumé config -->
+                    <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-6">
+                        <h3 class="font-bold text-blue-900 mb-3">📋 Résumé de votre configuration</h3>
+                        <div class="grid grid-cols-2 gap-3 text-sm">
+                            <div><span class="text-gray-600">Format:</span> <span class="font-bold" id="resume-format">-</span></div>
+                            <div><span class="text-gray-600">Dimensions:</span> <span class="font-bold" id="resume-dims">-</span></div>
+                            <div><span class="text-gray-600">Surface:</span> <span class="font-bold" id="resume-surface">-</span></div>
+                            <div><span class="text-gray-600">Quantité:</span> <span class="font-bold" id="resume-qte">-</span></div>
+                            <div><span class="text-gray-600">Finition:</span> <span class="font-bold" id="resume-finition">Standard</span></div>
+                            <div><span class="text-gray-600">Délai:</span> <span class="font-bold text-green-700">{$delai} jours ouvrés</span></div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                <!-- Description produit -->
+                <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-6">
                     <h2 class="text-2xl font-black text-gray-900 mb-4">📝 Description</h2>
                     <p class="text-lg text-gray-700 mb-4 font-medium">$descCourte</p>
                     <p class="text-gray-600 leading-relaxed">$descLongue</p>
-                </div>
 
-                <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
-                    <h2 class="text-2xl font-black text-gray-900 mb-6">⚙️ Caractéristiques techniques</h2>
-                    <div class="grid md:grid-cols-2 gap-4">
-                        <div class="spec-badge rounded-lg p-4"><div class="text-sm text-blue-700 font-medium">Poids</div><div class="text-lg font-black text-gray-900">$poids kg/m²</div></div>
-                        <div class="spec-badge rounded-lg p-4"><div class="text-sm text-blue-700 font-medium">Épaisseur</div><div class="text-lg font-black text-gray-900">$epaisseur</div></div>
-                        <div class="spec-badge rounded-lg p-4"><div class="text-sm text-blue-700 font-medium">Format maximum</div><div class="text-lg font-black text-gray-900">$formatMax cm</div></div>
-                        <div class="spec-badge rounded-lg p-4"><div class="text-sm text-blue-700 font-medium">Usage</div><div class="text-lg font-black text-gray-900">$usage</div></div>
-                        <div class="spec-badge rounded-lg p-4"><div class="text-sm text-blue-700 font-medium">Durée de vie</div><div class="text-lg font-black text-gray-900">$dureeVie</div></div>
-                        <div class="spec-badge rounded-lg p-4"><div class="text-sm text-blue-700 font-medium">Certification</div><div class="text-lg font-black text-gray-900">$certification</div></div>
-                        <div class="spec-badge rounded-lg p-4"><div class="text-sm text-blue-700 font-medium">Finition</div><div class="text-lg font-black text-gray-900">$finition</div></div>
-                        <div class="spec-badge rounded-lg p-4"><div class="text-sm text-blue-700 font-medium">Délai</div><div class="text-lg font-black text-gray-900">{$delai} jours</div></div>
+                    <div class="mt-6 bg-green-50 border-l-4 border-green-600 p-4 rounded">
+                        <div class="font-bold text-green-900 mb-2">🇪🇺 Fabrication européenne de qualité</div>
+                        <p class="text-sm text-green-800">Produit fabriqué en Europe par <strong>OLB SPORTS OOD</strong> (Bulgarie). Livraison dans toute l'Europe en {$delai} jours ouvrés.</p>
                     </div>
                 </div>
 
+                <!-- Caractéristiques -->
                 <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
-                    <h2 class="text-2xl font-black text-gray-900 mb-6">💰 Prix dégressifs au m²</h2>
-                    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                        <div class="border-2 border-gray-200 rounded-lg p-4 text-center hover:border-red-600 transition"><div class="text-sm text-gray-600 mb-1">0-10 m²</div><div class="text-2xl font-black text-red-600">{$prix010}€</div><div class="text-xs text-gray-500">/m²</div></div>
-                        <div class="border-2 border-gray-200 rounded-lg p-4 text-center hover:border-red-600 transition"><div class="text-sm text-gray-600 mb-1">11-50 m²</div><div class="text-2xl font-black text-red-600">{$prix1150}€</div><div class="text-xs text-gray-500">/m²</div></div>
-                        <div class="border-2 border-gray-200 rounded-lg p-4 text-center hover:border-red-600 transition"><div class="text-sm text-gray-600 mb-1">51-100 m²</div><div class="text-2xl font-black text-red-600">{$prix51100}€</div><div class="text-xs text-gray-500">/m²</div></div>
-                        <div class="border-2 border-gray-200 rounded-lg p-4 text-center hover:border-red-600 transition"><div class="text-sm text-gray-600 mb-1">101-300 m²</div><div class="text-2xl font-black text-red-600">{$prix101300}€</div><div class="text-xs text-gray-500">/m²</div></div>
-                        <div class="border-2 border-red-600 bg-red-50 rounded-lg p-4 text-center"><div class="text-sm text-red-700 mb-1 font-semibold">300+ m²</div><div class="text-2xl font-black text-red-600">{$prix300plus}€</div><div class="text-xs text-red-700 font-semibold">Meilleur prix !</div></div>
+                    <h2 class="text-2xl font-black text-gray-900 mb-6">⚙️ Caractéristiques techniques</h2>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-blue-50 border-l-4 border-blue-600 rounded-lg p-4">
+                            <div class="text-sm text-blue-700 font-medium">Poids</div>
+                            <div class="text-lg font-black text-gray-900">$poids kg/m²</div>
+                        </div>
+                        <div class="bg-blue-50 border-l-4 border-blue-600 rounded-lg p-4">
+                            <div class="text-sm text-blue-700 font-medium">Épaisseur</div>
+                            <div class="text-lg font-black text-gray-900">$epaisseur</div>
+                        </div>
+                        <div class="bg-blue-50 border-l-4 border-blue-600 rounded-lg p-4">
+                            <div class="text-sm text-blue-700 font-medium">Format maximum</div>
+                            <div class="text-lg font-black text-gray-900">$formatMax cm</div>
+                        </div>
+                        <div class="bg-blue-50 border-l-4 border-blue-600 rounded-lg p-4">
+                            <div class="text-sm text-blue-700 font-medium">Usage</div>
+                            <div class="text-lg font-black text-gray-900">$usage</div>
+                        </div>
+                        <div class="bg-blue-50 border-l-4 border-blue-600 rounded-lg p-4">
+                            <div class="text-sm text-blue-700 font-medium">Durée de vie</div>
+                            <div class="text-lg font-black text-gray-900">$dureeVie</div>
+                        </div>
+                        <div class="bg-blue-50 border-l-4 border-blue-600 rounded-lg p-4">
+                            <div class="text-sm text-blue-700 font-medium">Certification</div>
+                            <div class="text-lg font-black text-gray-900">$certification</div>
+                        </div>
                     </div>
                 </div>
             </div>
 
+            <!-- SIDEBAR PRIX & COMMANDE -->
             <div class="lg:col-span-1">
-                <div class="price-sidebar bg-white rounded-xl shadow-lg p-6">
-                    <div class="text-sm text-gray-600 mb-2">À partir de</div>
-                    <div class="text-4xl font-black text-gray-900 mb-1">{$prix300plus}€</div>
+                <div class="sticky top-24 bg-white rounded-xl shadow-lg p-6">
+                    <div class="text-sm text-gray-600 mb-2">Prix TTC à partir de</div>
+                    <div class="text-5xl font-black text-gray-900 mb-1 price-badge" id="prix-unitaire">{$prix300plus}€</div>
                     <div class="text-lg text-gray-600 mb-6">/m²</div>
+
                     <div class="bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 rounded-lg p-4 mb-6">
-                        <div class="text-sm font-semibold text-red-900 mb-2">🔥 Économisez jusqu'à</div>
-                        <div class="text-3xl font-black text-red-600">-" . round((($prix010-$prix300plus)/$prix010)*100) . "%</div>
-                        <div class="text-xs text-red-700 mt-1">sur les grandes quantités</div>
+                        <div class="text-sm font-semibold text-red-900 mb-2">💰 PRIX TOTAL TTC</div>
+                        <div class="text-3xl font-black text-red-600" id="prix-total">-</div>
+                        <div class="text-xs text-red-700 mt-2">TVA incluse • Livraison Europe</div>
                     </div>
-                    <a href="/panier.html?add=$id" class="block w-full btn-primary text-white py-4 rounded-lg font-black text-lg mb-3 shadow-lg text-center">🛒 COMMANDER</a>
-                    <a href="/contact.html?produit=$id" class="block w-full border-2 border-gray-300 text-gray-700 py-3 rounded-lg font-bold hover:border-red-600 hover:text-red-600 transition mb-6 text-center">📄 Devis gratuit</a>
+
+                    <button class="w-full btn-primary text-white py-4 rounded-lg font-black text-lg mb-3 shadow-lg" id="btn-add-cart">
+                        🛒 AJOUTER AU PANIER
+                    </button>
+
+                    <button class="w-full border-2 border-gray-300 text-gray-700 py-3 rounded-lg font-bold hover:border-red-600 hover:text-red-600 transition mb-6">
+                        📄 Demander un devis
+                    </button>
+
+                    <!-- Trust badges -->
                     <div class="grid grid-cols-2 gap-3 mb-6">
-                        <div class="text-center p-3 bg-gray-50 rounded-lg"><div class="text-2xl mb-1">🚚</div><div class="text-xs font-bold text-gray-700">Livraison {$delai}j</div></div>
-                        <div class="text-center p-3 bg-gray-50 rounded-lg"><div class="text-2xl mb-1">🔒</div><div class="text-xs font-bold text-gray-700">Paiement sécurisé</div></div>
-                        <div class="text-center p-3 bg-gray-50 rounded-lg"><div class="text-2xl mb-1">✓</div><div class="text-xs font-bold text-gray-700">Garantie qualité</div></div>
-                        <div class="text-center p-3 bg-gray-50 rounded-lg"><div class="text-2xl mb-1">⭐</div><div class="text-xs font-bold text-gray-700">4.7/5 avis</div></div>
+                        <div class="text-center p-3 bg-gray-50 rounded-lg">
+                            <div class="text-2xl mb-1">🇪🇺</div>
+                            <div class="text-xs font-bold text-gray-700">Fabrication UE</div>
+                        </div>
+                        <div class="text-center p-3 bg-gray-50 rounded-lg">
+                            <div class="text-2xl mb-1">🚚</div>
+                            <div class="text-xs font-bold text-gray-700">Livraison {$delai}j</div>
+                        </div>
+                        <div class="text-center p-3 bg-gray-50 rounded-lg">
+                            <div class="text-2xl mb-1">✓</div>
+                            <div class="text-xs font-bold text-gray-700">Qualité garantie</div>
+                        </div>
+                        <div class="text-center p-3 bg-gray-50 rounded-lg">
+                            <div class="text-2xl mb-1">🔒</div>
+                            <div class="text-xs font-bold text-gray-700">Paiement sécurisé</div>
+                        </div>
                     </div>
-                    <div class="border-t pt-4">
-                        <div class="text-sm text-gray-600 mb-3">✓ Livraison gratuite dès 200€</div>
-                        <div class="text-sm text-gray-600 mb-3">✓ Fichiers techniques fournis</div>
-                        <div class="text-sm text-gray-600">✓ Support client 7j/7</div>
+
+                    <div class="border-t pt-4 text-sm text-gray-600 space-y-2">
+                        <div>✓ Livraison gratuite dès 200€</div>
+                        <div>✓ Fichiers techniques fournis</div>
+                        <div>✓ Support client 7j/7</div>
+                        <div>✓ Paiement sécurisé (CB, PayPal)</div>
+                    </div>
+
+                    <!-- Prix dégressifs -->
+                    <div class="mt-6 pt-6 border-t">
+                        <h3 class="font-bold text-gray-900 mb-3">💰 Prix dégressifs au m²</h3>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between"><span>0-10 m²</span><span class="font-bold">{$prix010}€/m²</span></div>
+                            <div class="flex justify-between"><span>11-50 m²</span><span class="font-bold text-green-700">{$prix1150}€/m²</span></div>
+                            <div class="flex justify-between"><span>51-100 m²</span><span class="font-bold text-green-700">{$prix51100}€/m²</span></div>
+                            <div class="flex justify-between"><span>101-300 m²</span><span class="font-bold text-green-700">{$prix101300}€/m²</span></div>
+                            <div class="flex justify-between bg-red-50 p-2 rounded"><span class="font-bold">300+ m²</span><span class="font-black text-red-600">{$prix300plus}€/m²</span></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -199,8 +413,190 @@ function genererPageProduitHTML($p) {
 
     <div id="footer-placeholder"></div>
     <script>fetch('/includes/footer.html').then(r=>r.text()).then(html=>document.getElementById('footer-placeholder').innerHTML=html)</script>
+
+    <script>
+    // CONFIGURATEUR PRODUIT COMPLET
+    const PRODUIT = {
+        id: '$id',
+        nom: '$nom',
+        prix: {
+            '0-10': $prix010,
+            '11-50': $prix1150,
+            '51-100': $prix51100,
+            '101-300': $prix101300,
+            '300+': $prix300plus
+        },
+        delai: $delai
+    };
+
+    let config = {
+        largeur: 100,
+        hauteur: 100,
+        quantite: 1,
+        finition: 'standard',
+        prixFinition: 0,
+        format: 'Personnalisé',
+        fichier: null
+    };
+
+    // Sélection format
+    document.querySelectorAll('[data-format]').forEach(el => {
+        el.addEventListener('click', function() {
+            document.querySelectorAll('[data-format]').forEach(e => e.classList.remove('selected'));
+            this.classList.add('selected');
+
+            config.format = this.dataset.format;
+            config.largeur = parseFloat(this.dataset.w);
+            config.hauteur = parseFloat(this.dataset.h);
+
+            const isCustom = this.dataset.custom === 'true';
+            document.getElementById('custom-dimensions').style.display = isCustom ? 'grid' : 'none';
+
+            if (!isCustom) {
+                document.getElementById('largeur').value = config.largeur;
+                document.getElementById('hauteur').value = config.hauteur;
+            }
+
+            calculerPrix();
+        });
+    });
+
+    // Premier format sélectionné par défaut
+    document.querySelector('[data-format]').click();
+
+    // Dimensions personnalisées
+    ['largeur', 'hauteur'].forEach(dim => {
+        document.getElementById(dim).addEventListener('input', function() {
+            config[dim] = parseFloat(this.value) || 0;
+            config.format = 'Personnalisé';
+            calculerPrix();
+        });
+    });
+
+    // Quantité
+    document.getElementById('quantite').addEventListener('input', function() {
+        config.quantite = parseInt(this.value) || 1;
+        calculerPrix();
+    });
+
+    // Options finition
+    document.querySelectorAll('[data-option]').forEach(el => {
+        el.addEventListener('click', function() {
+            document.querySelectorAll('[data-option]').forEach(e => e.classList.remove('selected'));
+            this.classList.add('selected');
+            config.finition = this.dataset.option;
+            config.prixFinition = parseFloat(this.dataset.prix);
+            document.getElementById('resume-finition').textContent = this.querySelector('.font-bold').textContent;
+            calculerPrix();
+        });
+    });
+
+    // Upload fichier
+    const uploadZone = document.getElementById('upload-zone');
+    const fileInput = document.getElementById('file-input');
+
+    uploadZone.addEventListener('click', () => fileInput.click());
+
+    uploadZone.addEventListener('dragover', e => {
+        e.preventDefault();
+        uploadZone.classList.add('border-red-600');
+    });
+
+    uploadZone.addEventListener('dragleave', () => {
+        uploadZone.classList.remove('border-red-600');
+    });
+
+    uploadZone.addEventListener('drop', e => {
+        e.preventDefault();
+        uploadZone.classList.remove('border-red-600');
+        if (e.dataTransfer.files.length) {
+            handleFile(e.dataTransfer.files[0]);
+        }
+    });
+
+    fileInput.addEventListener('change', function() {
+        if (this.files.length) {
+            handleFile(this.files[0]);
+        }
+    });
+
+    function handleFile(file) {
+        config.fichier = file;
+        uploadZone.innerHTML = `
+            <div class="text-4xl mb-3">✓</div>
+            <div class="font-bold text-green-700 mb-2">\${file.name}</div>
+            <div class="text-sm text-gray-600">\${(file.size / 1024 / 1024).toFixed(2)} Mo</div>
+        `;
+    }
+
+    // Calcul prix
+    function calculerPrix() {
+        const surface = (config.largeur * config.hauteur) / 10000;
+        const surfaceTotale = surface * config.quantite;
+
+        // Prix dégressif
+        let prixM2;
+        if (surfaceTotale > 300) prixM2 = PRODUIT.prix['300+'];
+        else if (surfaceTotale > 100) prixM2 = PRODUIT.prix['101-300'];
+        else if (surfaceTotale > 50) prixM2 = PRODUIT.prix['51-100'];
+        else if (surfaceTotale > 10) prixM2 = PRODUIT.prix['11-50'];
+        else prixM2 = PRODUIT.prix['0-10'];
+
+        const prixImpression = prixM2 * surface * config.quantite;
+        const prixOptions = config.prixFinition * (config.prixFinition > 20 ? 1 : surface) * config.quantite;
+        const prixTotal = prixImpression + prixOptions;
+
+        // Affichage
+        document.getElementById('prix-unitaire').textContent = prixM2.toFixed(2) + '€';
+        document.getElementById('prix-total').textContent = prixTotal.toFixed(2) + ' €';
+
+        // Résumé
+        document.getElementById('resume-format').textContent = config.format;
+        document.getElementById('resume-dims').textContent = `\${config.largeur}×\${config.hauteur} cm`;
+        document.getElementById('resume-surface').textContent = surface.toFixed(2) + ' m²';
+        document.getElementById('resume-qte').textContent = config.quantite;
+
+        // Spécifications techniques fichier
+        const fondPerdu = 0.3; // 3mm = 0.3cm de chaque côté
+        const largeurAvecFondPerdu = config.largeur + (fondPerdu * 2);
+        const hauteurAvecFondPerdu = config.hauteur + (fondPerdu * 2);
+        const largeurSecurite = config.largeur - (fondPerdu * 2);
+        const hauteurSecurite = config.hauteur - (fondPerdu * 2);
+
+        document.getElementById('spec-format-fini').textContent = `\${config.largeur} × \${config.hauteur} cm`;
+        document.getElementById('spec-format-fourni').textContent = `\${largeurAvecFondPerdu.toFixed(1)} × \${hauteurAvecFondPerdu.toFixed(1)} cm`;
+        document.getElementById('spec-zone-securite').textContent = `\${largeurSecurite.toFixed(1)} × \${hauteurSecurite.toFixed(1)} cm`;
+    }
+
+    // Ajout au panier
+    document.getElementById('btn-add-cart').addEventListener('click', function() {
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+        cart.push({
+            id: PRODUIT.id,
+            nom: PRODUIT.nom,
+            config: {...config},
+            prix: parseFloat(document.getElementById('prix-total').textContent),
+            date: new Date().toISOString()
+        });
+
+        localStorage.setItem('cart', JSON.stringify(cart));
+
+        this.textContent = '✓ AJOUTÉ AU PANIER';
+        this.style.background = '#10b981';
+
+        setTimeout(() => {
+            window.location.href = '/panier.html';
+        }, 1000);
+    });
+
+    // Calcul initial
+    calculerPrix();
+    </script>
 </body>
 </html>
 HTML;
+
+    return $html;
 }
 ?>
