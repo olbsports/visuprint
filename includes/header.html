@@ -143,8 +143,9 @@
 
             <!-- CTA Desktop -->
             <div class="flex items-center space-x-3">
-                <a href="/panier.html" class="hidden md:flex bg-gray-900 hover:bg-gray-800 text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-lg transition items-center gap-2">
+                <a href="/panier.html" class="hidden md:flex bg-gray-900 hover:bg-gray-800 text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-lg transition items-center gap-2 relative">
                     🛒 <span class="hidden lg:inline">Panier</span>
+                    <span id="cart-count-desktop" class="hidden absolute -top-2 -right-2 bg-red-600 text-white text-xs font-black rounded-full w-5 h-5 flex items-center justify-center"></span>
                 </a>
 
                 <!-- Client connecté / non connecté -->
@@ -183,7 +184,10 @@
                 <a href="/tarifs.html">💰 Tarifs</a>
                 <a href="/faq.html">❓ FAQ</a>
                 <a href="/contact.html">✉️ Contact</a>
-                <a href="/panier.html" style="background: linear-gradient(135deg, #e63946 0%, #d62839 100%); color: white; text-align: center;">🛒 Panier</a>
+                <a href="/panier.html" style="background: linear-gradient(135deg, #e63946 0%, #d62839 100%); color: white; text-align: center; position: relative;">
+                    🛒 Panier
+                    <span id="cart-count-mobile" class="hidden" style="position: absolute; top: -8px; right: -8px; background: #fff; color: #e63946; font-size: 11px; font-weight: 900; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; border: 2px solid #e63946;"></span>
+                </a>
                 <div style="border-top: 1px solid #e5e7eb; margin: 12px 0;"></div>
                 <!-- Menu mobile connecté / non connecté -->
                 <div id="mobile-user-menu">
@@ -227,6 +231,38 @@ document.addEventListener('DOMContentLoaded', function() {
             mobileConnected.style.display = 'block';
         }
     }
+
+    // Mettre à jour compteur panier
+    function updateCartCount() {
+        try {
+            const cart = JSON.parse(localStorage.getItem('visuprint_cart') || '[]');
+            const count = cart.length;
+
+            const desktopBadge = document.getElementById('cart-count-desktop');
+            const mobileBadge = document.getElementById('cart-count-mobile');
+
+            if (count > 0) {
+                if (desktopBadge) {
+                    desktopBadge.textContent = count;
+                    desktopBadge.classList.remove('hidden');
+                }
+                if (mobileBadge) {
+                    mobileBadge.textContent = count;
+                    mobileBadge.style.display = 'flex';
+                }
+            } else {
+                if (desktopBadge) desktopBadge.classList.add('hidden');
+                if (mobileBadge) mobileBadge.style.display = 'none';
+            }
+        } catch (e) {
+            console.error('Erreur compteur panier:', e);
+        }
+    }
+
+    updateCartCount();
+
+    // Mettre à jour le compteur toutes les secondes (au cas où le panier change)
+    setInterval(updateCartCount, 1000);
 
     // Menu mobile
     const menuToggle = document.getElementById('mobile-menu-toggle');
