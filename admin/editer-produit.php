@@ -311,9 +311,8 @@ include __DIR__ . '/includes/header.php';
                     <input type="url" name="IMAGE_URL" value="<?php echo htmlspecialchars($produit['image_url'] ?? ''); ?>" placeholder="https://...">
                     <small>URL de l'image du produit</small>
                 </div>
-            </div>
-        </div>
-    </div>
+        </div><!-- .card-body -->
+    </div><!-- .card Informations de base -->
 
     <!-- Caractéristiques techniques -->
     <div class="card">
@@ -366,10 +365,9 @@ include __DIR__ . '/includes/header.php';
                             <option value="Double face" <?php echo (isset($produit['impression_faces']) && $produit['impression_faces'] === 'Double face') ? 'selected' : ''; ?>>Double face</option>
                         </select>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                </div><!-- .form-grid -->
+        </div><!-- .card-body -->
+    </div><!-- .card Caractéristiques techniques -->
 
     <!-- Prix et tarification -->
     <div class="card">
@@ -415,10 +413,9 @@ include __DIR__ . '/includes/header.php';
                         <label>Prix 300+ m² (€/m²)</label>
                         <input type="number" step="0.01" name="PRIX_300_PLUS_M2" value="<?php echo htmlspecialchars($produit['prix_300_plus'] ?? ''); ?>">
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                </div><!-- .form-grid -->
+        </div><!-- .card-body -->
+    </div><!-- .card Prix et tarification -->
 
     <!-- Logistique -->
     <div class="card">
@@ -445,10 +442,9 @@ include __DIR__ . '/includes/header.php';
                             <option value="unité" <?php echo (isset($produit['unite_vente']) && $produit['unite_vente'] === 'unité') ? 'selected' : ''; ?>>unité</option>
                         </select>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                </div><!-- .form-grid -->
+        </div><!-- .card-body -->
+    </div><!-- .card Logistique -->
 
     <!-- Finitions et options -->
     <div class="card">
@@ -524,8 +520,8 @@ include __DIR__ . '/includes/header.php';
             <p style="color: var(--text-muted); font-size: 12px; margin-top: 10px;">
                 💡 Le prix affiché est celui du catalogue. Modifiez-le pour personnaliser le prix pour ce produit uniquement.
             </p>
-        </div>
-    </div>
+        </div><!-- .card-body -->
+    </div><!-- .card Finitions -->
 
     <!-- Promotion -->
     <div class="card">
@@ -588,10 +584,9 @@ include __DIR__ . '/includes/header.php';
                             Afficher un compte à rebours
                         </label>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                </div><!-- #promo-fields -->
+        </div><!-- .card-body -->
+    </div><!-- .card Promotion -->
 
     <!-- Actions -->
     <div class="card" style="background: linear-gradient(135deg, var(--bg) 0%, var(--bg-hover) 100%);">
@@ -610,8 +605,8 @@ include __DIR__ . '/includes/header.php';
                     🗑️ Supprimer
                 </a>
             </div>
-        </div>
-    </div>
+        </div><!-- .card-body -->
+    </div><!-- .card Actions -->
 </form>
 
 <script>
