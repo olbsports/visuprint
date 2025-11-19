@@ -1,6 +1,6 @@
 <?php
 /**
- * Page de connexion Admin - VisuPrint Pro
+ * Page de connexion Admin - Imprixo Admin
  */
 
 require_once __DIR__ . '/auth.php';
@@ -18,7 +18,7 @@ if (isset($_SESSION['admin_id'])) {
 
 $error = '';
 
-// Traitement du formulaire de connexion
+// Traitement du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = cleanInput($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';
@@ -39,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         } else {
             $error = 'Identifiants incorrects';
-            // Logger la tentative échouée
             if ($admin) {
                 logAdminAction($admin['id'], 'login_failed', 'Tentative de connexion échouée');
             }
@@ -52,115 +51,141 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion Admin - VisuPrint Pro</title>
+    <title>Connexion Admin - Imprixo</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #e63946 0%, #d62839 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 20px;
         }
 
         .login-container {
             background: white;
-            padding: 40px;
-            border-radius: 12px;
+            padding: 50px;
+            border-radius: 16px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
         }
 
         .logo {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        .logo-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
         }
 
         .logo h1 {
-            color: #667eea;
-            font-size: 28px;
-            margin-bottom: 5px;
+            color: #e63946;
+            font-size: 32px;
+            margin-bottom: 8px;
+            font-weight: 900;
         }
 
         .logo p {
             color: #666;
-            font-size: 14px;
+            font-size: 16px;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         label {
             display: block;
             margin-bottom: 8px;
             color: #333;
-            font-weight: 500;
+            font-weight: 600;
+            font-size: 14px;
         }
 
         input[type="text"],
         input[type="password"] {
             width: 100%;
-            padding: 12px;
+            padding: 14px 16px;
             border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 14px;
-            transition: border-color 0.3s;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
         }
 
         input[type="text"]:focus,
         input[type="password"]:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #e63946;
+            box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.1);
         }
 
         .btn-login {
             width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 16px;
+            background: linear-gradient(135deg, #e63946 0%, #d62839 100%);
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.3s;
+            margin-top: 8px;
         }
 
         .btn-login:hover {
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(230, 57, 70, 0.3);
+        }
+
+        .btn-login:active {
+            transform: translateY(0);
         }
 
         .error {
             background: #fee;
             color: #c33;
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 20px;
+            padding: 14px 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
             border-left: 4px solid #c33;
+            font-size: 14px;
         }
 
         .info-box {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f0f0f0;
-            border-radius: 6px;
+            margin-top: 24px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
             font-size: 13px;
             color: #666;
+            border-left: 4px solid #e63946;
         }
 
         .info-box strong {
             color: #333;
+        }
+
+        code {
+            background: #fff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #e63946;
         }
     </style>
 </head>
 <body>
     <div class="login-container">
         <div class="logo">
-            <h1>🎨 VisuPrint Pro</h1>
+            <div class="logo-icon">🖨️</div>
+            <h1>Imprixo</h1>
             <p>Administration</p>
         </div>
 
