@@ -1,14 +1,12 @@
 <?php
 /**
- * Gestion Produits - VisuPrint Pro
+ * Gestion Produits - Imprixo Admin
  */
 
 require_once __DIR__ . '/auth.php';
-require_once __DIR__ . '/../api/config.php';
 
 verifierAdminConnecte();
 $admin = getAdminInfo();
-$db = Database::getInstance();
 
 $pageTitle = 'Gestion des produits';
 
@@ -19,54 +17,67 @@ $error = isset($_GET['error']) ? $_GET['error'] : '';
 $recherche = isset($_GET['q']) ? trim($_GET['q']) : '';
 $filtreCategorie = isset($_GET['cat']) ? $_GET['cat'] : '';
 
-// Charger les produits
-$where = ['actif = 1'];
-$params = [];
+// Charger produits depuis CSV
+$produits = [];
+$categories = [];
+$csvFile = __DIR__ . '/../CATALOGUE_COMPLET_VISUPRINT.csv';
 
-if ($recherche) {
-    $where[] = "(id_produit LIKE ? OR nom_produit LIKE ? OR sous_titre LIKE ? OR description_courte LIKE ?)";
-    $search = '%' . $recherche . '%';
-    $params = array_merge($params, [$search, $search, $search, $search]);
+if (file_exists($csvFile)) {
+    $handle = fopen($csvFile, 'r');
+    $headers = fgetcsv($handle);
+
+    while ($row = fgetcsv($handle)) {
+        if (count($row) >= 8) {
+            $produit = [
+                'id_produit' => $row[0],
+                'nom_produit' => $row[1],
+                'categorie' => $row[2],
+                'prix_0_10' => floatval($row[3]),
+                'prix_11_50' => floatval($row[4]),
+                'prix_51_100' => floatval($row[5]),
+                'prix_101_300' => floatval($row[6]),
+                'prix_300_plus' => floatval($row[7]),
+            ];
+
+            // Appliquer filtres
+            $matchRecherche = true;
+            $matchCategorie = true;
+
+            if ($recherche) {
+                $matchRecherche = (
+                    stripos($produit['id_produit'], $recherche) !== false ||
+                    stripos($produit['nom_produit'], $recherche) !== false
+                );
+            }
+
+            if ($filtreCategorie) {
+                $matchCategorie = ($produit['categorie'] === $filtreCategorie);
+            }
+
+            if ($matchRecherche && $matchCategorie) {
+                $produits[] = $produit;
+            }
+
+            // Collecter catégories
+            if (!in_array($produit['categorie'], $categories)) {
+                $categories[] = $produit['categorie'];
+            }
+        }
+    }
+    fclose($handle);
 }
 
-if ($filtreCategorie) {
-    $where[] = "categorie = ?";
-    $params[] = $filtreCategorie;
-}
-
-$whereClause = 'WHERE ' . implode(' AND ', $where);
-
-$produits = $db->fetchAll(
-    "SELECT p.*,
-            pr.id as promo_id,
-            pr.badge_texte as promo_badge,
-            pr.badge_couleur as promo_couleur,
-            pr.valeur as promo_valeur
-     FROM produits p
-     LEFT JOIN promotions pr ON pr.produit_id = p.id AND pr.actif = 1
-         AND (pr.date_debut IS NULL OR pr.date_debut <= NOW())
-         AND (pr.date_fin IS NULL OR pr.date_fin >= NOW())
-     $whereClause
-     ORDER BY categorie, nom_produit",
-    $params
-);
-
-// Récupérer les catégories uniques
-$categories = $db->fetchAll("SELECT DISTINCT categorie FROM produits WHERE actif = 1 ORDER BY categorie");
+sort($categories);
 
 include __DIR__ . '/includes/header.php';
 ?>
 
 <?php if ($success): ?>
-    <div class="alert alert-success">
-        ✓ <?php echo htmlspecialchars($success); ?>
-    </div>
+    <div class="alert alert-success">✓ <?php echo htmlspecialchars($success); ?></div>
 <?php endif; ?>
 
 <?php if ($error): ?>
-    <div class="alert alert-error">
-        ✗ <?php echo htmlspecialchars($error); ?>
-    </div>
+    <div class="alert alert-error">✗ <?php echo htmlspecialchars($error); ?></div>
 <?php endif; ?>
 
 <div class="top-bar">
@@ -75,36 +86,26 @@ include __DIR__ . '/includes/header.php';
         <p class="page-subtitle"><?php echo count($produits); ?> produit(s) dans le catalogue</p>
     </div>
     <div class="top-bar-actions">
-        <a href="/admin/nouveau-produit.php" class="btn btn-success">
-            ➕ Nouveau produit
-        </a>
-        <a href="/admin/finitions-catalogue.php" class="btn btn-primary">
-            🎨 Finitions
-        </a>
+        <a href="/admin/nouveau-produit.php" class="btn btn-success">➕ Nouveau produit</a>
+        <a href="/admin/finitions-catalogue.php" class="btn btn-primary">🎨 Finitions</a>
     </div>
 </div>
 
 <!-- Filtres -->
 <div class="card">
-    <form method="GET" action="" style="display: flex; gap: 16px; align-items: end;">
-        <div class="form-group" style="flex: 1; margin: 0;">
+    <form method="GET" style="display: flex; gap: 16px; align-items: end; flex-wrap: wrap;">
+        <div class="form-group" style="flex: 1; min-width: 250px; margin: 0;">
             <label class="form-label">🔍 Rechercher</label>
-            <input
-                type="text"
-                name="q"
-                class="form-input"
-                placeholder="ID, nom, description..."
-                value="<?php echo htmlspecialchars($recherche); ?>"
-            >
+            <input type="text" name="q" class="form-input" placeholder="ID, nom..." value="<?php echo htmlspecialchars($recherche); ?>">
         </div>
 
         <div class="form-group" style="min-width: 200px; margin: 0;">
             <label class="form-label">Catégorie</label>
             <select name="cat" class="form-select">
-                <option value="">Toutes les catégories</option>
+                <option value="">Toutes</option>
                 <?php foreach ($categories as $cat): ?>
-                    <option value="<?php echo htmlspecialchars($cat['categorie']); ?>" <?php echo $cat['categorie'] === $filtreCategorie ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($cat['categorie']); ?>
+                    <option value="<?php echo htmlspecialchars($cat); ?>" <?php echo $cat === $filtreCategorie ? 'selected' : ''; ?>>
+                        <?php echo htmlspecialchars($cat); ?>
                     </option>
                 <?php endforeach; ?>
             </select>
@@ -117,98 +118,78 @@ include __DIR__ . '/includes/header.php';
     </form>
 </div>
 
-<!-- Liste des produits -->
+<!-- Liste produits -->
 <?php if (empty($produits)): ?>
     <div class="card" style="text-align: center; padding: 60px 20px;">
         <div style="font-size: 64px; margin-bottom: 20px;">📦</div>
-        <h2 style="font-size: 24px; margin-bottom: 12px; color: var(--text-primary);">Aucun produit trouvé</h2>
+        <h2 style="font-size: 24px; margin-bottom: 12px;">Aucun produit trouvé</h2>
         <p style="color: var(--text-secondary); margin-bottom: 24px;">
             <?php if ($recherche || $filtreCategorie): ?>
-                Aucun produit ne correspond à vos critères de recherche.
+                Aucun produit ne correspond à vos critères.
             <?php else: ?>
-                Commencez par ajouter votre premier produit au catalogue.
+                Le catalogue est vide.
             <?php endif; ?>
         </p>
-        <a href="/admin/nouveau-produit.php" class="btn btn-primary">➕ Créer mon premier produit</a>
     </div>
 <?php else: ?>
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px;">
-        <?php foreach ($produits as $produit): ?>
-            <div class="card" style="position: relative; padding: 0; overflow: hidden; transition: all 0.3s ease;">
-                <!-- Badge promotion si active -->
-                <?php if ($produit['promo_id']): ?>
-                    <div style="position: absolute; top: 16px; right: 16px; z-index: 10;">
-                        <span class="badge" style="background: <?php echo htmlspecialchars($produit['promo_couleur'] ?? '#e63946'); ?>; color: white; font-size: 11px; padding: 6px 12px;">
-                            <?php echo htmlspecialchars($produit['promo_badge'] ?? 'PROMO'); ?>
-                            <?php if ($produit['promo_valeur']): ?>
-                                -<?php echo $produit['promo_valeur']; ?>%
-                            <?php endif; ?>
-                        </span>
-                    </div>
-                <?php endif; ?>
-
-                <!-- Image -->
-                <div style="height: 200px; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
-                    <?php if (!empty($produit['image_url'])): ?>
-                        <img
-                            src="<?php echo htmlspecialchars($produit['image_url']); ?>"
-                            alt="<?php echo htmlspecialchars($produit['nom_produit']); ?>"
-                            style="width: 100%; height: 100%; object-fit: cover;"
-                        >
-                    <?php else: ?>
-                        <div style="font-size: 48px; opacity: 0.3;">🎨</div>
-                    <?php endif; ?>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
+        <?php foreach ($produits as $p): ?>
+            <div class="card" style="transition: transform 0.2s;">
+                <!-- Header avec catégorie -->
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;">
+                    <span class="badge badge-info"><?php echo htmlspecialchars($p['categorie']); ?></span>
+                    <span style="font-family: monospace; font-size: 12px; color: var(--text-muted);">
+                        <?php echo htmlspecialchars($p['id_produit']); ?>
+                    </span>
                 </div>
 
-                <!-- Contenu -->
-                <div style="padding: 20px;">
-                    <!-- Catégorie -->
-                    <div style="margin-bottom: 8px;">
-                        <span class="badge badge-info" style="font-size: 11px;">
-                            <?php echo htmlspecialchars($produit['categorie']); ?>
-                        </span>
-                    </div>
+                <!-- Nom -->
+                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--text-primary);">
+                    <?php echo htmlspecialchars($p['nom_produit']); ?>
+                </h3>
 
-                    <!-- Titre -->
-                    <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 4px; color: var(--text-primary);">
-                        <?php echo htmlspecialchars($produit['nom_produit']); ?>
-                    </h3>
+                <!-- Prix dégressifs -->
+                <div style="background: var(--bg-hover); padding: 16px; border-radius: var(--radius-md); margin-bottom: 16px;">
+                    <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px; font-weight: 600;">Prix dégressifs au m²</div>
 
-                    <!-- ID Produit -->
-                    <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">
-                        ID: <?php echo htmlspecialchars($produit['id_produit']); ?>
-                    </div>
-
-                    <!-- Description -->
-                    <?php if (!empty($produit['description_courte'])): ?>
-                        <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 16px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                            <?php echo htmlspecialchars($produit['description_courte']); ?>
-                        </p>
-                    <?php endif; ?>
-
-                    <!-- Prix -->
-                    <div style="margin-bottom: 16px; padding: 12px; background: var(--bg-hover); border-radius: var(--radius-md);">
-                        <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 4px;">Prix de base</div>
-                        <div style="font-size: 24px; font-weight: 700; color: var(--primary);">
-                            <?php echo number_format($produit['prix_0_10'] ?? 0, 2, ',', ' '); ?> €
-                            <span style="font-size: 14px; font-weight: 400; color: var(--text-muted);">/m²</span>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 13px;">
+                        <div>
+                            <span style="color: var(--text-muted);">0-10 m²:</span>
+                            <strong style="color: var(--primary);"><?php echo number_format($p['prix_0_10'], 2); ?>€</strong>
+                        </div>
+                        <div>
+                            <span style="color: var(--text-muted);">11-50 m²:</span>
+                            <strong style="color: var(--primary);"><?php echo number_format($p['prix_11_50'], 2); ?>€</strong>
+                        </div>
+                        <div>
+                            <span style="color: var(--text-muted);">51-100 m²:</span>
+                            <strong style="color: var(--success);"><?php echo number_format($p['prix_51_100'], 2); ?>€</strong>
+                        </div>
+                        <div>
+                            <span style="color: var(--text-muted);">101-300 m²:</span>
+                            <strong style="color: var(--success);"><?php echo number_format($p['prix_101_300'], 2); ?>€</strong>
                         </div>
                     </div>
 
-                    <!-- Actions -->
-                    <div style="display: flex; gap: 8px;">
-                        <a href="/admin/editer-produit.php?id=<?php echo urlencode($produit['id_produit']); ?>" class="btn btn-primary" style="flex: 1; justify-content: center;">
-                            ✏️ Éditer
-                        </a>
-                        <a
-                            href="/admin/supprimer-produit.php?id=<?php echo urlencode($produit['id_produit']); ?>"
-                            class="btn btn-danger"
-                            style="justify-content: center;"
-                            data-confirm="Êtes-vous sûr de vouloir supprimer ce produit ?"
-                        >
-                            🗑️
-                        </a>
+                    <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); text-align: center;">
+                        <span style="color: var(--text-muted); font-size: 12px;">300+ m²:</span>
+                        <strong style="color: var(--success); font-size: 20px; margin-left: 8px;">
+                            <?php echo number_format($p['prix_300_plus'], 2); ?>€
+                        </strong>
+                        <span style="color: var(--success); font-size: 11px; font-weight: 600;">MEILLEUR PRIX</span>
                     </div>
+                </div>
+
+                <!-- Actions -->
+                <div style="display: flex; gap: 8px;">
+                    <a href="/admin/editer-produit.php?id=<?php echo urlencode($p['id_produit']); ?>" class="btn btn-primary btn-sm" style="flex: 1;">
+                        ✏️ Éditer
+                    </a>
+                    <a href="/admin/supprimer-produit.php?id=<?php echo urlencode($p['id_produit']); ?>"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Supprimer <?php echo htmlspecialchars($p['nom_produit']); ?> ?');">
+                        🗑️
+                    </a>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -216,10 +197,10 @@ include __DIR__ . '/includes/header.php';
 <?php endif; ?>
 
 <style>
-    .card:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--shadow-xl) !important;
-    }
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
 </style>
 
 <?php include __DIR__ . '/includes/footer.php'; ?>
