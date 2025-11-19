@@ -42,11 +42,24 @@ try {
         exit;
     }
 
-    // Charger les finitions
+    // Charger TOUTES les finitions du catalogue
+    $catalogueFinitions = $db->fetchAll(
+        "SELECT * FROM finitions_catalogue WHERE actif = 1 ORDER BY categorie, ordre"
+    );
+
+    // Charger les finitions déjà activées pour ce produit
     $finitions = $db->fetchAll(
         "SELECT * FROM produits_finitions WHERE produit_id = ? ORDER BY ordre",
         [$produit['id']]
     );
+
+    // Créer un index des finitions actives par catalogue_id pour accès rapide
+    $finitionsActives = [];
+    foreach ($finitions as $fin) {
+        if ($fin['finition_catalogue_id']) {
+            $finitionsActives[$fin['finition_catalogue_id']] = $fin;
+        }
+    }
 
 } catch (Exception $e) {
     header('Location: produits.php?error=' . urlencode('Erreur chargement: ' . $e->getMessage()));
@@ -113,24 +126,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 );
             }
 
-            // Mettre à jour finitions si présentes
-            if (isset($_POST['finitions']) && is_array($_POST['finitions'])) {
+            // Mettre à jour finitions depuis le catalogue
+            if (isset($_POST['finitions_selectionnees']) && is_array($_POST['finitions_selectionnees'])) {
                 // Supprimer anciennes finitions
                 $db->query("DELETE FROM produits_finitions WHERE produit_id = ?", [$produit['id']]);
 
-                // Ajouter nouvelles finitions
-                foreach ($_POST['finitions'] as $index => $fin) {
-                    if (!empty($fin['nom'])) {
+                // Ajouter les finitions sélectionnées depuis le catalogue
+                $ordre = 0;
+                foreach ($_POST['finitions_selectionnees'] as $catalogueId) {
+                    // Récupérer les infos du catalogue
+                    $catalogueFin = $db->fetchOne(
+                        "SELECT * FROM finitions_catalogue WHERE id = ?",
+                        [$catalogueId]
+                    );
+
+                    if ($catalogueFin) {
+                        // Utiliser le prix personnalisé si fourni, sinon prix du catalogue
+                        $prixPerso = $_POST['finition_prix'][$catalogueId] ?? null;
+                        $prixFinal = ($prixPerso !== '' && $prixPerso !== null) ? $prixPerso : $catalogueFin['prix_defaut'];
+
                         $db->query(
-                            "INSERT INTO produits_finitions (produit_id, nom, description, prix_supplement, type_prix, ordre)
-                             VALUES (?, ?, ?, ?, ?, ?)",
+                            "INSERT INTO produits_finitions (
+                                produit_id, finition_catalogue_id, nom, description,
+                                prix_supplement, type_prix, actif, ordre
+                            ) VALUES (?, ?, ?, ?, ?, ?, 1, ?)",
                             [
                                 $produit['id'],
-                                $fin['nom'],
-                                $fin['description'] ?? '',
-                                $fin['prix_supplement'] ?? 0,
-                                $fin['type_prix'] ?? 'fixe',
-                                $index
+                                $catalogueId,
+                                $catalogueFin['nom'],
+                                $catalogueFin['description'],
+                                $prixFinal,
+                                $catalogueFin['type_prix_defaut'],
+                                $ordre++
                             ]
                         );
                     }
@@ -648,34 +675,76 @@ try {
                 </div>
 
                 <div class="section-title">🎨 Finitions et options</div>
-                <div id="finitions-container">
-                    <?php foreach ($finitions as $index => $fin): ?>
-                        <div class="form-grid" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
-                            <input type="hidden" name="finitions[<?php echo $index; ?>][id]" value="<?php echo $fin['id']; ?>">
-                            <div class="form-group">
-                                <label>Nom</label>
-                                <input type="text" name="finitions[<?php echo $index; ?>][nom]" value="<?php echo htmlspecialchars($fin['nom']); ?>">
-                            </div>
-                            <div class="form-group">
-                                <label>Description</label>
-                                <input type="text" name="finitions[<?php echo $index; ?>][description]" value="<?php echo htmlspecialchars($fin['description'] ?? ''); ?>">
-                            </div>
-                            <div class="form-group">
-                                <label>Prix supplément</label>
-                                <input type="number" step="0.01" name="finitions[<?php echo $index; ?>][prix_supplement]" value="<?php echo htmlspecialchars($fin['prix_supplement']); ?>">
-                            </div>
-                            <div class="form-group">
-                                <label>Type prix</label>
-                                <select name="finitions[<?php echo $index; ?>][type_prix]">
-                                    <option value="fixe" <?php echo $fin['type_prix'] === 'fixe' ? 'selected' : ''; ?>>Fixe</option>
-                                    <option value="par_m2" <?php echo $fin['type_prix'] === 'par_m2' ? 'selected' : ''; ?>>Par m²</option>
-                                    <option value="par_ml" <?php echo $fin['type_prix'] === 'par_ml' ? 'selected' : ''; ?>>Par ml</option>
-                                </select>
+                <p style="color: #666; margin-bottom: 15px;">
+                    ✓ Cochez les finitions à activer pour ce produit depuis le catalogue global.<br>
+                    💡 Vous pouvez personnaliser le prix par produit si besoin.
+                    <a href="finitions-catalogue.php" target="_blank" style="color: #667eea; text-decoration: none;">→ Gérer le catalogue</a>
+                </p>
+
+                <div id="finitions-container" style="max-height: 500px; overflow-y: auto; border: 2px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #fafafa;">
+                    <?php
+                    $currentCategorie = '';
+                    foreach ($catalogueFinitions as $catalogueFin):
+                        // Afficher header de catégorie
+                        if ($catalogueFin['categorie'] !== $currentCategorie) {
+                            if ($currentCategorie !== '') echo '</div>';
+                            $currentCategorie = $catalogueFin['categorie'];
+                            echo '<div style="margin-bottom: 20px;">';
+                            echo '<h4 style="color: #667eea; margin: 15px 0 10px; padding-bottom: 5px; border-bottom: 1px solid #667eea;">';
+                            echo '📦 ' . htmlspecialchars($catalogueFin['categorie'] ?: 'Autres');
+                            echo '</h4>';
+                        }
+
+                        $isActive = isset($finitionsActives[$catalogueFin['id']]);
+                        $prixActuel = $isActive ? $finitionsActives[$catalogueFin['id']]['prix_supplement'] : $catalogueFin['prix_defaut'];
+                    ?>
+                        <div style="background: white; padding: 12px; margin-bottom: 8px; border-radius: 6px; border: 2px solid <?php echo $isActive ? '#667eea' : '#e0e0e0'; ?>; display: flex; align-items: center; gap: 15px;">
+                            <label style="display: flex; align-items: center; gap: 10px; flex: 1; cursor: pointer; margin: 0;">
+                                <input
+                                    type="checkbox"
+                                    name="finitions_selectionnees[]"
+                                    value="<?php echo $catalogueFin['id']; ?>"
+                                    <?php echo $isActive ? 'checked' : ''; ?>
+                                    style="width: 20px; height: 20px; cursor: pointer;"
+                                >
+                                <span style="font-size: 20px;"><?php echo $catalogueFin['icone'] ?: '•'; ?></span>
+                                <div style="flex: 1;">
+                                    <strong><?php echo htmlspecialchars($catalogueFin['nom']); ?></strong>
+                                    <br>
+                                    <small style="color: #666;"><?php echo htmlspecialchars($catalogueFin['description'] ?: ''); ?></small>
+                                </div>
+                            </label>
+                            <div style="min-width: 200px; display: flex; align-items: center; gap: 8px;">
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    name="finition_prix[<?php echo $catalogueFin['id']; ?>]"
+                                    value="<?php echo $prixActuel; ?>"
+                                    placeholder="<?php echo $catalogueFin['prix_defaut']; ?>"
+                                    style="width: 80px; padding: 6px; border: 1px solid #ddd; border-radius: 4px; text-align: right;"
+                                >
+                                <span style="color: #666; font-size: 13px;">
+                                    €
+                                    <?php
+                                    $typeLabels = [
+                                        'fixe' => 'fixe',
+                                        'par_m2' => '/m²',
+                                        'par_ml' => '/ml',
+                                        'pourcentage' => '%'
+                                    ];
+                                    echo $typeLabels[$catalogueFin['type_prix_defaut']] ?? 'fixe';
+                                    ?>
+                                </span>
                             </div>
                         </div>
-                    <?php endforeach; ?>
+                    <?php
+                    endforeach;
+                    if ($currentCategorie !== '') echo '</div>';
+                    ?>
                 </div>
-                <button type="button" onclick="addFinition()" class="btn btn-secondary" style="margin-bottom: 20px;">➕ Ajouter une finition</button>
+                <p style="color: #999; font-size: 12px; margin-top: 10px;">
+                    💡 Le prix affiché est celui du catalogue. Modifiez-le pour personnaliser le prix pour ce produit uniquement.
+                </p>
 
                 <div class="section-title">🎁 Promotion</div>
                 <div class="form-group">
@@ -736,39 +805,6 @@ try {
                 </div>
 
                 <script>
-                let finitionIndex = <?php echo count($finitions); ?>;
-
-                function addFinition() {
-                    const container = document.getElementById('finitions-container');
-                    const div = document.createElement('div');
-                    div.className = 'form-grid';
-                    div.style.cssText = 'background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 10px;';
-                    div.innerHTML = `
-                        <div class="form-group">
-                            <label>Nom</label>
-                            <input type="text" name="finitions[${finitionIndex}][nom]" placeholder="Ex: Œillets">
-                        </div>
-                        <div class="form-group">
-                            <label>Description</label>
-                            <input type="text" name="finitions[${finitionIndex}][description]" placeholder="Ex: Tous les 50cm">
-                        </div>
-                        <div class="form-group">
-                            <label>Prix supplément</label>
-                            <input type="number" step="0.01" name="finitions[${finitionIndex}][prix_supplement]" value="0">
-                        </div>
-                        <div class="form-group">
-                            <label>Type prix</label>
-                            <select name="finitions[${finitionIndex}][type_prix]">
-                                <option value="fixe">Fixe</option>
-                                <option value="par_m2">Par m²</option>
-                                <option value="par_ml">Par ml</option>
-                            </select>
-                        </div>
-                    `;
-                    container.appendChild(div);
-                    finitionIndex++;
-                }
-
                 // Toggle promo fields
                 document.querySelector('input[name="promo_actif"]').addEventListener('change', function(e) {
                     document.getElementById('promo-fields').style.display = e.target.checked ? 'block' : 'none';
