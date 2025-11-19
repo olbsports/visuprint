@@ -24,7 +24,7 @@ $where = ['actif = 1'];
 $params = [];
 
 if ($recherche) {
-    $where[] = "(id_produit LIKE ? OR nom_produit LIKE ?)";
+    $where[] = "(code LIKE ? OR nom LIKE ?)";
     $search = '%' . $recherche . '%';
     $params = array_merge($params, [$search, $search]);
 }
@@ -48,7 +48,7 @@ try {
              AND (pr.date_debut IS NULL OR pr.date_debut <= NOW())
              AND (pr.date_fin IS NULL OR pr.date_fin >= NOW())
          $whereClause
-         ORDER BY categorie, nom_produit",
+         ORDER BY categorie, nom",
         $params
     );
 
@@ -142,13 +142,13 @@ include __DIR__ . '/includes/header.php';
                 <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;">
                     <span class="badge badge-info"><?php echo htmlspecialchars($p['categorie']); ?></span>
                     <span style="font-family: monospace; font-size: 12px; color: var(--text-muted);">
-                        <?php echo htmlspecialchars($p['id_produit']); ?>
+                        <?php echo htmlspecialchars($p['code']); ?>
                     </span>
                 </div>
 
                 <!-- Nom -->
                 <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--text-primary);">
-                    <?php echo htmlspecialchars($p['nom_produit']); ?>
+                    <?php echo htmlspecialchars($p['nom']); ?>
                 </h3>
 
                 <!-- Prix dégressifs -->
@@ -185,12 +185,12 @@ include __DIR__ . '/includes/header.php';
 
                 <!-- Actions -->
                 <div style="display: flex; gap: 8px;">
-                    <a href="/admin/editer-produit.php?id=<?php echo urlencode($p['id_produit']); ?>" class="btn btn-primary btn-sm" style="flex: 1;">
+                    <a href="/admin/editer-produit.php?id=<?php echo urlencode($p['code']); ?>" class="btn btn-primary btn-sm" style="flex: 1;">
                         ✏️ Éditer
                     </a>
-                    <a href="/admin/supprimer-produit.php?id=<?php echo urlencode($p['id_produit']); ?>"
+                    <a href="/admin/supprimer-produit.php?id=<?php echo urlencode($p['code']); ?>"
                        class="btn btn-danger btn-sm"
-                       onclick="return confirm('Supprimer <?php echo htmlspecialchars($p['nom_produit']); ?> ?');">
+                       onclick="return confirm('Supprimer <?php echo htmlspecialchars($p['nom']); ?> ?');">
                         🗑️
                     </a>
                 </div>
