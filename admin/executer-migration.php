@@ -133,24 +133,27 @@ if (!$allowed) {
         <?php if (!isset($_GET['execute'])): ?>
 
             <div class="info-box">
-                <strong>ℹ️ Cette migration va ajouter :</strong>
+                <strong>ℹ️ MIGRATION V2 - Cette migration va ajouter :</strong>
                 <ul>
                     <li>Nouvelles colonnes à la table <code>produits</code> (image_url, actif, nouveau, best_seller, SEO, dates)</li>
-                    <li>Table <code>produits_finitions</code> pour les options configurateur</li>
-                    <li>Table <code>promotions</code> pour les promotions avec countdown</li>
+                    <li>Table <code>finitions_catalogue</code> pour la bibliothèque globale de finitions</li>
+                    <li>Table <code>produits_finitions</code> avec conditions (surface, dimensions)</li>
+                    <li>Table <code>promotions</code> avec conditions avancées (surface, quantité, finitions)</li>
                     <li>Table <code>produits_formats</code> pour les formats prédéfinis</li>
                     <li>Table <code>produits_historique</code> pour l'historique des modifications</li>
                     <li>Table <code>admin_users</code> pour les comptes admin</li>
                     <li>Vue <code>v_produits_avec_promos</code> pour les calculs automatiques</li>
-                    <li>Finitions par défaut selon les catégories (PVC, Alu, Bâche, Textile)</li>
+                    <li><strong>20+ finitions dans le catalogue global</strong> (PVC, Alu, Bâche, Textile, Universel)</li>
                 </ul>
             </div>
 
             <div class="warning-box">
-                <strong>⚠️ IMPORTANT :</strong>
+                <strong>⚠️ IMPORTANT V2 :</strong>
                 <ul>
                     <li>Vos produits existants <strong>NE SERONT PAS SUPPRIMÉS</strong></li>
                     <li>Seules les nouvelles colonnes et tables seront ajoutées</li>
+                    <li><strong>AUCUNE finition automatique</strong> ne sera créée sur vos produits</li>
+                    <li>Un catalogue de 20+ finitions sera créé (tu choisis lesquelles activer)</li>
                     <li>Un compte admin sera créé : <code>admin@imprixo.com</code> / <code>admin123</code></li>
                     <li>Pensez à faire un backup avant de lancer la migration (recommandé)</li>
                 </ul>
@@ -166,10 +169,10 @@ if (!$allowed) {
             <?php
             // Exécuter la migration
             $db = Database::getInstance();
-            $sqlFile = __DIR__ . '/migration-update-database.sql';
+            $sqlFile = __DIR__ . '/migration-update-database-v2.sql';
 
             if (!file_exists($sqlFile)) {
-                echo '<div class="error-box">❌ Fichier migration-update-database.sql non trouvé !</div>';
+                echo '<div class="error-box">❌ Fichier migration-update-database-v2.sql non trouvé !</div>';
                 exit;
             }
 
@@ -238,12 +241,13 @@ if (!$allowed) {
                 echo '<strong>⚠️ N\'oubliez pas de changer le mot de passe admin !</strong>';
                 echo '</div>';
 
-                // Compter les finitions créées
-                $finitions = $db->fetchOne("SELECT COUNT(*) as count FROM produits_finitions");
-                if ($finitions['count'] > 0) {
+                // Compter les finitions du catalogue
+                $catalogue = $db->fetchOne("SELECT COUNT(*) as count FROM finitions_catalogue");
+                if ($catalogue['count'] > 0) {
                     echo '<div class="info-box">';
-                    echo '<strong>🎨 Finitions créées : ' . $finitions['count'] . '</strong><br>';
-                    echo 'Les finitions par défaut ont été ajoutées à vos produits selon leur catégorie.';
+                    echo '<strong>🎨 Finitions dans le catalogue : ' . $catalogue['count'] . '</strong><br>';
+                    echo 'Vous pouvez maintenant activer ces finitions sur vos produits dans l\'édition produit.<br>';
+                    echo '<a href="finitions-catalogue.php" style="color: #667eea; font-weight: 600;">→ Voir le catalogue de finitions</a>';
                     echo '</div>';
                 }
 
@@ -252,6 +256,7 @@ if (!$allowed) {
             }
 
             echo '<div style="margin-top: 30px;">';
+            echo '<a href="finitions-catalogue.php" class="btn" style="background: #764ba2;">🎨 Catalogue Finitions</a> ';
             echo '<a href="produits.php" class="btn">📦 Voir mes produits</a> ';
             echo '<a href="index.php" class="btn" style="background: #28a745;">🏠 Dashboard Admin</a>';
             echo '</div>';
@@ -264,10 +269,11 @@ if (!$allowed) {
             <ol style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
                 <li>Connectez-vous à l'admin : <code>admin@imprixo.com</code> / <code>admin123</code></li>
                 <li>Changez le mot de passe admin dans Paramètres</li>
-                <li>Vérifiez vos produits dans la liste</li>
+                <li><strong>🎨 Allez dans "Catalogue Finitions"</strong> pour voir les 20+ finitions disponibles</li>
+                <li><strong>📦 Éditez vos produits</strong> et cochez les finitions que vous voulez activer</li>
                 <li>Ajoutez des images URL aux produits</li>
-                <li>Configurez les finitions personnalisées si besoin</li>
-                <li>Créez vos premières promotions !</li>
+                <li>Créez vos propres finitions personnalisées si besoin</li>
+                <li>Configurez des promotions avec conditions (surface, finitions, etc.)</li>
                 <li><strong>Supprimez ce fichier après migration</strong> pour la sécurité</li>
             </ol>
         </div>
