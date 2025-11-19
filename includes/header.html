@@ -146,9 +146,23 @@
                 <a href="/panier.html" class="hidden md:flex bg-gray-900 hover:bg-gray-800 text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-lg transition items-center gap-2">
                     🛒 <span class="hidden lg:inline">Panier</span>
                 </a>
-                <a href="/contact.html" class="hidden md:flex btn-primary text-white px-6 py-2.5 rounded-lg text-sm font-bold shadow-lg items-center gap-2">
-                    📧 <span class="hidden lg:inline">Contact</span>
-                </a>
+
+                <!-- Client connecté / non connecté -->
+                <div id="user-menu-desktop" class="hidden md:flex">
+                    <!-- Connecté -->
+                    <div id="user-connected" class="hidden items-center gap-3">
+                        <a href="/mon-compte.html" class="text-gray-700 hover:text-red-600 px-3 py-2 text-sm font-bold transition">
+                            👤 Mon Compte
+                        </a>
+                        <button onclick="logout()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg text-sm font-bold transition">
+                            Déconnexion
+                        </button>
+                    </div>
+                    <!-- Non connecté -->
+                    <a href="/login-client.html" id="user-login" class="btn-primary text-white px-6 py-2.5 rounded-lg text-sm font-bold shadow-lg">
+                        🔐 Connexion
+                    </a>
+                </div>
 
                 <!-- Bouton Menu Mobile -->
                 <button class="mobile-menu-btn" id="mobile-menu-toggle">
@@ -170,14 +184,51 @@
                 <a href="/faq.html">❓ FAQ</a>
                 <a href="/contact.html">✉️ Contact</a>
                 <a href="/panier.html" style="background: linear-gradient(135deg, #e63946 0%, #d62839 100%); color: white; text-align: center;">🛒 Panier</a>
+                <div style="border-top: 1px solid #e5e7eb; margin: 12px 0;"></div>
+                <!-- Menu mobile connecté / non connecté -->
+                <div id="mobile-user-menu">
+                    <a href="/login-client.html" id="mobile-login" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-align: center;">🔐 Connexion</a>
+                    <div id="mobile-connected" style="display: none;">
+                        <a href="/mon-compte.html">👤 Mon Compte</a>
+                        <a href="#" onclick="logout(); return false;" style="background: #ef4444; color: white; text-align: center;">🚪 Déconnexion</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </header>
 
 <script>
-// Toggle menu mobile
+// Fonction de déconnexion globale
+function logout() {
+    localStorage.removeItem('client');
+    window.location.href = '/index.html';
+}
+
+// Toggle menu mobile et gestion état connexion
 document.addEventListener('DOMContentLoaded', function() {
+    // Vérifier si client connecté
+    const client = JSON.parse(localStorage.getItem('client') || 'null');
+
+    if (client) {
+        // Afficher menu desktop connecté
+        const userConnected = document.getElementById('user-connected');
+        const userLogin = document.getElementById('user-login');
+        if (userConnected && userLogin) {
+            userConnected.style.display = 'flex';
+            userLogin.style.display = 'none';
+        }
+
+        // Afficher menu mobile connecté
+        const mobileLogin = document.getElementById('mobile-login');
+        const mobileConnected = document.getElementById('mobile-connected');
+        if (mobileLogin && mobileConnected) {
+            mobileLogin.style.display = 'none';
+            mobileConnected.style.display = 'block';
+        }
+    }
+
+    // Menu mobile
     const menuToggle = document.getElementById('mobile-menu-toggle');
     const mobileMenu = document.getElementById('mobile-menu');
 
