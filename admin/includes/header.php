@@ -25,12 +25,12 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         =================================== */
 
         :root {
-            /* Couleurs principales */
-            --primary: #667eea;
-            --primary-dark: #5568d3;
-            --primary-light: #7c8ef0;
-            --secondary: #764ba2;
-            --accent: #f093fb;
+            /* Couleurs principales IMPRIXO */
+            --primary: #e63946;
+            --primary-dark: #d62839;
+            --primary-light: #f05960;
+            --secondary: #2b2d42;
+            --accent: #ff6b7a;
 
             /* Couleurs sémantiques */
             --success: #10b981;
@@ -90,7 +90,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         /* Sidebar Navigation */
         .sidebar {
             width: 280px;
-            background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
+            background: linear-gradient(180deg, #1a1b2e 0%, #2b2d42 100%);
             color: white;
             display: flex;
             flex-direction: column;
@@ -523,8 +523,8 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         <aside class="sidebar">
             <div class="sidebar-header">
                 <a href="/admin/index.php" class="sidebar-logo">
-                    <span class="sidebar-logo-icon">🎨</span>
-                    <span>VisuPrint Pro</span>
+                    <span class="sidebar-logo-icon">🖨️</span>
+                    <span>Imprixo Admin</span>
                 </a>
             </div>
 

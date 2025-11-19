@@ -45,25 +45,25 @@ include __DIR__ . '/includes/header.php';
 
 <!-- Statistiques principales -->
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px;">
-    <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
+    <div class="card" style="background: linear-gradient(135deg, #e63946 0%, #d62839 100%); color: white; border: none;">
         <div style="font-size: 14px; opacity: 0.9; margin-bottom: 8px;">Commandes aujourd'hui</div>
         <div style="font-size: 36px; font-weight: 700;"><?php echo $stats['commandes_jour']; ?></div>
         <div style="font-size: 12px; opacity: 0.8; margin-top: 8px;">📦 Nouvelles commandes</div>
     </div>
 
-    <div class="card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none;">
+    <div class="card" style="background: linear-gradient(135deg, #2b2d42 0%, #1a1b2e 100%); color: white; border: none;">
         <div style="font-size: 14px; opacity: 0.9; margin-bottom: 8px;">Commandes ce mois</div>
         <div style="font-size: 36px; font-weight: 700;"><?php echo $stats['commandes_mois']; ?></div>
         <div style="font-size: 12px; opacity: 0.8; margin-top: 8px;">📅 Total mensuel</div>
     </div>
 
-    <div class="card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border: none;">
+    <div class="card" style="background: linear-gradient(135deg, #ff6b7a 0%, #e63946 100%); color: white; border: none;">
         <div style="font-size: 14px; opacity: 0.9; margin-bottom: 8px;">CA aujourd'hui</div>
         <div style="font-size: 36px; font-weight: 700;"><?php echo number_format($stats['ca_jour'], 0, ',', ' '); ?> €</div>
         <div style="font-size: 12px; opacity: 0.8; margin-top: 8px;">💰 Chiffre d'affaires</div>
     </div>
 
-    <div class="card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; border: none;">
+    <div class="card" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none;">
         <div style="font-size: 14px; opacity: 0.9; margin-bottom: 8px;">CA ce mois</div>
         <div style="font-size: 36px; font-weight: 700;"><?php echo number_format($stats['ca_mois'], 0, ',', ' '); ?> €</div>
         <div style="font-size: 12px; opacity: 0.8; margin-top: 8px;">💵 Total mensuel</div>
