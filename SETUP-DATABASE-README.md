@@ -33,9 +33,26 @@ Ou via phpMyAdmin :
 3. Choisir `/admin/setup-database.sql`
 4. Cliquez sur "Exécuter"
 
-## Étape 4 : Importer les produits depuis CSV
+## Étape 4 : Mise à jour de la base de données (MIGRATION)
 
-Exécutez le script d'import :
+⚠️ **SI VOUS AVEZ DÉJÀ VOS PRODUITS :** Utilisez le script de migration au lieu de l'import CSV
+
+### Option A : Vous avez déjà des produits (MIGRATION)
+
+Exécutez le script de migration dans le navigateur :
+```
+https://votre-domaine.com/admin/executer-migration.php
+```
+
+Ce script va :
+- ✅ Ajouter les nouvelles colonnes (image_url, actif, SEO, etc.)
+- ✅ Créer les nouvelles tables (finitions, promotions, formats, historique)
+- ✅ Créer les finitions par défaut selon vos catégories
+- ✅ **CONSERVER tous vos produits existants**
+
+### Option B : Base de données vide (IMPORT CSV)
+
+Si vous n'avez PAS encore de produits, utilisez l'import CSV :
 
 ```bash
 cd /admin
@@ -45,16 +62,6 @@ php import-csv-to-database.php
 Ou dans le navigateur :
 ```
 https://votre-domaine.com/admin/import-csv-to-database.php
-```
-
-Vous devriez voir :
-```
-✓ FX-2MM - Forex 2mm (PVC Foam)
-✓ FX-3MM - Forex 3mm (PVC Foam)
-...
-=== RÉSUMÉ ===
-✓ Produits importés: 54
-❌ Erreurs: 0
 ```
 
 ## Étape 5 : Connexion Admin
