@@ -6,9 +6,9 @@
 
 ```php
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'visuprint_ecommerce'); // À créer
-define('DB_USER', 'votre_user');          // Votre user MySQL
-define('DB_PASS', 'votre_password');      // Votre mot de passe
+define('DB_NAME', 'ispy2055_imprixo_ecommerce'); // Votre base de données
+define('DB_USER', 'votre_user');                  // Votre user MySQL
+define('DB_PASS', 'votre_password');              // Votre mot de passe
 ```
 
 ## Étape 2 : Créer la base de données
@@ -16,7 +16,7 @@ define('DB_PASS', 'votre_password');      // Votre mot de passe
 Dans phpMyAdmin ou MySQL :
 
 ```sql
-CREATE DATABASE visuprint_ecommerce CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE ispy2055_imprixo_ecommerce CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
 ## Étape 3 : Importer la structure
@@ -24,11 +24,11 @@ CREATE DATABASE visuprint_ecommerce CHARACTER SET utf8mb4 COLLATE utf8mb4_unicod
 Exécutez le fichier SQL :
 
 ```bash
-mysql -u votre_user -p visuprint_ecommerce < /admin/setup-database.sql
+mysql -u votre_user -p ispy2055_imprixo_ecommerce < /admin/setup-database.sql
 ```
 
 Ou via phpMyAdmin :
-1. Sélectionnez la base `visuprint_ecommerce`
+1. Sélectionnez la base `ispy2055_imprixo_ecommerce`
 2. Onglet "Importer"
 3. Choisir `/admin/setup-database.sql`
 4. Cliquez sur "Exécuter"
@@ -149,7 +149,7 @@ DELETE /api/produits-api.php?id=123     # Supprimer produit
 Pour sauvegarder :
 
 ```bash
-mysqldump -u votre_user -p visuprint_ecommerce > backup_$(date +%Y%m%d).sql
+mysqldump -u votre_user -p ispy2055_imprixo_ecommerce > backup_$(date +%Y%m%d).sql
 ```
 
 ## Support
