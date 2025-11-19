@@ -33,7 +33,7 @@ try {
                 pr.afficher_countdown as promo_countdown, pr.actif as promo_actif
          FROM produits p
          LEFT JOIN promotions pr ON pr.produit_id = p.id AND pr.actif = 1
-         WHERE p.id_produit = ?",
+         WHERE p.code = ?",
         [$idProduit]
     );
 
@@ -88,25 +88,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $allowedFields = [
                 'categorie' => 'CATEGORIE',
-                'nom_produit' => 'NOM_PRODUIT',
+                'nom' => 'NOM_PRODUIT',
                 'sous_titre' => 'SOUS_TITRE',
                 'description_courte' => 'DESCRIPTION_COURTE',
                 'description_longue' => 'DESCRIPTION_LONGUE',
                 'poids_m2' => 'POIDS_M2',
                 'epaisseur' => 'EPAISSEUR',
-                'format_max_cm' => 'FORMAT_MAX_CM',
+                'format_max' => 'FORMAT_MAX_CM',
                 'usage' => 'USAGE',
                 'duree_vie' => 'DUREE_VIE',
                 'certification' => 'CERTIFICATION',
-                'finition_defaut' => 'FINITION',
+                'finition' => 'FINITION',
                 'impression_faces' => 'IMPRESSION_FACES',
+                'prix_simple_face' => 'PRIX_SIMPLE_FACE',
+                'prix_double_face' => 'PRIX_DOUBLE_FACE',
                 'prix_0_10' => 'PRIX_0_10_M2',
                 'prix_11_50' => 'PRIX_11_50_M2',
                 'prix_51_100' => 'PRIX_51_100_M2',
                 'prix_101_300' => 'PRIX_101_300_M2',
                 'prix_300_plus' => 'PRIX_300_PLUS_M2',
-                'commande_min_euro' => 'COMMANDE_MIN_EURO',
-                'delai_standard_jours' => 'DELAI_STANDARD_JOURS',
+                'commande_min' => 'COMMANDE_MIN_EURO',
+                'delai_jours' => 'DELAI_STANDARD_JOURS',
                 'unite_vente' => 'UNITE_VENTE',
                 'image_url' => 'IMAGE_URL'
             ];
@@ -212,7 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             // Log admin action
-            logAdminAction($admin['id'] ?? 0, 'modification_produit', "Produit {$produit['id_produit']} modifié");
+            logAdminAction($admin['id'] ?? 0, 'modification_produit', "Produit {$produit['code']} modifié");
 
             // Redirection
             header('Location: produits.php?success=' . urlencode('Produit modifié avec succès !'));
@@ -248,7 +250,7 @@ include __DIR__ . '/includes/header.php';
 <div class="top-bar">
     <div>
         <h1 class="page-title">✏️ Éditer un produit</h1>
-        <p class="page-subtitle">Modification : <?php echo htmlspecialchars($produit['nom_produit']); ?></p>
+        <p class="page-subtitle">Modification : <?php echo htmlspecialchars($produit['nom']); ?></p>
     </div>
     <div class="top-bar-actions">
         <a href="/admin/produits.php" class="btn btn-secondary">← Retour aux produits</a>
@@ -260,9 +262,9 @@ include __DIR__ . '/includes/header.php';
                 <div class="section-title">📋 Informations de base</div>
                 <div class="form-grid">
                     <div class="form-group">
-                        <label>ID Produit <span class="required">*</span></label>
-                        <input type="text" name="ID_PRODUIT" required value="<?php echo htmlspecialchars($produit['id_produit']); ?>" readonly style="background: #f5f5f5;">
-                        <small>L'ID ne peut pas être modifié</small>
+                        <label>Code Produit <span class="required">*</span></label>
+                        <input type="text" name="CODE" required value="<?php echo htmlspecialchars($produit['code']); ?>" readonly style="background: #f5f5f5;">
+                        <small>Le code ne peut pas être modifié</small>
                     </div>
 
                     <div class="form-group">
@@ -281,7 +283,7 @@ include __DIR__ . '/includes/header.php';
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Nom du produit <span class="required">*</span></label>
-                        <input type="text" name="NOM_PRODUIT" required value="<?php echo htmlspecialchars($produit['nom_produit']); ?>">
+                        <input type="text" name="NOM_PRODUIT" required value="<?php echo htmlspecialchars($produit['nom']); ?>">
                     </div>
 
                     <div class="form-group">
@@ -320,7 +322,7 @@ include __DIR__ . '/includes/header.php';
 
                     <div class="form-group">
                         <label>Format maximum (cm)</label>
-                        <input type="text" name="FORMAT_MAX_CM" value="<?php echo htmlspecialchars($produit['format_max_cm'] ?? ''); ?>">
+                        <input type="text" name="FORMAT_MAX_CM" value="<?php echo htmlspecialchars($produit['format_max'] ?? ''); ?>">
                     </div>
 
                     <div class="form-group">
@@ -340,7 +342,7 @@ include __DIR__ . '/includes/header.php';
 
                     <div class="form-group">
                         <label>Finition</label>
-                        <input type="text" name="FINITION" value="<?php echo htmlspecialchars($produit['finition_defaut'] ?? ''); ?>">
+                        <input type="text" name="FINITION" value="<?php echo htmlspecialchars($produit['finition'] ?? ''); ?>">
                     </div>
 
                     <div class="form-group">
@@ -357,18 +359,13 @@ include __DIR__ . '/includes/header.php';
                 <div class="section-title">💰 Prix et tarification</div>
                 <div class="form-grid">
                     <div class="form-group">
-                        <label>Coût d'achat (€/m²)</label>
-                        <input type="number" step="0.01" name="COUT_ACHAT_M2" value="<?php echo htmlspecialchars($produit['COUT_ACHAT_M2'] ?? ''); ?>">
-                    </div>
-
-                    <div class="form-group">
                         <label>Prix simple face (€/m²)</label>
-                        <input type="number" step="0.01" name="PRIX_SIMPLE_FACE_M2" value="<?php echo htmlspecialchars($produit['PRIX_SIMPLE_FACE_M2'] ?? ''); ?>">
+                        <input type="number" step="0.01" name="PRIX_SIMPLE_FACE" value="<?php echo htmlspecialchars($produit['prix_simple_face'] ?? ''); ?>">
                     </div>
 
                     <div class="form-group">
                         <label>Prix double face (€/m²)</label>
-                        <input type="number" step="0.01" name="PRIX_DOUBLE_FACE_M2" value="<?php echo htmlspecialchars($produit['PRIX_DOUBLE_FACE_M2'] ?? ''); ?>">
+                        <input type="number" step="0.01" name="PRIX_DOUBLE_FACE" value="<?php echo htmlspecialchars($produit['prix_double_face'] ?? ''); ?>">
                     </div>
                 </div>
 
@@ -403,12 +400,12 @@ include __DIR__ . '/includes/header.php';
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Commande minimum (€)</label>
-                        <input type="number" step="0.01" name="COMMANDE_MIN_EURO" value="<?php echo htmlspecialchars($produit['commande_min_euro'] ?? ''); ?>">
+                        <input type="number" step="0.01" name="COMMANDE_MIN_EURO" value="<?php echo htmlspecialchars($produit['commande_min'] ?? ''); ?>">
                     </div>
 
                     <div class="form-group">
                         <label>Délai standard (jours)</label>
-                        <input type="number" name="DELAI_STANDARD_JOURS" value="<?php echo htmlspecialchars($produit['delai_standard_jours'] ?? ''); ?>">
+                        <input type="number" name="DELAI_STANDARD_JOURS" value="<?php echo htmlspecialchars($produit['delai_jours'] ?? ''); ?>">
                     </div>
 
                     <div class="form-group">
@@ -561,7 +558,7 @@ include __DIR__ . '/includes/header.php';
         <div style="display: flex; gap: 12px; margin-top: 30px; padding-top: 20px; border-top: 2px solid var(--border);">
             <button type="submit" class="btn btn-primary">💾 Enregistrer les modifications</button>
             <a href="/admin/produits.php" class="btn btn-secondary">✖ Annuler</a>
-            <a href="/admin/supprimer-produit.php?id=<?php echo urlencode($produit['id_produit']); ?>" class="btn btn-danger" onclick="return confirm('Supprimer définitivement ce produit ?')" style="margin-left: auto;">🗑️ Supprimer le produit</a>
+            <a href="/admin/supprimer-produit.php?id=<?php echo urlencode($produit['code']); ?>" class="btn btn-danger" onclick="return confirm('Supprimer définitivement ce produit ?')" style="margin-left: auto;">🗑️ Supprimer le produit</a>
         </div>
     </form>
 </div>
