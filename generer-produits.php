@@ -1,7 +1,7 @@
 <?php
 /**
  * Générateur Autonome de Pages Produits HTML avec CONFIGURATEUR COMPLET
- * Site e-commerce Imprixo - OLB SPORTS OOD (Bulgarie)
+ * Site e-commerce Imprixo
  */
 
 // Configuration
@@ -72,47 +72,63 @@ function genererPageProduitHTML($p) {
     $finition = htmlspecialchars($p['FINITION']);
     $delai = intval($p['DELAI_STANDARD_JOURS']);
 
-    // Formats standards COMPLETS selon catégorie
+    // Formats standards ESSENTIELS
     $formatsStandards = [
-        // Formats ISO
-        'A0 (84×119 cm)' => ['w' => 84, 'h' => 119, 'cat' => 'iso'],
-        'A1 (59×84 cm)' => ['w' => 59, 'h' => 84, 'cat' => 'iso'],
-        'A2 (42×59 cm)' => ['w' => 42, 'h' => 59, 'cat' => 'iso'],
-        'A3 (30×42 cm)' => ['w' => 30, 'h' => 42, 'cat' => 'iso'],
-        'A4 (21×30 cm)' => ['w' => 21, 'h' => 30, 'cat' => 'iso'],
-
-        // Kakémonos & Roll-ups
-        'Kakemono 85×200 cm' => ['w' => 85, 'h' => 200, 'cat' => 'kakemono'],
-        'Kakemono 100×200 cm' => ['w' => 100, 'h' => 200, 'cat' => 'kakemono'],
-        'Roll-up 85×200 cm' => ['w' => 85, 'h' => 200, 'cat' => 'rollup'],
-        'Roll-up 100×200 cm' => ['w' => 100, 'h' => 200, 'cat' => 'rollup'],
-        'Roll-up 120×200 cm' => ['w' => 120, 'h' => 200, 'cat' => 'rollup'],
-
-        // X-Banner & L-Banner
-        'X-Banner 60×160 cm' => ['w' => 60, 'h' => 160, 'cat' => 'banner'],
-        'X-Banner 80×180 cm' => ['w' => 80, 'h' => 180, 'cat' => 'banner'],
-        'L-Banner 80×200 cm' => ['w' => 80, 'h' => 200, 'cat' => 'banner'],
-
-        // Panneaux publicitaires
-        'Panneau 40×60 cm' => ['w' => 40, 'h' => 60, 'cat' => 'panneau'],
-        'Panneau 60×80 cm' => ['w' => 60, 'h' => 80, 'cat' => 'panneau'],
-        'Panneau 80×120 cm' => ['w' => 80, 'h' => 120, 'cat' => 'panneau'],
-        'Panneau 100×150 cm' => ['w' => 100, 'h' => 150, 'cat' => 'panneau'],
-
-        // Formats carrés
-        'Carré 50×50 cm' => ['w' => 50, 'h' => 50, 'cat' => 'carre'],
-        'Carré 80×80 cm' => ['w' => 80, 'h' => 80, 'cat' => 'carre'],
-        'Carré 100×100 cm' => ['w' => 100, 'h' => 100, 'cat' => 'carre'],
-
-        // Grands formats
-        '200×100 cm' => ['w' => 200, 'h' => 100, 'cat' => 'grand'],
-        '300×100 cm' => ['w' => 300, 'h' => 100, 'cat' => 'grand'],
-        '300×200 cm' => ['w' => 300, 'h' => 200, 'cat' => 'grand'],
-        '400×200 cm' => ['w' => 400, 'h' => 200, 'cat' => 'grand'],
-
-        // Personnalisé
-        'Personnalisé' => ['w' => 100, 'h' => 100, 'cat' => 'custom']
+        'A0 (84×119 cm)' => ['w' => 84, 'h' => 119],
+        'A1 (59×84 cm)' => ['w' => 59, 'h' => 84],
+        'Roll-up 85×200 cm' => ['w' => 85, 'h' => 200],
+        'Panneau 60×80 cm' => ['w' => 60, 'h' => 80],
+        'Panneau 80×120 cm' => ['w' => 80, 'h' => 120],
+        '200×100 cm' => ['w' => 200, 'h' => 100],
+        '300×200 cm' => ['w' => 300, 'h' => 200],
+        'Personnalisé' => ['w' => 100, 'h' => 100]
     ];
+
+    // Finitions selon catégorie produit
+    $finitionsParCategorie = [
+        'PVC' => [
+            ['nom' => 'Standard', 'desc' => 'Inclus', 'prix' => 0],
+            ['nom' => 'Contrecollage', 'desc' => '+8€/m²', 'prix' => 8],
+            ['nom' => 'Découpe forme', 'desc' => '+15€', 'prix' => 15]
+        ],
+        'Aluminium' => [
+            ['nom' => 'Standard', 'desc' => 'Inclus', 'prix' => 0],
+            ['nom' => 'Perçage angles', 'desc' => '+8€', 'prix' => 8],
+            ['nom' => 'Cadre aluminium', 'desc' => '+25€', 'prix' => 25]
+        ],
+        'Bache' => [
+            ['nom' => 'Standard', 'desc' => 'Inclus', 'prix' => 0],
+            ['nom' => 'Œillets (tous les 50cm)', 'desc' => '+12€', 'prix' => 12],
+            ['nom' => 'Ourlet soudé', 'desc' => '+8€/ml', 'prix' => 8]
+        ],
+        'Textile' => [
+            ['nom' => 'Standard', 'desc' => 'Inclus', 'prix' => 0],
+            ['nom' => 'Baguettes haut/bas', 'desc' => '+18€', 'prix' => 18],
+            ['nom' => 'Confection suspendue', 'desc' => '+25€', 'prix' => 25]
+        ]
+    ];
+
+    // Déterminer finitions selon catégorie
+    $finitions = $finitionsParCategorie['PVC']; // défaut
+    if (stripos($categorie, 'Aluminium') !== false) {
+        $finitions = $finitionsParCategorie['Aluminium'];
+    } elseif (stripos($categorie, 'Bache') !== false || stripos($categorie, 'Bâche') !== false) {
+        $finitions = $finitionsParCategorie['Bache'];
+    } elseif (stripos($categorie, 'Textile') !== false) {
+        $finitions = $finitionsParCategorie['Textile'];
+    }
+
+    // Image produit selon catégorie
+    $imageUrl = 'https://via.placeholder.com/600x400/e63946/ffffff?text=' . urlencode($nom);
+    if (stripos($categorie, 'Forex') !== false || stripos($categorie, 'PVC') !== false) {
+        $imageUrl = 'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=600&h=400&fit=crop';
+    } elseif (stripos($categorie, 'Dibond') !== false || stripos($categorie, 'Aluminium') !== false) {
+        $imageUrl = 'https://images.unsplash.com/photo-1603912699214-92627f304eb6?w=600&h=400&fit=crop';
+    } elseif (stripos($categorie, 'Bache') !== false || stripos($categorie, 'Bâche') !== false) {
+        $imageUrl = 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop';
+    } elseif (stripos($categorie, 'Textile') !== false) {
+        $imageUrl = 'https://images.unsplash.com/photo-1558769132-cb1aea9ccff1?w=600&h=400&fit=crop';
+    }
 
     $html = <<<HTML
 <!DOCTYPE html>
@@ -149,13 +165,23 @@ function genererPageProduitHTML($p) {
             <span class="text-gray-900 font-semibold">$nom</span>
         </nav>
 
-        <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-6">
-            <h1 class="text-4xl font-black text-gray-900 mb-2">$nom</h1>
-            <p class="text-xl text-gray-600 mb-4">$soustitre</p>
-            <div class="flex flex-wrap items-center gap-4">
-                <div class="bg-green-100 text-green-800 px-4 py-2 rounded-full font-semibold text-sm">✓ Fabrication UE</div>
-                <div class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-semibold text-sm">🇪🇺 Livraison Europe {$delai}j</div>
-                <div class="bg-red-100 text-red-800 px-4 py-2 rounded-full font-semibold text-sm">🔥 Prix dégressifs</div>
+        <!-- En-tête produit avec image -->
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <img src="$imageUrl" alt="$nom" class="w-full h-64 object-cover">
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h1 class="text-3xl font-black text-gray-900 mb-2">$nom</h1>
+                <p class="text-lg text-gray-600 mb-4">$soustitre</p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <div class="bg-green-100 text-green-800 px-3 py-1 rounded-full font-semibold text-sm">✓ Fabrication UE</div>
+                    <div class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-semibold text-sm">🇪🇺 Livraison {$delai}j</div>
+                    <div class="bg-red-100 text-red-800 px-3 py-1 rounded-full font-semibold text-sm">🔥 Prix dégressifs</div>
+                </div>
+                <div class="border-t pt-4">
+                    <div class="text-sm text-gray-600">À partir de</div>
+                    <div class="text-3xl font-black text-red-600">{$prix300plus}€<span class="text-lg">/m²</span></div>
+                </div>
             </div>
         </div>
 
@@ -170,14 +196,15 @@ function genererPageProduitHTML($p) {
                     <!-- Format -->
                     <div class="mb-6">
                         <label class="block text-sm font-bold text-gray-700 mb-3">📐 Format</label>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="format-selector">
+                        <div class="grid grid-cols-4 gap-2" id="format-selector">
 HTML;
 
     foreach ($formatsStandards as $label => $dims) {
         $isPersonnalise = $label === 'Personnalisé' ? 'true' : 'false';
+        $selected = $label === 'Personnalisé' ? 'selected' : '';
         $html .= <<<HTML
-                            <div class="config-option rounded-lg p-3 text-center" data-format="$label" data-w="{$dims['w']}" data-h="{$dims['h']}" data-custom="$isPersonnalise">
-                                <div class="font-semibold text-sm">$label</div>
+                            <div class="config-option rounded-lg p-2 text-center $selected" data-format="$label" data-w="{$dims['w']}" data-h="{$dims['h']}" data-custom="$isPersonnalise">
+                                <div class="font-semibold text-xs">$label</div>
                             </div>
 HTML;
     }
@@ -187,7 +214,7 @@ HTML;
                     </div>
 
                     <!-- Dimensions personnalisées -->
-                    <div class="grid grid-cols-2 gap-4 mb-6" id="custom-dimensions" style="display:none">
+                    <div class="grid grid-cols-2 gap-4 mb-6" id="custom-dimensions">
                         <div>
                             <label class="block text-sm font-bold text-gray-700 mb-2">Largeur (cm)</label>
                             <input type="number" id="largeur" value="100" min="10" max="500" step="1" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none font-bold text-lg">
@@ -208,84 +235,38 @@ HTML;
                     <!-- Options -->
                     <div class="mb-6">
                         <label class="block text-sm font-bold text-gray-700 mb-3">🎨 Finition</label>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                            <div class="config-option rounded-lg p-4 selected" data-option="standard" data-prix="0">
-                                <div class="font-bold">Standard</div>
-                                <div class="text-sm text-gray-600">Inclus</div>
+                        <div class="grid grid-cols-3 gap-2">
+HTML;
+
+    foreach ($finitions as $index => $finition) {
+        $selected = $index === 0 ? 'selected' : '';
+        $html .= <<<HTML
+                            <div class="config-option rounded-lg p-3 $selected" data-option="{$finition['nom']}" data-prix="{$finition['prix']}">
+                                <div class="font-bold text-sm">{$finition['nom']}</div>
+                                <div class="text-xs text-gray-600">{$finition['desc']}</div>
                             </div>
-                            <div class="config-option rounded-lg p-4" data-option="oeillets" data-prix="5">
-                                <div class="font-bold">Avec œillets</div>
-                                <div class="text-sm text-gray-600">+5€</div>
-                            </div>
-                            <div class="config-option rounded-lg p-4" data-option="support" data-prix="12">
-                                <div class="font-bold">Sur support</div>
-                                <div class="text-sm text-gray-600">+12€/m²</div>
-                            </div>
+HTML;
+    }
+
+    $html .= <<<HTML
                         </div>
                     </div>
 
                     <!-- Upload fichier -->
                     <div class="mb-6">
-                        <label class="block text-sm font-bold text-gray-700 mb-3">📁 Votre fichier (optionnel)</label>
-                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-red-600 transition cursor-pointer" id="upload-zone">
-                            <div class="text-4xl mb-3">📤</div>
-                            <div class="font-bold text-gray-900 mb-2">Glissez votre fichier ici</div>
-                            <div class="text-sm text-gray-600 mb-3">ou cliquez pour parcourir</div>
-                            <div class="text-xs text-gray-500">PDF, AI, EPS, PNG, JPG • Max 100 Mo • 300 DPI recommandé</div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">📁 Fichier graphique (optionnel)</label>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-red-600 transition cursor-pointer" id="upload-zone">
+                            <div class="text-2xl mb-1">📤</div>
+                            <div class="font-bold text-gray-900 text-sm mb-1">Glissez votre fichier</div>
+                            <div class="text-xs text-gray-500">PDF, AI, EPS, PNG, JPG • Max 100 Mo</div>
                             <input type="file" id="file-input" class="hidden" accept=".pdf,.ai,.eps,.png,.jpg,.jpeg">
                         </div>
-                        <p class="text-sm text-gray-600 mt-2">💡 Vous pouvez aussi commander maintenant et envoyer votre fichier plus tard</p>
                     </div>
 
                     <!-- Notice technique fichier -->
-                    <div class="bg-yellow-50 border-2 border-yellow-400 rounded-lg p-6 mb-6">
-                        <h3 class="font-bold text-yellow-900 mb-4 flex items-center gap-2 text-lg">
-                            <span class="text-2xl">📐</span> Spécifications techniques du fichier
-                        </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4">
-                            <div class="bg-white p-3 rounded border border-yellow-300">
-                                <div class="text-yellow-800 font-semibold mb-1">📏 Format fini (après coupe)</div>
-                                <div class="text-xl font-black text-gray-900" id="spec-format-fini">100 × 100 cm</div>
-                            </div>
-                            <div class="bg-white p-3 rounded border border-red-300">
-                                <div class="text-red-700 font-semibold mb-1">📐 Format à fournir (avec fond perdu)</div>
-                                <div class="text-xl font-black text-red-600" id="spec-format-fourni">100.6 × 100.6 cm</div>
-                            </div>
-                            <div class="bg-white p-3 rounded border border-green-300">
-                                <div class="text-green-700 font-semibold mb-1">✓ Zone de sécurité (textes/logos)</div>
-                                <div class="text-lg font-bold text-green-600" id="spec-zone-securite">94 × 94 cm</div>
-                            </div>
-                            <div class="bg-white p-3 rounded border border-blue-300">
-                                <div class="text-blue-700 font-semibold mb-1">🖨️ Résolution minimale</div>
-                                <div class="text-lg font-bold text-gray-900">300 DPI (haute qualité)</div>
-                            </div>
-                        </div>
-                        <div class="bg-white rounded border-2 border-yellow-300 p-4">
-                            <div class="font-bold text-gray-900 mb-3 flex items-center gap-2">
-                                <span>💡</span> Informations importantes pour votre fichier
-                            </div>
-                            <ul class="text-xs text-gray-700 space-y-2">
-                                <li class="flex items-start gap-2">
-                                    <span class="text-red-600 font-bold">•</span>
-                                    <span><strong>Fond perdu (3mm):</strong> Prolongez vos visuels de 3mm de chaque côté pour éviter les liserés blancs après découpe</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <span class="text-green-600 font-bold">•</span>
-                                    <span><strong>Zone de sécurité:</strong> Placez vos textes et logos importants à minimum 3mm du bord de coupe</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <span class="text-blue-600 font-bold">•</span>
-                                    <span><strong>Formats acceptés:</strong> PDF (vectoriel recommandé), AI, EPS, PNG, JPG, TIFF</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <span class="text-purple-600 font-bold">•</span>
-                                    <span><strong>Profil couleur:</strong> CMJN (CMYK) obligatoire pour l'impression professionnelle</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <span class="text-orange-600 font-bold">•</span>
-                                    <span><strong>Résolution:</strong> 300 DPI minimum pour une qualité optimale • 150 DPI acceptable pour grands formats (>2m)</span>
-                                </li>
-                            </ul>
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-6">
+                        <div class="text-xs text-blue-800">
+                            <strong>💡 Votre fichier:</strong> PDF, AI ou JPG • 300 DPI • CMJN • Format <span id="spec-format-simple">100×100cm</span> + 3mm fond perdu
                         </div>
                     </div>
 
@@ -557,20 +538,12 @@ HTML;
         document.getElementById('resume-qte').textContent = config.quantite;
 
         // Spécifications techniques fichier
-        const fondPerdu = 0.3; // 3mm = 0.3cm de chaque côté
-        const largeurAvecFondPerdu = config.largeur + (fondPerdu * 2);
-        const hauteurAvecFondPerdu = config.hauteur + (fondPerdu * 2);
-        const largeurSecurite = config.largeur - (fondPerdu * 2);
-        const hauteurSecurite = config.hauteur - (fondPerdu * 2);
-
-        document.getElementById('spec-format-fini').textContent = `\${config.largeur} × \${config.hauteur} cm`;
-        document.getElementById('spec-format-fourni').textContent = `\${largeurAvecFondPerdu.toFixed(1)} × \${hauteurAvecFondPerdu.toFixed(1)} cm`;
-        document.getElementById('spec-zone-securite').textContent = `\${largeurSecurite.toFixed(1)} × \${hauteurSecurite.toFixed(1)} cm`;
+        document.getElementById('spec-format-simple').textContent = `\${config.largeur}×\${config.hauteur}cm`;
     }
 
     // Ajout au panier
     document.getElementById('btn-add-cart').addEventListener('click', function() {
-        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        const cart = JSON.parse(localStorage.getItem('visuprint_cart') || '[]');
 
         cart.push({
             id: PRODUIT.id,
@@ -580,7 +553,7 @@ HTML;
             date: new Date().toISOString()
         });
 
-        localStorage.setItem('cart', JSON.stringify(cart));
+        localStorage.setItem('visuprint_cart', JSON.stringify(cart));
 
         this.textContent = '✓ AJOUTÉ AU PANIER';
         this.style.background = '#10b981';
