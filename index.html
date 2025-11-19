@@ -153,58 +153,9 @@
 </head>
 <body class="bg-gray-50">
 
-    <!-- HEADER -->
-    <header class="bg-white border-b-2 border-gray-200 sticky top-0 z-50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Top Bar -->
-            <div class="flex items-center justify-between py-2 text-sm border-b border-gray-100">
-                <div class="flex items-center gap-4">
-                    <span class="text-gray-600">📧 contact@imprixo.fr</span>
-                    <span class="text-gray-600">⏰ Lun-Ven 9h-18h</span>
-                </div>
-                <div class="flex items-center gap-3">
-                    <span class="badge badge-green pulse">✓ Livraison 48h</span>
-                    <span class="badge badge-red">-40% Volume</span>
-                </div>
-            </div>
-
-            <!-- Main Header -->
-            <div class="flex items-center justify-between py-4">
-                <div class="flex items-center">
-                    <a href="/" class="flex-shrink-0">
-                        <span class="text-3xl font-black text-gray-900">Imprixo</span>
-                        <span class="text-3xl font-black text-red-600">Pro</span>
-                    </a>
-                    <nav class="hidden md:ml-12 md:flex md:space-x-8">
-                        <a href="/catalogue.html" class="text-gray-700 hover:text-red-600 px-3 py-2 text-sm font-bold transition">
-                            Catalogue
-                        </a>
-                        <a href="#categories" class="text-gray-700 hover:text-red-600 px-3 py-2 text-sm font-bold transition">
-                            Catégories
-                        </a>
-                        <a href="#avantages" class="text-gray-700 hover:text-red-600 px-3 py-2 text-sm font-bold transition">
-                            Nos Avantages
-                        </a>
-                        <a href="/mon-compte.php" class="text-gray-700 hover:text-red-600 px-3 py-2 text-sm font-bold transition">
-                            Mon Compte
-                        </a>
-                    </nav>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <div class="hidden lg:block text-right">
-                        <div class="text-xs text-gray-500 font-semibold">☎️ Service client</div>
-                        <div class="text-lg font-black text-red-600">01 23 45 67 89</div>
-                    </div>
-                    <a href="/panier.html" class="bg-gray-900 hover:bg-gray-800 text-white px-6 py-3 rounded-lg text-sm font-bold shadow-lg transition">
-                        🛒 Panier
-                    </a>
-                    <a href="#contact" class="btn-primary text-white px-8 py-3 rounded-lg text-sm font-bold shadow-lg">
-                        📧 Contact
-                    </a>
-                </div>
-            </div>
-        </div>
-    </header>
+    <!-- HEADER DYNAMIQUE -->
+    <div id="header-placeholder"></div>
+    <script>fetch('/includes/header.html').then(r=>r.text()).then(html=>document.getElementById('header-placeholder').innerHTML=html)</script>
 
     <!-- HERO SECTION -->
     <section class="hero-gradient text-white py-20">
@@ -741,83 +692,9 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer class="bg-gray-900 text-gray-300 py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-4 gap-10 mb-12">
-                <div>
-                    <div class="text-3xl font-black text-white mb-4">
-                        Imprixo<span class="text-red-600">Pro</span>
-                    </div>
-                    <p class="text-sm text-gray-400 mb-4">
-                        Spécialiste de l'impression professionnelle grand format depuis 2010. Plus de 50 supports disponibles.
-                    </p>
-                    <div class="flex gap-3">
-                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600 transition">
-                            F
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600 transition">
-                            L
-                        </a>
-                    </div>
-                </div>
-
-                <div>
-                    <h4 class="font-bold text-white mb-4 text-sm uppercase tracking-wide">Produits</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="/categorie/supports-rigides-pvc.html" class="hover:text-white transition">Panneaux PVC Forex</a></li>
-                        <li><a href="/categorie/supports-aluminium.html" class="hover:text-white transition">Dibond Aluminium</a></li>
-                        <li><a href="/categorie/baches-souples.html" class="hover:text-white transition">Bâches & Mesh</a></li>
-                        <li><a href="/categorie/textiles.html" class="hover:text-white transition">Textiles Imprimés</a></li>
-                        <li><a href="/produits.html" class="hover:text-white transition font-bold">Tous les produits →</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 class="font-bold text-white mb-4 text-sm uppercase tracking-wide">Services</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="/configurateur.html" class="hover:text-white transition">Configurateur en ligne</a></li>
-                        <li><a href="/devis.html" class="hover:text-white transition">Devis gratuit</a></li>
-                        <li><a href="/livraison.html" class="hover:text-white transition">Livraison express</a></li>
-                        <li><a href="/conception.html" class="hover:text-white transition">Conception graphique</a></li>
-                        <li><a href="/installation.html" class="hover:text-white transition">Installation</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 class="font-bold text-white mb-4 text-sm uppercase tracking-wide">Contact</h4>
-                    <ul class="space-y-3 text-sm">
-                        <li class="flex items-center gap-2">
-                            <span>📞</span>
-                            <a href="tel:0123456789" class="hover:text-white transition font-bold text-lg">01 23 45 67 89</a>
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <span>📧</span>
-                            <a href="mailto:contact@imprixo.fr" class="hover:text-white transition">contact@imprixo.fr</a>
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <span>⏰</span>
-                            <span>Lun-Ven : 9h-18h</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="border-t border-gray-800 pt-8">
-                <div class="flex flex-wrap justify-between items-center">
-                    <div class="text-sm text-gray-500">
-                        © 2025 Imprixo - Tous droits réservés
-                    </div>
-                    <div class="flex gap-6 text-sm">
-                        <a href="/mentions-legales.html" class="hover:text-white transition">Mentions légales</a>
-                        <a href="/cgv.html" class="hover:text-white transition">CGV</a>
-                        <a href="/politique-confidentialite.html" class="hover:text-white transition">Confidentialité</a>
-                        <a href="/sitemap.xml" class="hover:text-white transition">Plan du site</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <!-- FOOTER DYNAMIQUE -->
+    <div id="footer-placeholder"></div>
+    <script>fetch('/includes/footer.html').then(r=>r.text()).then(html=>document.getElementById('footer-placeholder').innerHTML=html)</script>
 
     <!-- Schema.org FAQ -->
     <script type="application/ld+json">
