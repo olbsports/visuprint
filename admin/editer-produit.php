@@ -30,7 +30,9 @@ try {
                 pr.id as promo_id, pr.type as promo_type, pr.valeur as promo_valeur,
                 pr.prix_special as promo_prix, pr.titre as promo_titre, pr.badge_texte as promo_badge,
                 pr.date_debut as promo_date_debut, pr.date_fin as promo_date_fin,
-                pr.afficher_countdown as promo_countdown, pr.actif as promo_actif
+                pr.afficher_countdown as promo_countdown, pr.actif as promo_actif,
+                pr.condition_surface_min, pr.condition_surface_max, pr.condition_quantite_min,
+                pr.condition_finitions, pr.condition_sans_finitions
          FROM produits p
          LEFT JOIN promotions pr ON pr.produit_id = p.id AND pr.actif = 1
          WHERE p.code = ?",
@@ -176,7 +178,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $db->query(
                             "UPDATE promotions SET
                                 type = ?, valeur = ?, prix_special = ?, titre = ?, badge_texte = ?,
-                                date_debut = ?, date_fin = ?, afficher_countdown = ?, actif = 1
+                                date_debut = ?, date_fin = ?, afficher_countdown = ?,
+                                condition_surface_min = ?, condition_surface_max = ?, condition_quantite_min = ?,
+                                condition_finitions = ?, condition_sans_finitions = ?,
+                                actif = 1
                              WHERE id = ?",
                             [
                                 $_POST['promo_type'] ?? 'pourcentage',
@@ -187,13 +192,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $_POST['promo_date_debut'] ?? null,
                                 $_POST['promo_date_fin'] ?? null,
                                 isset($_POST['promo_countdown']) ? 1 : 0,
+                                !empty($_POST['promo_condition_surface_min']) ? (float)$_POST['promo_condition_surface_min'] : null,
+                                !empty($_POST['promo_condition_surface_max']) ? (float)$_POST['promo_condition_surface_max'] : null,
+                                !empty($_POST['promo_condition_quantite_min']) ? (int)$_POST['promo_condition_quantite_min'] : null,
+                                !empty($_POST['promo_condition_finitions']) ? json_encode($_POST['promo_condition_finitions']) : null,
+                                !empty($_POST['promo_condition_sans_finitions']) ? json_encode($_POST['promo_condition_sans_finitions']) : null,
                                 $existing['id']
                             ]
                         );
                     } else {
                         $db->query(
-                            "INSERT INTO promotions (produit_id, type, valeur, prix_special, titre, badge_texte, date_debut, date_fin, afficher_countdown, actif)
-                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)",
+                            "INSERT INTO promotions (produit_id, type, valeur, prix_special, titre, badge_texte, date_debut, date_fin, afficher_countdown, condition_surface_min, condition_surface_max, condition_quantite_min, condition_finitions, condition_sans_finitions, actif)
+                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)",
                             [
                                 $produit['id'],
                                 $_POST['promo_type'] ?? 'pourcentage',
@@ -203,7 +213,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $_POST['promo_badge'] ?? 'PROMO',
                                 $_POST['promo_date_debut'] ?? null,
                                 $_POST['promo_date_fin'] ?? null,
-                                isset($_POST['promo_countdown']) ? 1 : 0
+                                isset($_POST['promo_countdown']) ? 1 : 0,
+                                !empty($_POST['promo_condition_surface_min']) ? (float)$_POST['promo_condition_surface_min'] : null,
+                                !empty($_POST['promo_condition_surface_max']) ? (float)$_POST['promo_condition_surface_max'] : null,
+                                !empty($_POST['promo_condition_quantite_min']) ? (int)$_POST['promo_condition_quantite_min'] : null,
+                                !empty($_POST['promo_condition_finitions']) ? json_encode($_POST['promo_condition_finitions']) : null,
+                                !empty($_POST['promo_condition_sans_finitions']) ? json_encode($_POST['promo_condition_sans_finitions']) : null
                             ]
                         );
                     }
@@ -576,6 +591,68 @@ include __DIR__ . '/includes/header.php';
                             <label>Date fin</label>
                             <input type="datetime-local" name="promo_date_fin" value="<?php echo isset($produit['promo_date_fin']) ? date('Y-m-d\TH:i', strtotime($produit['promo_date_fin'])) : ''; ?>">
                         </div>
+                    </div>
+
+                    <h3 style="color: var(--primary); font-size: 16px; font-weight: 700; margin: 30px 0 15px; padding-bottom: 10px; border-bottom: 2px solid var(--border);">
+                        🎯 Conditions d'application (optionnel)
+                    </h3>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Surface minimum (m²)</label>
+                            <input type="number" step="0.01" name="promo_condition_surface_min" value="<?php echo htmlspecialchars($produit['condition_surface_min'] ?? ''); ?>" placeholder="Ex: 10">
+                            <small>Promotion valide à partir de cette surface</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Surface maximum (m²)</label>
+                            <input type="number" step="0.01" name="promo_condition_surface_max" value="<?php echo htmlspecialchars($produit['condition_surface_max'] ?? ''); ?>" placeholder="Ex: 100">
+                            <small>Promotion valide jusqu'à cette surface</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Quantité minimum</label>
+                            <input type="number" name="promo_condition_quantite_min" value="<?php echo htmlspecialchars($produit['condition_quantite_min'] ?? ''); ?>" placeholder="Ex: 5">
+                            <small>Nombre minimum de produits</small>
+                        </div>
+                    </div>
+
+                    <h4 style="color: var(--text-primary); font-size: 14px; font-weight: 600; margin: 20px 0 10px;">
+                        🎨 Conditions sur les finitions
+                    </h4>
+
+                    <div class="form-group">
+                        <label>Promotion valide UNIQUEMENT avec ces finitions</label>
+                        <div style="max-height: 200px; overflow-y: auto; border: 2px solid var(--border); border-radius: var(--radius-md); padding: 12px; background: var(--bg-hover);">
+                            <?php
+                            $conditionFinitions = !empty($produit['condition_finitions']) ? json_decode($produit['condition_finitions'], true) : [];
+                            foreach ($catalogueFinitions as $fin):
+                            ?>
+                                <label style="display: flex; align-items: center; gap: 8px; padding: 6px; cursor: pointer;">
+                                    <input type="checkbox" name="promo_condition_finitions[]" value="<?php echo $fin['id']; ?>"
+                                           <?php echo in_array($fin['id'], $conditionFinitions) ? 'checked' : ''; ?>
+                                           style="width: 18px; height: 18px;">
+                                    <span><?php echo htmlspecialchars($fin['nom']); ?></span>
+                                </label>
+                            <?php endforeach; ?>
+                        </div>
+                        <small>Si cochées, la promotion ne s'applique que si le client choisit AU MOINS une de ces finitions</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Promotion NON valide avec ces finitions</label>
+                        <div style="max-height: 200px; overflow-y: auto; border: 2px solid var(--border); border-radius: var(--radius-md); padding: 12px; background: var(--bg-hover);">
+                            <?php
+                            $conditionSansFinitions = !empty($produit['condition_sans_finitions']) ? json_decode($produit['condition_sans_finitions'], true) : [];
+                            foreach ($catalogueFinitions as $fin):
+                            ?>
+                                <label style="display: flex; align-items: center; gap: 8px; padding: 6px; cursor: pointer;">
+                                    <input type="checkbox" name="promo_condition_sans_finitions[]" value="<?php echo $fin['id']; ?>"
+                                           <?php echo in_array($fin['id'], $conditionSansFinitions) ? 'checked' : ''; ?>
+                                           style="width: 18px; height: 18px;">
+                                    <span><?php echo htmlspecialchars($fin['nom']); ?></span>
+                                </label>
+                            <?php endforeach; ?>
+                        </div>
+                        <small>Si cochées, la promotion ne s'applique PAS si le client choisit une de ces finitions</small>
                     </div>
 
                     <div class="form-group">
