@@ -176,7 +176,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $db->query(
                             "UPDATE promotions SET
                                 type = ?, valeur = ?, prix_special = ?, titre = ?, badge_texte = ?,
-                                date_debut = ?, date_fin = ?, afficher_countdown = ?, actif = 1
+                                date_debut = ?, date_fin = ?, afficher_countdown = ?,
+                                condition_surface_min = ?, condition_surface_max = ?, condition_quantite_min = ?,
+                                actif = 1
                              WHERE id = ?",
                             [
                                 $_POST['promo_type'] ?? 'pourcentage',
@@ -187,13 +189,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $_POST['promo_date_debut'] ?? null,
                                 $_POST['promo_date_fin'] ?? null,
                                 isset($_POST['promo_countdown']) ? 1 : 0,
+                                !empty($_POST['promo_condition_surface_min']) ? (float)$_POST['promo_condition_surface_min'] : null,
+                                !empty($_POST['promo_condition_surface_max']) ? (float)$_POST['promo_condition_surface_max'] : null,
+                                !empty($_POST['promo_condition_quantite_min']) ? (int)$_POST['promo_condition_quantite_min'] : null,
                                 $existing['id']
                             ]
                         );
                     } else {
                         $db->query(
-                            "INSERT INTO promotions (produit_id, type, valeur, prix_special, titre, badge_texte, date_debut, date_fin, afficher_countdown, actif)
-                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)",
+                            "INSERT INTO promotions (produit_id, type, valeur, prix_special, titre, badge_texte, date_debut, date_fin, afficher_countdown, condition_surface_min, condition_surface_max, condition_quantite_min, actif)
+                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)",
                             [
                                 $produit['id'],
                                 $_POST['promo_type'] ?? 'pourcentage',
@@ -203,7 +208,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $_POST['promo_badge'] ?? 'PROMO',
                                 $_POST['promo_date_debut'] ?? null,
                                 $_POST['promo_date_fin'] ?? null,
-                                isset($_POST['promo_countdown']) ? 1 : 0
+                                isset($_POST['promo_countdown']) ? 1 : 0,
+                                !empty($_POST['promo_condition_surface_min']) ? (float)$_POST['promo_condition_surface_min'] : null,
+                                !empty($_POST['promo_condition_surface_max']) ? (float)$_POST['promo_condition_surface_max'] : null,
+                                !empty($_POST['promo_condition_quantite_min']) ? (int)$_POST['promo_condition_quantite_min'] : null
                             ]
                         );
                     }
@@ -575,6 +583,28 @@ include __DIR__ . '/includes/header.php';
                         <div class="form-group">
                             <label>Date fin</label>
                             <input type="datetime-local" name="promo_date_fin" value="<?php echo isset($produit['promo_date_fin']) ? date('Y-m-d\TH:i', strtotime($produit['promo_date_fin'])) : ''; ?>">
+                        </div>
+                    </div>
+
+                    <h3 style="color: var(--primary); font-size: 16px; font-weight: 700; margin: 30px 0 15px; padding-bottom: 10px; border-bottom: 2px solid var(--border);">
+                        🎯 Conditions d'application (optionnel)
+                    </h3>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Surface minimum (m²)</label>
+                            <input type="number" step="0.01" name="promo_condition_surface_min" value="<?php echo htmlspecialchars($produit['condition_surface_min'] ?? ''); ?>" placeholder="Ex: 10">
+                            <small>Promotion valide à partir de cette surface</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Surface maximum (m²)</label>
+                            <input type="number" step="0.01" name="promo_condition_surface_max" value="<?php echo htmlspecialchars($produit['condition_surface_max'] ?? ''); ?>" placeholder="Ex: 100">
+                            <small>Promotion valide jusqu'à cette surface</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Quantité minimum</label>
+                            <input type="number" name="promo_condition_quantite_min" value="<?php echo htmlspecialchars($produit['condition_quantite_min'] ?? ''); ?>" placeholder="Ex: 5">
+                            <small>Nombre minimum de produits</small>
                         </div>
                     </div>
 
