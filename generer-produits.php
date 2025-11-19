@@ -72,16 +72,46 @@ function genererPageProduitHTML($p) {
     $finition = htmlspecialchars($p['FINITION']);
     $delai = intval($p['DELAI_STANDARD_JOURS']);
 
-    // Formats standards selon catégorie
+    // Formats standards COMPLETS selon catégorie
     $formatsStandards = [
-        'A0 (84×119 cm)' => ['w' => 84, 'h' => 119],
-        'A1 (59×84 cm)' => ['w' => 59, 'h' => 84],
-        'A2 (42×59 cm)' => ['w' => 42, 'h' => 59],
-        'A3 (30×42 cm)' => ['w' => 30, 'h' => 42],
-        '100×100 cm' => ['w' => 100, 'h' => 100],
-        '200×100 cm' => ['w' => 200, 'h' => 100],
-        '300×200 cm' => ['w' => 300, 'h' => 200],
-        'Personnalisé' => ['w' => 100, 'h' => 100]
+        // Formats ISO
+        'A0 (84×119 cm)' => ['w' => 84, 'h' => 119, 'cat' => 'iso'],
+        'A1 (59×84 cm)' => ['w' => 59, 'h' => 84, 'cat' => 'iso'],
+        'A2 (42×59 cm)' => ['w' => 42, 'h' => 59, 'cat' => 'iso'],
+        'A3 (30×42 cm)' => ['w' => 30, 'h' => 42, 'cat' => 'iso'],
+        'A4 (21×30 cm)' => ['w' => 21, 'h' => 30, 'cat' => 'iso'],
+
+        // Kakémonos & Roll-ups
+        'Kakemono 85×200 cm' => ['w' => 85, 'h' => 200, 'cat' => 'kakemono'],
+        'Kakemono 100×200 cm' => ['w' => 100, 'h' => 200, 'cat' => 'kakemono'],
+        'Roll-up 85×200 cm' => ['w' => 85, 'h' => 200, 'cat' => 'rollup'],
+        'Roll-up 100×200 cm' => ['w' => 100, 'h' => 200, 'cat' => 'rollup'],
+        'Roll-up 120×200 cm' => ['w' => 120, 'h' => 200, 'cat' => 'rollup'],
+
+        // X-Banner & L-Banner
+        'X-Banner 60×160 cm' => ['w' => 60, 'h' => 160, 'cat' => 'banner'],
+        'X-Banner 80×180 cm' => ['w' => 80, 'h' => 180, 'cat' => 'banner'],
+        'L-Banner 80×200 cm' => ['w' => 80, 'h' => 200, 'cat' => 'banner'],
+
+        // Panneaux publicitaires
+        'Panneau 40×60 cm' => ['w' => 40, 'h' => 60, 'cat' => 'panneau'],
+        'Panneau 60×80 cm' => ['w' => 60, 'h' => 80, 'cat' => 'panneau'],
+        'Panneau 80×120 cm' => ['w' => 80, 'h' => 120, 'cat' => 'panneau'],
+        'Panneau 100×150 cm' => ['w' => 100, 'h' => 150, 'cat' => 'panneau'],
+
+        // Formats carrés
+        'Carré 50×50 cm' => ['w' => 50, 'h' => 50, 'cat' => 'carre'],
+        'Carré 80×80 cm' => ['w' => 80, 'h' => 80, 'cat' => 'carre'],
+        'Carré 100×100 cm' => ['w' => 100, 'h' => 100, 'cat' => 'carre'],
+
+        // Grands formats
+        '200×100 cm' => ['w' => 200, 'h' => 100, 'cat' => 'grand'],
+        '300×100 cm' => ['w' => 300, 'h' => 100, 'cat' => 'grand'],
+        '300×200 cm' => ['w' => 300, 'h' => 200, 'cat' => 'grand'],
+        '400×200 cm' => ['w' => 400, 'h' => 200, 'cat' => 'grand'],
+
+        // Personnalisé
+        'Personnalisé' => ['w' => 100, 'h' => 100, 'cat' => 'custom']
     ];
 
     return <<<HTML
@@ -205,6 +235,58 @@ HTML;
                             <input type="file" id="file-input" class="hidden" accept=".pdf,.ai,.eps,.png,.jpg,.jpeg">
                         </div>
                         <p class="text-sm text-gray-600 mt-2">💡 Vous pouvez aussi commander maintenant et envoyer votre fichier plus tard</p>
+                    </div>
+
+                    <!-- Notice technique fichier -->
+                    <div class="bg-yellow-50 border-2 border-yellow-400 rounded-lg p-6 mb-6">
+                        <h3 class="font-bold text-yellow-900 mb-4 flex items-center gap-2 text-lg">
+                            <span class="text-2xl">📐</span> Spécifications techniques du fichier
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4">
+                            <div class="bg-white p-3 rounded border border-yellow-300">
+                                <div class="text-yellow-800 font-semibold mb-1">📏 Format fini (après coupe)</div>
+                                <div class="text-xl font-black text-gray-900" id="spec-format-fini">100 × 100 cm</div>
+                            </div>
+                            <div class="bg-white p-3 rounded border border-red-300">
+                                <div class="text-red-700 font-semibold mb-1">📐 Format à fournir (avec fond perdu)</div>
+                                <div class="text-xl font-black text-red-600" id="spec-format-fourni">100.6 × 100.6 cm</div>
+                            </div>
+                            <div class="bg-white p-3 rounded border border-green-300">
+                                <div class="text-green-700 font-semibold mb-1">✓ Zone de sécurité (textes/logos)</div>
+                                <div class="text-lg font-bold text-green-600" id="spec-zone-securite">94 × 94 cm</div>
+                            </div>
+                            <div class="bg-white p-3 rounded border border-blue-300">
+                                <div class="text-blue-700 font-semibold mb-1">🖨️ Résolution minimale</div>
+                                <div class="text-lg font-bold text-gray-900">300 DPI (haute qualité)</div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded border-2 border-yellow-300 p-4">
+                            <div class="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                                <span>💡</span> Informations importantes pour votre fichier
+                            </div>
+                            <ul class="text-xs text-gray-700 space-y-2">
+                                <li class="flex items-start gap-2">
+                                    <span class="text-red-600 font-bold">•</span>
+                                    <span><strong>Fond perdu (3mm):</strong> Prolongez vos visuels de 3mm de chaque côté pour éviter les liserés blancs après découpe</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-green-600 font-bold">•</span>
+                                    <span><strong>Zone de sécurité:</strong> Placez vos textes et logos importants à minimum 3mm du bord de coupe</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-blue-600 font-bold">•</span>
+                                    <span><strong>Formats acceptés:</strong> PDF (vectoriel recommandé), AI, EPS, PNG, JPG, TIFF</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-purple-600 font-bold">•</span>
+                                    <span><strong>Profil couleur:</strong> CMJN (CMYK) obligatoire pour l'impression professionnelle</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-orange-600 font-bold">•</span>
+                                    <span><strong>Résolution:</strong> 300 DPI minimum pour une qualité optimale • 150 DPI acceptable pour grands formats (>2m)</span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
 
                     <!-- Résumé config -->
@@ -473,6 +555,17 @@ HTML;
         document.getElementById('resume-dims').textContent = `\${config.largeur}×\${config.hauteur} cm`;
         document.getElementById('resume-surface').textContent = surface.toFixed(2) + ' m²';
         document.getElementById('resume-qte').textContent = config.quantite;
+
+        // Spécifications techniques fichier
+        const fondPerdu = 0.3; // 3mm = 0.3cm de chaque côté
+        const largeurAvecFondPerdu = config.largeur + (fondPerdu * 2);
+        const hauteurAvecFondPerdu = config.hauteur + (fondPerdu * 2);
+        const largeurSecurite = config.largeur - (fondPerdu * 2);
+        const hauteurSecurite = config.hauteur - (fondPerdu * 2);
+
+        document.getElementById('spec-format-fini').textContent = `\${config.largeur} × \${config.hauteur} cm`;
+        document.getElementById('spec-format-fourni').textContent = `\${largeurAvecFondPerdu.toFixed(1)} × \${hauteurAvecFondPerdu.toFixed(1)} cm`;
+        document.getElementById('spec-zone-securite').textContent = `\${largeurSecurite.toFixed(1)} × \${hauteurSecurite.toFixed(1)} cm`;
     }
 
     // Ajout au panier
