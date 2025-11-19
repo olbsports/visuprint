@@ -4,14 +4,16 @@
  */
 
 require_once __DIR__ . '/auth.php';
+require_once __DIR__ . '/../api/config.php';
 
 verifierAdminConnecte();
 $admin = getAdminInfo();
 
-$csvFile = __DIR__ . '/../CATALOGUE_COMPLET_VISUPRINT.csv';
+$db = Database::getInstance();
 $error = '';
 $success = '';
 $produit = null;
+$finitions = [];
 
 // Récupérer l'ID du produit
 $idProduit = isset($_GET['id']) ? $_GET['id'] : '';
@@ -21,29 +23,40 @@ if (empty($idProduit)) {
     exit;
 }
 
-// Charger les données du produit
-if (file_exists($csvFile)) {
-    $file = fopen($csvFile, 'r');
-    $headers = fgetcsv($file);
+// Charger les données du produit depuis la base de données
+try {
+    $produit = $db->fetchOne(
+        "SELECT p.*,
+                pr.id as promo_id, pr.type as promo_type, pr.valeur as promo_valeur,
+                pr.prix_special as promo_prix, pr.titre as promo_titre, pr.badge_texte as promo_badge,
+                pr.date_debut as promo_date_debut, pr.date_fin as promo_date_fin,
+                pr.afficher_countdown as promo_countdown, pr.actif as promo_actif
+         FROM produits p
+         LEFT JOIN promotions pr ON pr.produit_id = p.id AND pr.actif = 1
+         WHERE p.id_produit = ?",
+        [$idProduit]
+    );
 
-    while (($row = fgetcsv($file)) !== false) {
-        if (count($row) === count($headers) && $row[0] === $idProduit) {
-            $produit = array_combine($headers, $row);
-            break;
-        }
+    if (!$produit) {
+        header('Location: produits.php?error=' . urlencode('Produit non trouvé'));
+        exit;
     }
-    fclose($file);
-}
 
-if (!$produit) {
-    header('Location: produits.php?error=' . urlencode('Produit non trouvé'));
+    // Charger les finitions
+    $finitions = $db->fetchAll(
+        "SELECT * FROM produits_finitions WHERE produit_id = ? ORDER BY ordre",
+        [$produit['id']]
+    );
+
+} catch (Exception $e) {
+    header('Location: produits.php?error=' . urlencode('Erreur chargement: ' . $e->getMessage()));
     exit;
 }
 
 // Traitement du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validation
-    $requiredFields = ['ID_PRODUIT', 'CATEGORIE', 'NOM_PRODUIT', 'DESCRIPTION_COURTE'];
+    $requiredFields = ['CATEGORIE', 'NOM_PRODUIT', 'DESCRIPTION_COURTE'];
     $missingFields = [];
 
     foreach ($requiredFields as $field) {
@@ -55,107 +68,142 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($missingFields)) {
         $error = "Champs obligatoires manquants : " . implode(', ', $missingFields);
     } else {
-        // Lire tous les produits
-        $allProducts = [];
-        $file = fopen($csvFile, 'r');
-        $headers = fgetcsv($file);
-        $allProducts[] = $headers;
+        try {
+            // Mettre à jour le produit
+            $updates = [];
+            $params = [];
 
-        while (($row = fgetcsv($file)) !== false) {
-            if ($row[0] === $idProduit) {
-                // Remplacer ce produit par les nouvelles données
-                $row = [
-                    $_POST['ID_PRODUIT'],
-                    $_POST['CATEGORIE'],
-                    $_POST['NOM_PRODUIT'],
-                    $_POST['SOUS_TITRE'] ?? '',
-                    $_POST['DESCRIPTION_COURTE'],
-                    $_POST['DESCRIPTION_LONGUE'] ?? '',
-                    $_POST['POIDS_M2'] ?? '',
-                    $_POST['EPAISSEUR'] ?? '',
-                    $_POST['FORMAT_MAX_CM'] ?? '',
-                    $_POST['USAGE'] ?? '',
-                    $_POST['DUREE_VIE'] ?? '',
-                    $_POST['CERTIFICATION'] ?? '',
-                    $_POST['FINITION'] ?? '',
-                    $_POST['IMPRESSION_FACES'] ?? '',
-                    $_POST['COUT_ACHAT_M2'] ?? '',
-                    $_POST['PRIX_SIMPLE_FACE_M2'] ?? '',
-                    $_POST['PRIX_DOUBLE_FACE_M2'] ?? '',
-                    $_POST['PRIX_0_10_M2'] ?? '',
-                    $_POST['PRIX_11_50_M2'] ?? '',
-                    $_POST['PRIX_51_100_M2'] ?? '',
-                    $_POST['PRIX_101_300_M2'] ?? '',
-                    $_POST['PRIX_300_PLUS_M2'] ?? '',
-                    $_POST['COMMANDE_MIN_EURO'] ?? '',
-                    $_POST['DELAI_STANDARD_JOURS'] ?? '',
-                    $_POST['UNITE_VENTE'] ?? 'm²'
-                ];
+            $allowedFields = [
+                'categorie' => 'CATEGORIE',
+                'nom_produit' => 'NOM_PRODUIT',
+                'sous_titre' => 'SOUS_TITRE',
+                'description_courte' => 'DESCRIPTION_COURTE',
+                'description_longue' => 'DESCRIPTION_LONGUE',
+                'poids_m2' => 'POIDS_M2',
+                'epaisseur' => 'EPAISSEUR',
+                'format_max_cm' => 'FORMAT_MAX_CM',
+                'usage' => 'USAGE',
+                'duree_vie' => 'DUREE_VIE',
+                'certification' => 'CERTIFICATION',
+                'finition_defaut' => 'FINITION',
+                'impression_faces' => 'IMPRESSION_FACES',
+                'prix_0_10' => 'PRIX_0_10_M2',
+                'prix_11_50' => 'PRIX_11_50_M2',
+                'prix_51_100' => 'PRIX_51_100_M2',
+                'prix_101_300' => 'PRIX_101_300_M2',
+                'prix_300_plus' => 'PRIX_300_PLUS_M2',
+                'commande_min_euro' => 'COMMANDE_MIN_EURO',
+                'delai_standard_jours' => 'DELAI_STANDARD_JOURS',
+                'unite_vente' => 'UNITE_VENTE',
+                'image_url' => 'IMAGE_URL'
+            ];
+
+            foreach ($allowedFields as $dbField => $postField) {
+                if (isset($_POST[$postField])) {
+                    $updates[] = "$dbField = ?";
+                    $params[] = $_POST[$postField];
+                }
             }
-            $allProducts[] = $row;
+
+            if (count($updates) > 0) {
+                $params[] = $produit['id'];
+                $db->query(
+                    "UPDATE produits SET " . implode(', ', $updates) . ", updated_at = NOW() WHERE id = ?",
+                    $params
+                );
+            }
+
+            // Mettre à jour finitions si présentes
+            if (isset($_POST['finitions']) && is_array($_POST['finitions'])) {
+                // Supprimer anciennes finitions
+                $db->query("DELETE FROM produits_finitions WHERE produit_id = ?", [$produit['id']]);
+
+                // Ajouter nouvelles finitions
+                foreach ($_POST['finitions'] as $index => $fin) {
+                    if (!empty($fin['nom'])) {
+                        $db->query(
+                            "INSERT INTO produits_finitions (produit_id, nom, description, prix_supplement, type_prix, ordre)
+                             VALUES (?, ?, ?, ?, ?, ?)",
+                            [
+                                $produit['id'],
+                                $fin['nom'],
+                                $fin['description'] ?? '',
+                                $fin['prix_supplement'] ?? 0,
+                                $fin['type_prix'] ?? 'fixe',
+                                $index
+                            ]
+                        );
+                    }
+                }
+            }
+
+            // Gestion promotion
+            if (isset($_POST['promo_actif'])) {
+                if ($_POST['promo_actif'] == '1') {
+                    // Créer ou mettre à jour promo
+                    $existing = $db->fetchOne("SELECT id FROM promotions WHERE produit_id = ?", [$produit['id']]);
+
+                    if ($existing) {
+                        $db->query(
+                            "UPDATE promotions SET
+                                type = ?, valeur = ?, prix_special = ?, titre = ?, badge_texte = ?,
+                                date_debut = ?, date_fin = ?, afficher_countdown = ?, actif = 1
+                             WHERE id = ?",
+                            [
+                                $_POST['promo_type'] ?? 'pourcentage',
+                                $_POST['promo_valeur'] ?? 0,
+                                $_POST['promo_prix_special'] ?? null,
+                                $_POST['promo_titre'] ?? '',
+                                $_POST['promo_badge'] ?? 'PROMO',
+                                $_POST['promo_date_debut'] ?? null,
+                                $_POST['promo_date_fin'] ?? null,
+                                isset($_POST['promo_countdown']) ? 1 : 0,
+                                $existing['id']
+                            ]
+                        );
+                    } else {
+                        $db->query(
+                            "INSERT INTO promotions (produit_id, type, valeur, prix_special, titre, badge_texte, date_debut, date_fin, afficher_countdown, actif)
+                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)",
+                            [
+                                $produit['id'],
+                                $_POST['promo_type'] ?? 'pourcentage',
+                                $_POST['promo_valeur'] ?? 0,
+                                $_POST['promo_prix_special'] ?? null,
+                                $_POST['promo_titre'] ?? '',
+                                $_POST['promo_badge'] ?? 'PROMO',
+                                $_POST['promo_date_debut'] ?? null,
+                                $_POST['promo_date_fin'] ?? null,
+                                isset($_POST['promo_countdown']) ? 1 : 0
+                            ]
+                        );
+                    }
+                } else {
+                    // Désactiver promo
+                    $db->query("UPDATE promotions SET actif = 0 WHERE produit_id = ?", [$produit['id']]);
+                }
+            }
+
+            // Log admin action
+            logAdminAction($admin['id'] ?? 0, 'modification_produit', "Produit {$produit['id_produit']} modifié");
+
+            // Redirection
+            header('Location: produits.php?success=' . urlencode('Produit modifié avec succès !'));
+            exit;
+
+        } catch (Exception $e) {
+            $error = "Erreur lors de la mise à jour : " . $e->getMessage();
         }
-        fclose($file);
-
-        // Écrire le nouveau CSV
-        $file = fopen($csvFile, 'w');
-        foreach ($allProducts as $row) {
-            fputcsv($file, $row);
-        }
-        fclose($file);
-
-        // Régénérer la page HTML du produit
-        require_once __DIR__ . '/helpers/generer-page-produit.php';
-
-        // Construire l'array du produit pour la génération HTML
-        $produitData = [
-            'ID_PRODUIT' => $_POST['ID_PRODUIT'],
-            'CATEGORIE' => $_POST['CATEGORIE'],
-            'NOM_PRODUIT' => $_POST['NOM_PRODUIT'],
-            'SOUS_TITRE' => $_POST['SOUS_TITRE'] ?? '',
-            'DESCRIPTION_COURTE' => $_POST['DESCRIPTION_COURTE'],
-            'DESCRIPTION_LONGUE' => $_POST['DESCRIPTION_LONGUE'] ?? '',
-            'POIDS_M2' => $_POST['POIDS_M2'] ?? '',
-            'EPAISSEUR' => $_POST['EPAISSEUR'] ?? '',
-            'FORMAT_MAX_CM' => $_POST['FORMAT_MAX_CM'] ?? '',
-            'USAGE' => $_POST['USAGE'] ?? '',
-            'DUREE_VIE' => $_POST['DUREE_VIE'] ?? '',
-            'CERTIFICATION' => $_POST['CERTIFICATION'] ?? '',
-            'FINITION' => $_POST['FINITION'] ?? '',
-            'IMPRESSION_FACES' => $_POST['IMPRESSION_FACES'] ?? '',
-            'COUT_ACHAT_M2' => $_POST['COUT_ACHAT_M2'] ?? '',
-            'PRIX_SIMPLE_FACE_M2' => $_POST['PRIX_SIMPLE_FACE_M2'] ?? '',
-            'PRIX_DOUBLE_FACE_M2' => $_POST['PRIX_DOUBLE_FACE_M2'] ?? '',
-            'PRIX_0_10_M2' => $_POST['PRIX_0_10_M2'] ?? '',
-            'PRIX_11_50_M2' => $_POST['PRIX_11_50_M2'] ?? '',
-            'PRIX_51_100_M2' => $_POST['PRIX_51_100_M2'] ?? '',
-            'PRIX_101_300_M2' => $_POST['PRIX_101_300_M2'] ?? '',
-            'PRIX_300_PLUS_M2' => $_POST['PRIX_300_PLUS_M2'] ?? '',
-            'COMMANDE_MIN_EURO' => $_POST['COMMANDE_MIN_EURO'] ?? '',
-            'DELAI_STANDARD_JOURS' => $_POST['DELAI_STANDARD_JOURS'] ?? '',
-            'UNITE_VENTE' => $_POST['UNITE_VENTE'] ?? 'm²'
-        ];
-
-        genererEtSauvegarderPageProduit($produitData);
-
-        // Redirection
-        header('Location: produits.php?success=' . urlencode('Produit modifié avec succès !'));
-        exit;
     }
 }
 
-// Charger les catégories existantes
+// Charger les catégories existantes depuis la base de données
 $categories = [];
-if (file_exists($csvFile)) {
-    $file = fopen($csvFile, 'r');
-    $headers = fgetcsv($file);
-    while (($row = fgetcsv($file)) !== false) {
-        if (!empty($row[1])) {
-            $categories[] = $row[1];
-        }
-    }
-    fclose($file);
-    $categories = array_unique($categories);
-    sort($categories);
+try {
+    $categoriesData = $db->fetchAll("SELECT DISTINCT categorie FROM produits ORDER BY categorie");
+    $categories = array_column($categoriesData, 'categorie');
+} catch (Exception $e) {
+    // Erreur silencieuse, on continuera avec une liste vide
 }
 ?>
 <!DOCTYPE html>
@@ -425,12 +473,12 @@ if (file_exists($csvFile)) {
         <?php endif; ?>
 
         <div class="page-header">
-            <h1 class="page-title">✏️ Éditer le produit: <?php echo htmlspecialchars($produit['NOM_PRODUIT']); ?></h1>
+            <h1 class="page-title">✏️ Éditer le produit: <?php echo htmlspecialchars($produit['nom_produit']); ?></h1>
             <a href="produits.php" class="btn btn-secondary">← Retour à la liste</a>
         </div>
 
         <div class="alert-info">
-            ℹ️ <strong>ID Produit:</strong> <code><?php echo htmlspecialchars($produit['ID_PRODUIT']); ?></code> - La modification du produit met automatiquement à jour le CSV et régénère la page HTML.
+            ℹ️ <strong>ID Produit:</strong> <code><?php echo htmlspecialchars($produit['id_produit']); ?></code> - La modification du produit met automatiquement à jour la base de données.
         </div>
 
         <div class="card">
@@ -439,7 +487,7 @@ if (file_exists($csvFile)) {
                 <div class="form-grid">
                     <div class="form-group">
                         <label>ID Produit <span class="required">*</span></label>
-                        <input type="text" name="ID_PRODUIT" required value="<?php echo htmlspecialchars($produit['ID_PRODUIT']); ?>" readonly style="background: #f5f5f5;">
+                        <input type="text" name="ID_PRODUIT" required value="<?php echo htmlspecialchars($produit['id_produit']); ?>" readonly style="background: #f5f5f5;">
                         <small>L'ID ne peut pas être modifié</small>
                     </div>
 
@@ -448,7 +496,7 @@ if (file_exists($csvFile)) {
                         <select name="CATEGORIE" required>
                             <option value="">Sélectionner une catégorie</option>
                             <?php foreach ($categories as $cat): ?>
-                                <option value="<?php echo htmlspecialchars($cat); ?>" <?php echo $produit['CATEGORIE'] === $cat ? 'selected' : ''; ?>>
+                                <option value="<?php echo htmlspecialchars($cat); ?>" <?php echo $produit['categorie'] === $cat ? 'selected' : ''; ?>>
                                     <?php echo htmlspecialchars($cat); ?>
                                 </option>
                             <?php endforeach; ?>
@@ -459,69 +507,75 @@ if (file_exists($csvFile)) {
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Nom du produit <span class="required">*</span></label>
-                        <input type="text" name="NOM_PRODUIT" required value="<?php echo htmlspecialchars($produit['NOM_PRODUIT']); ?>">
+                        <input type="text" name="NOM_PRODUIT" required value="<?php echo htmlspecialchars($produit['nom_produit']); ?>">
                     </div>
 
                     <div class="form-group">
                         <label>Sous-titre</label>
-                        <input type="text" name="SOUS_TITRE" value="<?php echo htmlspecialchars($produit['SOUS_TITRE'] ?? ''); ?>">
+                        <input type="text" name="SOUS_TITRE" value="<?php echo htmlspecialchars($produit['sous_titre'] ?? ''); ?>">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>Description courte <span class="required">*</span></label>
-                    <textarea name="DESCRIPTION_COURTE" required><?php echo htmlspecialchars($produit['DESCRIPTION_COURTE']); ?></textarea>
+                    <textarea name="DESCRIPTION_COURTE" required><?php echo htmlspecialchars($produit['description_courte']); ?></textarea>
                 </div>
 
                 <div class="form-group">
                     <label>Description longue</label>
-                    <textarea name="DESCRIPTION_LONGUE" style="min-height: 150px;"><?php echo htmlspecialchars($produit['DESCRIPTION_LONGUE'] ?? ''); ?></textarea>
+                    <textarea name="DESCRIPTION_LONGUE" style="min-height: 150px;"><?php echo htmlspecialchars($produit['description_longue'] ?? ''); ?></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Image URL</label>
+                    <input type="url" name="IMAGE_URL" value="<?php echo htmlspecialchars($produit['image_url'] ?? ''); ?>" placeholder="https://...">
+                    <small>URL de l'image du produit (Unsplash, CDN, etc.)</small>
                 </div>
 
                 <div class="section-title">⚙️ Caractéristiques techniques</div>
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Poids (kg/m²)</label>
-                        <input type="text" name="POIDS_M2" value="<?php echo htmlspecialchars($produit['POIDS_M2'] ?? ''); ?>">
+                        <input type="text" name="POIDS_M2" value="<?php echo htmlspecialchars($produit['poids_m2'] ?? ''); ?>">
                     </div>
 
                     <div class="form-group">
                         <label>Épaisseur</label>
-                        <input type="text" name="EPAISSEUR" value="<?php echo htmlspecialchars($produit['EPAISSEUR'] ?? ''); ?>">
+                        <input type="text" name="EPAISSEUR" value="<?php echo htmlspecialchars($produit['epaisseur'] ?? ''); ?>">
                     </div>
 
                     <div class="form-group">
                         <label>Format maximum (cm)</label>
-                        <input type="text" name="FORMAT_MAX_CM" value="<?php echo htmlspecialchars($produit['FORMAT_MAX_CM'] ?? ''); ?>">
+                        <input type="text" name="FORMAT_MAX_CM" value="<?php echo htmlspecialchars($produit['format_max_cm'] ?? ''); ?>">
                     </div>
 
                     <div class="form-group">
                         <label>Usage</label>
-                        <input type="text" name="USAGE" value="<?php echo htmlspecialchars($produit['USAGE'] ?? ''); ?>">
+                        <input type="text" name="USAGE" value="<?php echo htmlspecialchars($produit['usage'] ?? ''); ?>">
                     </div>
 
                     <div class="form-group">
                         <label>Durée de vie</label>
-                        <input type="text" name="DUREE_VIE" value="<?php echo htmlspecialchars($produit['DUREE_VIE'] ?? ''); ?>">
+                        <input type="text" name="DUREE_VIE" value="<?php echo htmlspecialchars($produit['duree_vie'] ?? ''); ?>">
                     </div>
 
                     <div class="form-group">
                         <label>Certification</label>
-                        <input type="text" name="CERTIFICATION" value="<?php echo htmlspecialchars($produit['CERTIFICATION'] ?? ''); ?>">
+                        <input type="text" name="CERTIFICATION" value="<?php echo htmlspecialchars($produit['certification'] ?? ''); ?>">
                     </div>
 
                     <div class="form-group">
                         <label>Finition</label>
-                        <input type="text" name="FINITION" value="<?php echo htmlspecialchars($produit['FINITION'] ?? ''); ?>">
+                        <input type="text" name="FINITION" value="<?php echo htmlspecialchars($produit['finition_defaut'] ?? ''); ?>">
                     </div>
 
                     <div class="form-group">
                         <label>Impression faces</label>
                         <select name="IMPRESSION_FACES">
                             <option value="">Sélectionner</option>
-                            <option value="Simple ou double" <?php echo (isset($produit['IMPRESSION_FACES']) && $produit['IMPRESSION_FACES'] === 'Simple ou double') ? 'selected' : ''; ?>>Simple ou double</option>
-                            <option value="Simple face" <?php echo (isset($produit['IMPRESSION_FACES']) && $produit['IMPRESSION_FACES'] === 'Simple face') ? 'selected' : ''; ?>>Simple face</option>
-                            <option value="Double face" <?php echo (isset($produit['IMPRESSION_FACES']) && $produit['IMPRESSION_FACES'] === 'Double face') ? 'selected' : ''; ?>>Double face</option>
+                            <option value="Simple ou double" <?php echo (isset($produit['impression_faces']) && $produit['impression_faces'] === 'Simple ou double') ? 'selected' : ''; ?>>Simple ou double</option>
+                            <option value="Simple face" <?php echo (isset($produit['impression_faces']) && $produit['impression_faces'] === 'Simple face') ? 'selected' : ''; ?>>Simple face</option>
+                            <option value="Double face" <?php echo (isset($produit['impression_faces']) && $produit['impression_faces'] === 'Double face') ? 'selected' : ''; ?>>Double face</option>
                         </select>
                     </div>
                 </div>
@@ -547,27 +601,27 @@ if (file_exists($csvFile)) {
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Prix 0-10 m² (€/m²)</label>
-                        <input type="number" step="0.01" name="PRIX_0_10_M2" value="<?php echo htmlspecialchars($produit['PRIX_0_10_M2'] ?? ''); ?>">
+                        <input type="number" step="0.01" name="PRIX_0_10_M2" value="<?php echo htmlspecialchars($produit['prix_0_10'] ?? ''); ?>">
                     </div>
 
                     <div class="form-group">
                         <label>Prix 11-50 m² (€/m²)</label>
-                        <input type="number" step="0.01" name="PRIX_11_50_M2" value="<?php echo htmlspecialchars($produit['PRIX_11_50_M2'] ?? ''); ?>">
+                        <input type="number" step="0.01" name="PRIX_11_50_M2" value="<?php echo htmlspecialchars($produit['prix_11_50'] ?? ''); ?>">
                     </div>
 
                     <div class="form-group">
                         <label>Prix 51-100 m² (€/m²)</label>
-                        <input type="number" step="0.01" name="PRIX_51_100_M2" value="<?php echo htmlspecialchars($produit['PRIX_51_100_M2'] ?? ''); ?>">
+                        <input type="number" step="0.01" name="PRIX_51_100_M2" value="<?php echo htmlspecialchars($produit['prix_51_100'] ?? ''); ?>">
                     </div>
 
                     <div class="form-group">
                         <label>Prix 101-300 m² (€/m²)</label>
-                        <input type="number" step="0.01" name="PRIX_101_300_M2" value="<?php echo htmlspecialchars($produit['PRIX_101_300_M2'] ?? ''); ?>">
+                        <input type="number" step="0.01" name="PRIX_101_300_M2" value="<?php echo htmlspecialchars($produit['prix_101_300'] ?? ''); ?>">
                     </div>
 
                     <div class="form-group">
                         <label>Prix 300+ m² (€/m²)</label>
-                        <input type="number" step="0.01" name="PRIX_300_PLUS_M2" value="<?php echo htmlspecialchars($produit['PRIX_300_PLUS_M2'] ?? ''); ?>">
+                        <input type="number" step="0.01" name="PRIX_300_PLUS_M2" value="<?php echo htmlspecialchars($produit['prix_300_plus'] ?? ''); ?>">
                     </div>
                 </div>
 
@@ -575,28 +629,156 @@ if (file_exists($csvFile)) {
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Commande minimum (€)</label>
-                        <input type="number" step="0.01" name="COMMANDE_MIN_EURO" value="<?php echo htmlspecialchars($produit['COMMANDE_MIN_EURO'] ?? ''); ?>">
+                        <input type="number" step="0.01" name="COMMANDE_MIN_EURO" value="<?php echo htmlspecialchars($produit['commande_min_euro'] ?? ''); ?>">
                     </div>
 
                     <div class="form-group">
                         <label>Délai standard (jours)</label>
-                        <input type="number" name="DELAI_STANDARD_JOURS" value="<?php echo htmlspecialchars($produit['DELAI_STANDARD_JOURS'] ?? ''); ?>">
+                        <input type="number" name="DELAI_STANDARD_JOURS" value="<?php echo htmlspecialchars($produit['delai_standard_jours'] ?? ''); ?>">
                     </div>
 
                     <div class="form-group">
                         <label>Unité de vente</label>
                         <select name="UNITE_VENTE">
-                            <option value="m²" <?php echo (isset($produit['UNITE_VENTE']) && $produit['UNITE_VENTE'] === 'm²') ? 'selected' : ''; ?>>m²</option>
-                            <option value="ml" <?php echo (isset($produit['UNITE_VENTE']) && $produit['UNITE_VENTE'] === 'ml') ? 'selected' : ''; ?>>ml (mètre linéaire)</option>
-                            <option value="unité" <?php echo (isset($produit['UNITE_VENTE']) && $produit['UNITE_VENTE'] === 'unité') ? 'selected' : ''; ?>>unité</option>
+                            <option value="m²" <?php echo (isset($produit['unite_vente']) && $produit['unite_vente'] === 'm²') ? 'selected' : ''; ?>>m²</option>
+                            <option value="ml" <?php echo (isset($produit['unite_vente']) && $produit['unite_vente'] === 'ml') ? 'selected' : ''; ?>>ml (mètre linéaire)</option>
+                            <option value="unité" <?php echo (isset($produit['unite_vente']) && $produit['unite_vente'] === 'unité') ? 'selected' : ''; ?>>unité</option>
                         </select>
                     </div>
                 </div>
 
+                <div class="section-title">🎨 Finitions et options</div>
+                <div id="finitions-container">
+                    <?php foreach ($finitions as $index => $fin): ?>
+                        <div class="form-grid" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                            <input type="hidden" name="finitions[<?php echo $index; ?>][id]" value="<?php echo $fin['id']; ?>">
+                            <div class="form-group">
+                                <label>Nom</label>
+                                <input type="text" name="finitions[<?php echo $index; ?>][nom]" value="<?php echo htmlspecialchars($fin['nom']); ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>Description</label>
+                                <input type="text" name="finitions[<?php echo $index; ?>][description]" value="<?php echo htmlspecialchars($fin['description'] ?? ''); ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>Prix supplément</label>
+                                <input type="number" step="0.01" name="finitions[<?php echo $index; ?>][prix_supplement]" value="<?php echo htmlspecialchars($fin['prix_supplement']); ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>Type prix</label>
+                                <select name="finitions[<?php echo $index; ?>][type_prix]">
+                                    <option value="fixe" <?php echo $fin['type_prix'] === 'fixe' ? 'selected' : ''; ?>>Fixe</option>
+                                    <option value="par_m2" <?php echo $fin['type_prix'] === 'par_m2' ? 'selected' : ''; ?>>Par m²</option>
+                                    <option value="par_ml" <?php echo $fin['type_prix'] === 'par_ml' ? 'selected' : ''; ?>>Par ml</option>
+                                </select>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+                <button type="button" onclick="addFinition()" class="btn btn-secondary" style="margin-bottom: 20px;">➕ Ajouter une finition</button>
+
+                <div class="section-title">🎁 Promotion</div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" name="promo_actif" value="1" <?php echo ($produit['promo_actif'] ?? 0) ? 'checked' : ''; ?>>
+                        Activer une promotion sur ce produit
+                    </label>
+                </div>
+
+                <div id="promo-fields" style="display: <?php echo ($produit['promo_actif'] ?? 0) ? 'block' : 'none'; ?>;">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Type de promotion</label>
+                            <select name="promo_type">
+                                <option value="pourcentage" <?php echo ($produit['promo_type'] ?? '') === 'pourcentage' ? 'selected' : ''; ?>>Pourcentage</option>
+                                <option value="fixe" <?php echo ($produit['promo_type'] ?? '') === 'fixe' ? 'selected' : ''; ?>>Réduction fixe</option>
+                                <option value="prix_special" <?php echo ($produit['promo_type'] ?? '') === 'prix_special' ? 'selected' : ''; ?>>Prix spécial</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Valeur (% ou €)</label>
+                            <input type="number" step="0.01" name="promo_valeur" value="<?php echo htmlspecialchars($produit['promo_valeur'] ?? ''); ?>">
+                        </div>
+                        <div class="form-group">
+                            <label>Prix spécial (si applicable)</label>
+                            <input type="number" step="0.01" name="promo_prix_special" value="<?php echo htmlspecialchars($produit['promo_prix'] ?? ''); ?>">
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Titre promo</label>
+                            <input type="text" name="promo_titre" value="<?php echo htmlspecialchars($produit['promo_titre'] ?? ''); ?>" placeholder="Ex: SOLDES D'ÉTÉ">
+                        </div>
+                        <div class="form-group">
+                            <label>Badge</label>
+                            <input type="text" name="promo_badge" value="<?php echo htmlspecialchars($produit['promo_badge'] ?? 'PROMO'); ?>" placeholder="PROMO">
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Date début</label>
+                            <input type="datetime-local" name="promo_date_debut" value="<?php echo isset($produit['promo_date_debut']) ? date('Y-m-d\TH:i', strtotime($produit['promo_date_debut'])) : ''; ?>">
+                        </div>
+                        <div class="form-group">
+                            <label>Date fin</label>
+                            <input type="datetime-local" name="promo_date_fin" value="<?php echo isset($produit['promo_date_fin']) ? date('Y-m-d\TH:i', strtotime($produit['promo_date_fin'])) : ''; ?>">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" name="promo_countdown" value="1" <?php echo ($produit['promo_countdown'] ?? 0) ? 'checked' : ''; ?>>
+                            Afficher un compte à rebours
+                        </label>
+                    </div>
+                </div>
+
+                <script>
+                let finitionIndex = <?php echo count($finitions); ?>;
+
+                function addFinition() {
+                    const container = document.getElementById('finitions-container');
+                    const div = document.createElement('div');
+                    div.className = 'form-grid';
+                    div.style.cssText = 'background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 10px;';
+                    div.innerHTML = `
+                        <div class="form-group">
+                            <label>Nom</label>
+                            <input type="text" name="finitions[${finitionIndex}][nom]" placeholder="Ex: Œillets">
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <input type="text" name="finitions[${finitionIndex}][description]" placeholder="Ex: Tous les 50cm">
+                        </div>
+                        <div class="form-group">
+                            <label>Prix supplément</label>
+                            <input type="number" step="0.01" name="finitions[${finitionIndex}][prix_supplement]" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Type prix</label>
+                            <select name="finitions[${finitionIndex}][type_prix]">
+                                <option value="fixe">Fixe</option>
+                                <option value="par_m2">Par m²</option>
+                                <option value="par_ml">Par ml</option>
+                            </select>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                    finitionIndex++;
+                }
+
+                // Toggle promo fields
+                document.querySelector('input[name="promo_actif"]').addEventListener('change', function(e) {
+                    document.getElementById('promo-fields').style.display = e.target.checked ? 'block' : 'none';
+                });
+                </script>
+
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">💾 Enregistrer les modifications</button>
                     <a href="produits.php" class="btn btn-secondary">✖ Annuler</a>
-                    <a href="supprimer-produit.php?id=<?php echo urlencode($produit['ID_PRODUIT']); ?>" class="btn btn-danger" onclick="return confirm('Supprimer définitivement ce produit ?')" style="margin-left: auto;">🗑️ Supprimer le produit</a>
+                    <a href="supprimer-produit.php?id=<?php echo urlencode($produit['id_produit']); ?>" class="btn btn-danger" onclick="return confirm('Supprimer définitivement ce produit ?')" style="margin-left: auto;">🗑️ Supprimer le produit</a>
                 </div>
             </form>
         </div>

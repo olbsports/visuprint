@@ -1,10 +1,11 @@
 <?php
 /**
  * Gestion Produits - Imprixo Admin
- * Affichage et gestion des produits depuis CSV
+ * Affichage et gestion des produits depuis base de données
  */
 
 require_once __DIR__ . '/auth.php';
+require_once __DIR__ . '/../api/config.php';
 
 verifierAdminConnecte();
 $admin = getAdminInfo();
@@ -12,63 +13,69 @@ $admin = getAdminInfo();
 $success = isset($_GET['success']) ? $_GET['success'] : '';
 $error = isset($_GET['error']) ? $_GET['error'] : '';
 
-// Charger les produits depuis CSV
+// Charger les produits depuis la base de données
+$db = Database::getInstance();
 $produits = [];
-$csvFile = __DIR__ . '/../CATALOGUE_COMPLET_VISUPRINT.csv';
 
-if (file_exists($csvFile)) {
-    $file = fopen($csvFile, 'r');
-    $headers = fgetcsv($file); // Lire l'en-tête
+try {
+    // Construire la requête avec filtres
+    $where = ['actif = 1'];
+    $params = [];
 
-    while (($row = fgetcsv($file)) !== false) {
-        if (count($row) === count($headers)) {
-            $produit = array_combine($headers, $row);
-            if (!empty($produit['ID_PRODUIT'])) {
-                $produits[] = $produit;
-            }
-        }
+    $recherche = isset($_GET['q']) ? trim($_GET['q']) : '';
+    $filtreCategorie = isset($_GET['cat']) ? $_GET['cat'] : '';
+
+    if ($recherche) {
+        $where[] = "(id_produit LIKE ? OR nom_produit LIKE ? OR sous_titre LIKE ? OR description_courte LIKE ?)";
+        $search = '%' . $recherche . '%';
+        $params[] = $search;
+        $params[] = $search;
+        $params[] = $search;
+        $params[] = $search;
     }
-    fclose($file);
+
+    if ($filtreCategorie) {
+        $where[] = "categorie = ?";
+        $params[] = $filtreCategorie;
+    }
+
+    $whereClause = 'WHERE ' . implode(' AND ', $where);
+
+    // Récupérer produits avec promotions actives
+    $produits = $db->fetchAll(
+        "SELECT * FROM v_produits_avec_promos $whereClause ORDER BY categorie, nom_produit",
+        $params
+    );
+
+    // Convertir en format compatible avec l'affichage (majuscules pour compatibilité)
+    foreach ($produits as &$p) {
+        $p['ID_PRODUIT'] = $p['id_produit'];
+        $p['CATEGORIE'] = $p['categorie'];
+        $p['NOM_PRODUIT'] = $p['nom_produit'];
+        $p['SOUS_TITRE'] = $p['sous_titre'];
+        $p['PRIX_300_PLUS_M2'] = $p['prix_300_plus'];
+        $p['DELAI_STANDARD_JOURS'] = $p['delai_standard_jours'];
+    }
+
+    // Liste de toutes les catégories pour le filtre
+    $listeCategoriesUniques = $db->fetchAll(
+        "SELECT DISTINCT categorie FROM produits WHERE actif = 1 ORDER BY categorie"
+    );
+    $listeCategoriesUniques = array_column($listeCategoriesUniques, 'categorie');
+
+} catch (Exception $e) {
+    $error = "Erreur chargement produits: " . $e->getMessage();
+    $produits = [];
+    $listeCategoriesUniques = [];
 }
 
-// Liste de toutes les catégories pour le filtre (avant filtrage)
-$tousLesProduits = $produits;
-$listeCategoriesUniques = array_unique(array_column($tousLesProduits, 'CATEGORIE'));
-sort($listeCategoriesUniques);
-
-// Filtrage et recherche
-$recherche = isset($_GET['q']) ? trim($_GET['q']) : '';
-$filtreCategorie = isset($_GET['cat']) ? $_GET['cat'] : '';
-
-if ($recherche || $filtreCategorie) {
-    $produits = array_filter($produits, function($p) use ($recherche, $filtreCategorie) {
-        $matchRecherche = true;
-        $matchCategorie = true;
-
-        if ($recherche) {
-            $matchRecherche = (
-                stripos($p['ID_PRODUIT'], $recherche) !== false ||
-                stripos($p['NOM_PRODUIT'], $recherche) !== false ||
-                stripos($p['SOUS_TITRE'], $recherche) !== false ||
-                stripos($p['DESCRIPTION_COURTE'], $recherche) !== false
-            );
-        }
-
-        if ($filtreCategorie) {
-            $matchCategorie = ($p['CATEGORIE'] === $filtreCategorie);
-        }
-
-        return $matchRecherche && $matchCategorie;
-    });
-}
-
-// Stats (après filtrage)
+// Stats
 $stats = [
     'total' => count($produits),
     'categories' => count(array_unique(array_column($produits, 'CATEGORIE')))
 ];
 
-// Grouper par catégorie (après filtrage)
+// Grouper par catégorie
 $categories = [];
 foreach ($produits as $produit) {
     $cat = $produit['CATEGORIE'];
