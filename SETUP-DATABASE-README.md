@@ -6,9 +6,9 @@
 
 ```php
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'visuprint_ecommerce'); // À créer
-define('DB_USER', 'votre_user');          // Votre user MySQL
-define('DB_PASS', 'votre_password');      // Votre mot de passe
+define('DB_NAME', 'ispy2055_imprixo_ecommerce'); // Votre base de données
+define('DB_USER', 'votre_user');                  // Votre user MySQL
+define('DB_PASS', 'votre_password');              // Votre mot de passe
 ```
 
 ## Étape 2 : Créer la base de données
@@ -16,7 +16,7 @@ define('DB_PASS', 'votre_password');      // Votre mot de passe
 Dans phpMyAdmin ou MySQL :
 
 ```sql
-CREATE DATABASE visuprint_ecommerce CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE ispy2055_imprixo_ecommerce CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
 ## Étape 3 : Importer la structure
@@ -24,18 +24,35 @@ CREATE DATABASE visuprint_ecommerce CHARACTER SET utf8mb4 COLLATE utf8mb4_unicod
 Exécutez le fichier SQL :
 
 ```bash
-mysql -u votre_user -p visuprint_ecommerce < /admin/setup-database.sql
+mysql -u votre_user -p ispy2055_imprixo_ecommerce < /admin/setup-database.sql
 ```
 
 Ou via phpMyAdmin :
-1. Sélectionnez la base `visuprint_ecommerce`
+1. Sélectionnez la base `ispy2055_imprixo_ecommerce`
 2. Onglet "Importer"
 3. Choisir `/admin/setup-database.sql`
 4. Cliquez sur "Exécuter"
 
-## Étape 4 : Importer les produits depuis CSV
+## Étape 4 : Mise à jour de la base de données (MIGRATION)
 
-Exécutez le script d'import :
+⚠️ **SI VOUS AVEZ DÉJÀ VOS PRODUITS :** Utilisez le script de migration au lieu de l'import CSV
+
+### Option A : Vous avez déjà des produits (MIGRATION)
+
+Exécutez le script de migration dans le navigateur :
+```
+https://votre-domaine.com/admin/executer-migration.php
+```
+
+Ce script va :
+- ✅ Ajouter les nouvelles colonnes (image_url, actif, SEO, etc.)
+- ✅ Créer les nouvelles tables (finitions, promotions, formats, historique)
+- ✅ Créer les finitions par défaut selon vos catégories
+- ✅ **CONSERVER tous vos produits existants**
+
+### Option B : Base de données vide (IMPORT CSV)
+
+Si vous n'avez PAS encore de produits, utilisez l'import CSV :
 
 ```bash
 cd /admin
@@ -45,16 +62,6 @@ php import-csv-to-database.php
 Ou dans le navigateur :
 ```
 https://votre-domaine.com/admin/import-csv-to-database.php
-```
-
-Vous devriez voir :
-```
-✓ FX-2MM - Forex 2mm (PVC Foam)
-✓ FX-3MM - Forex 3mm (PVC Foam)
-...
-=== RÉSUMÉ ===
-✓ Produits importés: 54
-❌ Erreurs: 0
 ```
 
 ## Étape 5 : Connexion Admin
@@ -149,7 +156,7 @@ DELETE /api/produits-api.php?id=123     # Supprimer produit
 Pour sauvegarder :
 
 ```bash
-mysqldump -u votre_user -p visuprint_ecommerce > backup_$(date +%Y%m%d).sql
+mysqldump -u votre_user -p ispy2055_imprixo_ecommerce > backup_$(date +%Y%m%d).sql
 ```
 
 ## Support
