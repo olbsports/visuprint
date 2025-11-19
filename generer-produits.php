@@ -114,7 +114,7 @@ function genererPageProduitHTML($p) {
         'Personnalisé' => ['w' => 100, 'h' => 100, 'cat' => 'custom']
     ];
 
-    return <<<HTML
+    $html = <<<HTML
 <!DOCTYPE html>
 <html lang="fr">
 <head>
