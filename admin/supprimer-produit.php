@@ -1,6 +1,6 @@
 <?php
 /**
- * Supprimer un produit du catalogue
+ * Supprimer un produit du catalogue - Imprixo Admin
  */
 
 require_once __DIR__ . '/auth.php';
