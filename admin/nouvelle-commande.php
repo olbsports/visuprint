@@ -1,7 +1,7 @@
 <?php
 /**
- * Création Commande Manuelle - Imprixo Admin
- * Pour commandes téléphoniques ou sur place
+ * Nouvelle Commande - Imprixo Admin
+ * Création manuelle avec personnalisation des prix
  */
 
 require_once __DIR__ . '/auth.php';
@@ -10,29 +10,31 @@ verifierAdminConnecte();
 $admin = getAdminInfo();
 $db = Database::getInstance();
 
-$error = '';
-$success = '';
+$pageTitle = 'Nouvelle Commande';
 
-// Récupérer la liste des clients pour l'autocomplete
+$error = '';
+
+// Charger clients et produits CSV
 $clients = $db->fetchAll("SELECT id, prenom, nom, email FROM clients ORDER BY nom, prenom");
 
-// Récupérer les produits depuis le CSV
 $produits = [];
 $csvFile = __DIR__ . '/../CATALOGUE_COMPLET_VISUPRINT.csv';
 if (file_exists($csvFile)) {
     $handle = fopen($csvFile, 'r');
     $headers = fgetcsv($handle);
     while ($row = fgetcsv($handle)) {
-        $produits[] = [
-            'code' => $row[0],
-            'nom' => $row[1],
-            'categorie' => $row[2],
-            'prix_0_10' => $row[3],
-            'prix_11_50' => $row[4],
-            'prix_51_100' => $row[5],
-            'prix_101_300' => $row[6],
-            'prix_300_plus' => $row[7],
-        ];
+        if (count($row) >= 8) {
+            $produits[] = [
+                'code' => $row[0],
+                'nom' => $row[1],
+                'categorie' => $row[2],
+                'prix_0_10' => floatval($row[3]),
+                'prix_11_50' => floatval($row[4]),
+                'prix_51_100' => floatval($row[5]),
+                'prix_101_300' => floatval($row[6]),
+                'prix_300_plus' => floatval($row[7]),
+            ];
+        }
     }
     fclose($handle);
 }
@@ -44,13 +46,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $hauteur = (float)$_POST['hauteur'];
     $quantite = (int)$_POST['quantite'];
     $impression = cleanInput($_POST['impression']);
-    $notes = cleanInput($_POST['notes']);
+    $notes = cleanInput($_POST['notes'] ?? '');
 
-    // Validation
+    // NOUVEAUTÉ: Prix personnalisables
+    $prixPersonnalise = isset($_POST['prix_personnalise']) && $_POST['prix_personnalise'] === '1';
+    $prixUnitaireManuel = $prixPersonnalise ? (float)$_POST['prix_unitaire_manuel'] : 0;
+    $remisePourcent = $prixPersonnalise ? (float)($_POST['remise_pourcent'] ?? 0) : 0;
+    $remiseMontant = $prixPersonnalise ? (float)($_POST['remise_montant'] ?? 0) : 0;
+
     if (!$clientId || !$produitCode || !$largeur || !$hauteur || !$quantite) {
         $error = 'Tous les champs obligatoires doivent être remplis';
     } else {
-        // Récupérer le client
         $client = $db->fetchOne("SELECT * FROM clients WHERE id = ?", [$clientId]);
 
         if (!$client) {
@@ -68,21 +74,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!$produit) {
                 $error = 'Produit introuvable';
             } else {
-                // Calculer le prix
+                // Calculer surface
                 $surface = ($largeur * $hauteur) / 10000; // en m²
                 $surfaceTotale = $surface * $quantite;
 
-                // Prix dégressif
-                if ($surfaceTotale > 300) {
-                    $prixUnitaireM2 = $produit['prix_300_plus'];
-                } elseif ($surfaceTotale > 100) {
-                    $prixUnitaireM2 = $produit['prix_101_300'];
-                } elseif ($surfaceTotale > 50) {
-                    $prixUnitaireM2 = $produit['prix_51_100'];
-                } elseif ($surfaceTotale > 10) {
-                    $prixUnitaireM2 = $produit['prix_11_50'];
+                // Prix unitaire
+                if ($prixPersonnalise && $prixUnitaireManuel > 0) {
+                    // Prix manuel saisi
+                    $prixUnitaireM2 = $prixUnitaireManuel;
                 } else {
-                    $prixUnitaireM2 = $produit['prix_0_10'];
+                    // Prix dégressif automatique
+                    if ($surfaceTotale > 300) {
+                        $prixUnitaireM2 = $produit['prix_300_plus'];
+                    } elseif ($surfaceTotale > 100) {
+                        $prixUnitaireM2 = $produit['prix_101_300'];
+                    } elseif ($surfaceTotale > 50) {
+                        $prixUnitaireM2 = $produit['prix_51_100'];
+                    } elseif ($surfaceTotale > 10) {
+                        $prixUnitaireM2 = $produit['prix_11_50'];
+                    } else {
+                        $prixUnitaireM2 = $produit['prix_0_10'];
+                    }
                 }
 
                 // Multiplicateur impression
@@ -94,10 +106,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
 
                 $totalHT = $prixUnitaireM2 * $surface * $quantite * $multiplicateur;
+
+                // Appliquer remises personnalisées
+                if ($prixPersonnalise) {
+                    if ($remisePourcent > 0) {
+                        $totalHT = $totalHT * (1 - $remisePourcent / 100);
+                    }
+                    if ($remiseMontant > 0) {
+                        $totalHT = max(0, $totalHT - $remiseMontant);
+                    }
+                }
+
                 $totalTTC = $totalHT * 1.20;
 
                 // Créer la commande
-                $numeroCommande = 'CMD-' . date('Ymd') . '-' . str_pad(rand(1, 9999), 4, '0', STR_PAD_LEFT);
+                $numeroCommande = 'CMD-' . date('Ymd') . '-' . strtoupper(bin2hex(random_bytes(3)));
 
                 $db->query(
                     "INSERT INTO commandes (
@@ -123,9 +146,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ]
                 );
 
-                $commandeId = $db->getLastInsertId();
+                $commandeId = $db->lastInsertId();
 
-                // Créer la ligne de commande
+                // Créer ligne de commande
                 $db->query(
                     "INSERT INTO lignes_commande (
                         commande_id, produit_code, produit_nom, produit_categorie,
@@ -148,276 +171,200 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
+include __DIR__ . '/includes/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nouvelle Commande - Imprixo Admin</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: #f5f7fa;
-            color: #2c3e50;
-        }
+<?php if ($error): ?>
+    <div class="alert alert-error">✗ <?php echo htmlspecialchars($error); ?></div>
+<?php endif; ?>
 
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px 40px;
-        }
+<div class="top-bar">
+    <div>
+        <h1 class="page-title">➕ Nouvelle Commande Manuelle</h1>
+        <p class="page-subtitle">Créer une commande avec prix personnalisables</p>
+    </div>
+    <div class="top-bar-actions">
+        <a href="/admin/commandes.php" class="btn btn-secondary">← Retour</a>
+    </div>
+</div>
 
-        .back-link {
-            color: white;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            margin-bottom: 10px;
-        }
+<div class="card" style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border-left: 4px solid var(--info);">
+    <div style="display: flex; gap: 12px; align-items: start;">
+        <div style="font-size: 24px;">ℹ️</div>
+        <div>
+            <strong style="color: var(--info);">Commande manuelle</strong>
+            <p style="color: var(--text-secondary); margin-top: 4px; font-size: 14px;">
+                Pour commandes téléphoniques, sur place, ou avec conditions spéciales.
+                Vous pouvez personnaliser les prix et appliquer des remises.
+            </p>
+        </div>
+    </div>
+</div>
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 40px;
-        }
+<form method="POST" id="commandeForm">
+    <!-- Client -->
+    <div class="card">
+        <h2 class="card-title">👤 Sélection du client</h2>
 
-        .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 4px solid #dc3545;
-        }
-
-        .alert-info {
-            background: #d1ecf1;
-            color: #0c5460;
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 4px solid #17a2b8;
-        }
-
-        .section {
-            background: white;
-            border-radius: 12px;
-            padding: 40px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-        }
-
-        .section-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #ecf0f1;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: #555;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: border 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .form-group textarea {
-            min-height: 80px;
-            resize: vertical;
-            font-family: inherit;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .form-grid-3 {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 15px;
-        }
-
-        .btn {
-            padding: 14px 28px;
-            border-radius: 8px;
-            border: none;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-primary {
-            background: #667eea;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #5568d3;
-        }
-
-        .btn-secondary {
-            background: #95a5a6;
-            color: white;
-            margin-left: 10px;
-        }
-
-        .btn-secondary:hover {
-            background: #7f8c8d;
-        }
-
-        .form-footer {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 2px solid #ecf0f1;
-        }
-
-        .required {
-            color: #e74c3c;
-        }
-
-        .help-text {
-            font-size: 13px;
-            color: #7f8c8d;
-            margin-top: 5px;
-        }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <a href="/admin/commandes.php" class="back-link">← Retour aux commandes</a>
-        <h1>📦 Nouvelle commande manuelle</h1>
+        <div class="form-group">
+            <label class="form-label">Client <span style="color: var(--danger);">*</span></label>
+            <select name="client_id" class="form-select" required>
+                <option value="">-- Choisir un client --</option>
+                <?php foreach ($clients as $c): ?>
+                    <option value="<?php echo $c['id']; ?>">
+                        <?php echo htmlspecialchars($c['prenom'] . ' ' . $c['nom'] . ' (' . $c['email'] . ')'); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+            <small style="color: var(--text-muted); font-size: 13px;">
+                <a href="/admin/nouveau-client.php" target="_blank" style="color: var(--primary);">+ Créer un nouveau client</a>
+            </small>
+        </div>
     </div>
 
-    <div class="container">
-        <div class="alert-info">
-            <strong>ℹ️ Commande manuelle</strong><br>
-            Utilisez ce formulaire pour créer une commande pour un client existant (commande téléphonique, sur place, etc.).
-            La commande sera créée avec le statut "Nouveau" et le paiement "En attente".
+    <!-- Produit & Configuration -->
+    <div class="card">
+        <h2 class="card-title">🎨 Produit et Configuration</h2>
+
+        <div class="form-group">
+            <label class="form-label">Produit <span style="color: var(--danger);">*</span></label>
+            <select name="produit_code" class="form-select" required id="produitSelect">
+                <option value="">-- Choisir un produit --</option>
+                <?php
+                $lastCategorie = '';
+                foreach ($produits as $p):
+                    if ($p['categorie'] !== $lastCategorie):
+                        if ($lastCategorie) echo '</optgroup>';
+                        echo '<optgroup label="' . htmlspecialchars($p['categorie']) . '">';
+                        $lastCategorie = $p['categorie'];
+                    endif;
+                ?>
+                    <option value="<?php echo htmlspecialchars($p['code']); ?>"
+                            data-prix-min="<?php echo $p['prix_300_plus']; ?>"
+                            data-prix-max="<?php echo $p['prix_0_10']; ?>">
+                        <?php echo htmlspecialchars($p['nom'] . ' - De ' . $p['prix_300_plus'] . '€ à ' . $p['prix_0_10'] . '€/m²'); ?>
+                    </option>
+                <?php endforeach; ?>
+                <?php if ($lastCategorie) echo '</optgroup>'; ?>
+            </select>
         </div>
 
-        <?php if ($error): ?>
-            <div class="alert-error">✗ <?php echo htmlspecialchars($error); ?></div>
-        <?php endif; ?>
-
-        <form method="POST">
-            <!-- Sélection du client -->
-            <div class="section">
-                <h2 class="section-title">👤 Client</h2>
-
-                <div class="form-group">
-                    <label>Sélectionner un client <span class="required">*</span></label>
-                    <select name="client_id" required>
-                        <option value="">-- Choisir un client --</option>
-                        <?php foreach ($clients as $c): ?>
-                            <option value="<?php echo $c['id']; ?>" <?php echo (isset($_POST['client_id']) && $_POST['client_id'] == $c['id']) ? 'selected' : ''; ?>>
-                                <?php echo htmlspecialchars($c['prenom'] . ' ' . $c['nom'] . ' (' . $c['email'] . ')'); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                    <div class="help-text">Le client doit exister dans la base. <a href="nouveau-client.php" target="_blank">Créer un nouveau client</a></div>
-                </div>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+            <div class="form-group">
+                <label class="form-label">Largeur (cm) <span style="color: var(--danger);">*</span></label>
+                <input type="number" name="largeur" class="form-input" step="0.1" min="10" max="500" value="100" required id="largeurInput">
+                <small style="color: var(--text-muted); font-size: 13px;">Entre 10 et 500 cm</small>
             </div>
 
-            <!-- Configuration du produit -->
-            <div class="section">
-                <h2 class="section-title">🎨 Produit et Configuration</h2>
+            <div class="form-group">
+                <label class="form-label">Hauteur (cm) <span style="color: var(--danger);">*</span></label>
+                <input type="number" name="hauteur" class="form-input" step="0.1" min="10" max="500" value="100" required id="hauteurInput">
+                <small style="color: var(--text-muted); font-size: 13px;">Entre 10 et 500 cm</small>
+            </div>
+        </div>
 
-                <div class="form-group">
-                    <label>Produit <span class="required">*</span></label>
-                    <select name="produit_code" required>
-                        <option value="">-- Choisir un produit --</option>
-                        <?php
-                        $lastCategorie = '';
-                        foreach ($produits as $p):
-                            if ($p['categorie'] !== $lastCategorie):
-                                if ($lastCategorie) echo '</optgroup>';
-                                echo '<optgroup label="' . htmlspecialchars($p['categorie']) . '">';
-                                $lastCategorie = $p['categorie'];
-                            endif;
-                        ?>
-                            <option value="<?php echo htmlspecialchars($p['code']); ?>" <?php echo (isset($_POST['produit_code']) && $_POST['produit_code'] == $p['code']) ? 'selected' : ''; ?>>
-                                <?php echo htmlspecialchars($p['nom'] . ' (' . $p['code'] . ')'); ?>
-                            </option>
-                        <?php endforeach; ?>
-                        <?php if ($lastCategorie) echo '</optgroup>'; ?>
-                    </select>
-                </div>
-
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Largeur (cm) <span class="required">*</span></label>
-                        <input type="number" name="largeur" step="0.1" min="1" value="<?php echo htmlspecialchars($_POST['largeur'] ?? '100'); ?>" required>
-                        <div class="help-text">Entre 10 et 500 cm</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Hauteur (cm) <span class="required">*</span></label>
-                        <input type="number" name="hauteur" step="0.1" min="1" value="<?php echo htmlspecialchars($_POST['hauteur'] ?? '100'); ?>" required>
-                        <div class="help-text">Entre 10 et 500 cm</div>
-                    </div>
-                </div>
-
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Quantité <span class="required">*</span></label>
-                        <input type="number" name="quantite" min="1" value="<?php echo htmlspecialchars($_POST['quantite'] ?? '1'); ?>" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Type d'impression <span class="required">*</span></label>
-                        <select name="impression" required>
-                            <option value="simple">Simple face</option>
-                            <option value="double_meme">Double face - même visuel (×1.5)</option>
-                            <option value="double_different">Double face - visuels différents (×1.8)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Notes internes</label>
-                    <textarea name="notes" placeholder="Notes, remarques, fichiers reçus, etc."><?php echo htmlspecialchars($_POST['notes'] ?? ''); ?></textarea>
-                    <div class="help-text">Ces notes ne seront visibles que par les administrateurs</div>
-                </div>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+            <div class="form-group">
+                <label class="form-label">Quantité <span style="color: var(--danger);">*</span></label>
+                <input type="number" name="quantite" class="form-input" min="1" value="1" required id="quantiteInput">
             </div>
 
-            <div class="form-footer">
-                <button type="submit" class="btn btn-primary">✓ Créer la commande</button>
-                <a href="/admin/commandes.php" class="btn btn-secondary">Annuler</a>
+            <div class="form-group">
+                <label class="form-label">Type d'impression <span style="color: var(--danger);">*</span></label>
+                <select name="impression" class="form-select" required>
+                    <option value="simple">Simple face (×1)</option>
+                    <option value="double_meme">Double face - même visuel (×1.5)</option>
+                    <option value="double_different">Double face - visuels différents (×1.8)</option>
+                </select>
             </div>
-        </form>
+        </div>
+
+        <!-- Surface calculée -->
+        <div style="padding: 16px; background: var(--bg-hover); border-radius: var(--radius-md); margin-top: 16px;">
+            <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 4px;">Surface totale calculée:</div>
+            <div style="font-size: 24px; font-weight: 700; color: var(--primary);" id="surfaceDisplay">1.00 m²</div>
+        </div>
     </div>
-</body>
-</html>
+
+    <!-- NOUVEAUTÉ: Personnalisation Prix -->
+    <div class="card" style="border-left: 4px solid var(--warning);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 class="card-title" style="margin: 0;">💰 Personnalisation des Prix</h2>
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                <input type="checkbox" name="prix_personnalise" value="1" id="prixPersonnaliseCheck" style="width: auto; margin: 0;">
+                <span style="font-weight: 600;">Activer la personnalisation</span>
+            </label>
+        </div>
+
+        <div id="prixPersonnaliseFields" style="display: none;">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                <div class="form-group">
+                    <label class="form-label">Prix unitaire manuel (€/m²)</label>
+                    <input type="number" name="prix_unitaire_manuel" class="form-input" step="0.01" min="0" placeholder="Laisser vide pour auto">
+                    <small style="color: var(--text-muted); font-size: 13px;">Si vide, prix dégressif auto</small>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Remise (%)</label>
+                    <input type="number" name="remise_pourcent" class="form-input" step="0.1" min="0" max="100" placeholder="Ex: 15">
+                    <small style="color: var(--text-muted); font-size: 13px;">Pourcentage de réduction</small>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Remise fixe (€)</label>
+                    <input type="number" name="remise_montant" class="form-input" step="0.01" min="0" placeholder="Ex: 50">
+                    <small style="color: var(--text-muted); font-size: 13px;">Montant en euros</small>
+                </div>
+            </div>
+
+            <div style="padding: 16px; background: #fff3cd; border-left: 4px solid var(--warning); border-radius: var(--radius-md); margin-top: 16px;">
+                <strong style="color: var(--warning);">⚠️ Attention:</strong>
+                <p style="color: var(--text-secondary); margin-top: 4px; font-size: 14px;">
+                    Les remises et prix personnalisés s'appliquent après le calcul automatique.
+                    Utilisez avec précaution pour les conditions commerciales spéciales.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="card">
+        <h2 class="card-title">📝 Notes internes</h2>
+
+        <div class="form-group">
+            <label class="form-label">Notes administrateur</label>
+            <textarea name="notes" class="form-textarea" rows="4" placeholder="Notes, remarques, fichiers reçus, conditions spéciales..."></textarea>
+            <small style="color: var(--text-muted); font-size: 13px;">Visibles uniquement par les administrateurs</small>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div style="display: flex; gap: 12px; justify-content: flex-end;">
+        <a href="/admin/commandes.php" class="btn btn-secondary">Annuler</a>
+        <button type="submit" class="btn btn-primary" style="font-size: 16px;">✓ Créer la commande</button>
+    </div>
+</form>
+
+<script>
+// Calculer surface en temps réel
+function calculateSurface() {
+    const largeur = parseFloat(document.getElementById('largeurInput').value) || 0;
+    const hauteur = parseFloat(document.getElementById('hauteurInput').value) || 0;
+    const quantite = parseInt(document.getElementById('quantiteInput').value) || 1;
+
+    const surface = (largeur * hauteur / 10000) * quantite;
+    document.getElementById('surfaceDisplay').textContent = surface.toFixed(2) + ' m²';
+}
+
+document.getElementById('largeurInput').addEventListener('input', calculateSurface);
+document.getElementById('hauteurInput').addEventListener('input', calculateSurface);
+document.getElementById('quantiteInput').addEventListener('input', calculateSurface);
+
+// Toggle personnalisation prix
+document.getElementById('prixPersonnaliseCheck').addEventListener('change', function() {
+    document.getElementById('prixPersonnaliseFields').style.display = this.checked ? 'block' : 'none';
+});
+</script>
+
+<?php include __DIR__ . '/includes/footer.php'; ?>
