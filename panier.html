@@ -3,367 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panier - Imprixo</title>
+    <title>Mon Panier - Imprixo</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
-
-        * {
-            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
-        }
-
+        * { font-family: 'Roboto', sans-serif; }
+        
         .btn-primary {
-            background: #e63946;
-            transition: all 0.2s ease;
+            background: linear-gradient(135deg, #e63946 0%, #d62839 100%);
+            transition: all 0.3s;
         }
-
         .btn-primary:hover {
-            background: #d62839;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(230, 57, 70, 0.3);
         }
-
         .btn-secondary {
             background: #2b2d42;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
         }
-
         .btn-secondary:hover {
             background: #1a1b2e;
-        }
-
-        .nav-link {
-            position: relative;
-        }
-
-        .nav-link:after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #e63946;
-            transition: width 0.2s ease;
-        }
-
-        .nav-link:hover:after {
-            width: 100%;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 12px;
-            font-size: 12px;
-            font-weight: 600;
-            border-radius: 4px;
-        }
-
-        .badge-green {
-            background: #d1fae5;
-            color: #059669;
-        }
-
-        .cart-badge {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #e63946;
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            font-size: 11px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
     </style>
 </head>
 <body class="bg-gray-50">
-    <div id="root"></div>
+    <div id="header-placeholder"></div>
+    <script>fetch('/includes/header.html').then(r=>r.text()).then(html=>document.getElementById('header-placeholder').innerHTML=html)</script>
 
-    <script type="text/babel">
-        const { useState, useEffect } = React;
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Breadcrumb -->
+        <nav class="text-sm mb-6">
+            <a href="/index.html" class="text-gray-600 hover:text-red-600">Accueil</a>
+            <span class="mx-2 text-gray-400">›</span>
+            <span class="text-gray-900 font-semibold">Mon Panier</span>
+        </nav>
 
-        // Fonction pour obtenir le panier
-        function getCart() {
-            try {
-                return JSON.parse(localStorage.getItem('visuprint_cart') || '[]');
-            } catch {
-                return [];
-            }
-        }
+        <h1 class="text-4xl font-black text-gray-900 mb-8">🛒 Mon Panier</h1>
 
-        // Fonction pour sauvegarder le panier
-        function saveCart(cart) {
-            localStorage.setItem('visuprint_cart', JSON.stringify(cart));
-        }
+        <!-- Panier vide -->
+        <div id="empty-cart" class="hidden text-center py-16 bg-white rounded-xl shadow-lg">
+            <div class="text-6xl mb-4">🛒</div>
+            <h3 class="text-2xl font-black text-gray-900 mb-2">Votre panier est vide</h3>
+            <p class="text-gray-600 mb-6">Ajoutez des produits pour commencer votre commande</p>
+            <a href="/produits.html" class="inline-block btn-primary text-white px-8 py-3 rounded-lg font-bold">
+                Voir nos produits
+            </a>
+        </div>
 
-        // Header
-        function Header({ cartCount }) {
-            return (
-                <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="flex items-center justify-between h-16">
-                            <div className="flex items-center">
-                                <div className="flex-shrink-0">
-                                    <a href="/">
-                                        <span className="text-2xl font-black text-gray-900">Imprixo</span>
-                                        <span className="text-2xl font-black text-red-600">Pro</span>
-                                    </a>
-                                </div>
-                                <nav className="hidden md:ml-10 md:flex md:space-x-8">
-                                    <a href="/" className="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">
-                                        Accueil
-                                    </a>
-                                    <a href="/catalogue.html" className="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">
-                                        Catalogue
-                                    </a>
-                                    <a href="/mon-compte.php" className="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">
-                                        Mon compte
-                                    </a>
-                                </nav>
-                            </div>
-                            <div className="flex items-center space-x-4">
-                                <div className="hidden md:block text-right">
-                                    <div className="text-xs text-gray-500">Service client</div>
-                                    <div className="text-sm font-bold text-gray-900">01 23 45 67 89</div>
-                                </div>
-                                <a href="/panier.html" className="relative btn-secondary text-white px-4 py-2 rounded text-sm font-semibold">
-                                    🛒 Panier
-                                    {cartCount > 0 && (
-                                        <span className="cart-badge">{cartCount}</span>
-                                    )}
-                                </a>
-                            </div>
+        <!-- Panier avec articles -->
+        <div id="cart-content" class="grid lg:grid-cols-3 gap-8">
+            <!-- Liste articles -->
+            <div class="lg:col-span-2 space-y-4" id="cart-items"></div>
+
+            <!-- Résumé commande -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-xl shadow-lg p-6 sticky top-8">
+                    <h2 class="text-2xl font-black text-gray-900 mb-6">Résumé</h2>
+                    
+                    <div class="space-y-3 mb-6 pb-6 border-b">
+                        <div class="flex justify-between text-gray-700">
+                            <span>Sous-total</span>
+                            <span class="font-bold" id="subtotal">0.00€</span>
+                        </div>
+                        <div class="flex justify-between text-gray-700">
+                            <span>TVA (20%)</span>
+                            <span class="font-bold" id="tva">0.00€</span>
+                        </div>
+                        <div class="flex justify-between text-gray-700">
+                            <span>Livraison</span>
+                            <span class="font-bold text-green-600">GRATUITE</span>
                         </div>
                     </div>
-                </header>
-            );
-        }
 
-        // Composant principal
-        function App() {
-            const [cart, setCart] = useState([]);
+                    <div class="flex justify-between text-xl font-black text-gray-900 mb-6">
+                        <span>TOTAL TTC</span>
+                        <span class="text-red-600" id="total">0.00€</span>
+                    </div>
 
-            useEffect(() => {
-                setCart(getCart());
-            }, []);
+                    <button onclick="proceedToCheckout()" class="btn-primary w-full text-white px-6 py-4 rounded-lg font-black text-lg mb-3">
+                        COMMANDER
+                    </button>
 
-            const updateQuantity = (index, quantity) => {
-                const newCart = [...cart];
-                newCart[index].quantity = Math.max(1, quantity);
-                setCart(newCart);
-                saveCart(newCart);
-            };
+                    <button onclick="clearCart()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-lg font-bold transition">
+                        Vider le panier
+                    </button>
 
-            const removeItem = (index) => {
-                const newCart = cart.filter((_, i) => i !== index);
-                setCart(newCart);
-                saveCart(newCart);
-            };
-
-            const clearCart = () => {
-                if (confirm('Êtes-vous sûr de vouloir vider le panier ?')) {
-                    setCart([]);
-                    saveCart([]);
-                }
-            };
-
-            const totalHT = cart.reduce((sum, item) => sum + (item.price * item.quantity / 1.2), 0);
-            const totalTVA = cart.reduce((sum, item) => sum + (item.price * item.quantity - item.price * item.quantity / 1.2), 0);
-            const totalTTC = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-
-            return (
-                <div className="min-h-screen bg-gray-50">
-                    <Header cartCount={cart.length} />
-
-                    <section className="py-12">
-                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                            <h1 className="text-3xl font-black text-gray-900 mb-8">Mon Panier</h1>
-
-                            {cart.length === 0 ? (
-                                <div className="text-center py-16 bg-white rounded-lg">
-                                    <div className="text-6xl mb-4">🛒</div>
-                                    <h3 className="text-xl font-bold text-gray-900 mb-2">
-                                        Votre panier est vide
-                                    </h3>
-                                    <p className="text-gray-600 mb-6">
-                                        Ajoutez des produits pour commencer
-                                    </p>
-                                    <a href="/catalogue.html" className="inline-block btn-primary text-white px-8 py-3 rounded font-semibold">
-                                        Voir le catalogue
-                                    </a>
-                                </div>
-                            ) : (
-                                <div className="grid lg:grid-cols-3 gap-8">
-                                    {/* Liste articles */}
-                                    <div className="lg:col-span-2 space-y-4">
-                                        {cart.map((item, index) => (
-                                            <div key={index} className="bg-white rounded-lg p-6 border border-gray-200">
-                                                <div className="flex items-start justify-between mb-4">
-                                                    <div className="flex-1">
-                                                        <h3 className="font-bold text-gray-900 text-lg mb-1">
-                                                            {item.name}
-                                                        </h3>
-                                                        <p className="text-sm text-gray-600 mb-3">
-                                                            {item.surface} m² ({item.width}×{item.height}cm)
-                                                        </p>
-                                                        <div className="flex flex-wrap gap-2">
-                                                            {item.printSide === 'double' && (
-                                                                <span className="badge badge-green">Double face</span>
-                                                            )}
-                                                            {item.hasEyelets && (
-                                                                <span className="badge badge-green">Œillets</span>
-                                                            )}
-                                                            {item.hasCutting && (
-                                                                <span className="badge badge-green">Découpe</span>
-                                                            )}
-                                                            {item.hasLamination && (
-                                                                <span className="badge badge-green">Lamination</span>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                    <div className="text-right ml-4">
-                                                        <div className="text-2xl font-black text-gray-900 mb-2">
-                                                            {(item.price * item.quantity).toFixed(2)} €
-                                                        </div>
-                                                        <div className="text-xs text-gray-500">TTC</div>
-                                                    </div>
-                                                </div>
-                                                <div className="flex items-center gap-4 pt-4 border-t border-gray-100">
-                                                    <div className="flex items-center gap-2">
-                                                        <span className="text-sm text-gray-600">Quantité:</span>
-                                                        <input
-                                                            type="number"
-                                                            value={item.quantity}
-                                                            onChange={(e) => updateQuantity(index, parseInt(e.target.value) || 1)}
-                                                            className="w-20 px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-red-600 focus:border-transparent"
-                                                            min="1"
-                                                        />
-                                                    </div>
-                                                    <button
-                                                        onClick={() => removeItem(index)}
-                                                        className="text-red-600 hover:text-red-800 text-sm font-bold"
-                                                    >
-                                                        Supprimer
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        ))}
-
-                                        <button
-                                            onClick={clearCart}
-                                            className="btn-secondary text-white px-6 py-3 rounded font-semibold"
-                                        >
-                                            Vider le panier
-                                        </button>
-                                    </div>
-
-                                    {/* Récapitulatif */}
-                                    <div className="lg:col-span-1">
-                                        <div className="bg-white rounded-lg p-6 border border-gray-200 sticky top-24">
-                                            <h3 className="font-bold text-gray-900 mb-4">Récapitulatif</h3>
-
-                                            <div className="space-y-3 mb-4 pb-4 border-b border-gray-200">
-                                                <div className="flex justify-between text-sm">
-                                                    <span className="text-gray-600">Sous-total HT:</span>
-                                                    <span className="font-bold">{totalHT.toFixed(2)} €</span>
-                                                </div>
-                                                <div className="flex justify-between text-sm">
-                                                    <span className="text-gray-600">TVA (20%):</span>
-                                                    <span className="font-bold">{totalTVA.toFixed(2)} €</span>
-                                                </div>
-                                                <div className="flex justify-between text-sm">
-                                                    <span className="text-gray-600">Livraison:</span>
-                                                    <span className="font-bold text-green-600">Gratuite</span>
-                                                </div>
-                                            </div>
-
-                                            <div className="flex justify-between items-center mb-6">
-                                                <span className="text-lg font-bold text-gray-900">Total TTC:</span>
-                                                <span className="text-2xl font-black text-red-600">
-                                                    {totalTTC.toFixed(2)} €
-                                                </span>
-                                            </div>
-
-                                            <a
-                                                href="/checkout.html"
-                                                className="block w-full btn-primary text-white py-4 rounded text-center font-bold text-lg mb-3"
-                                            >
-                                                Valider la commande
-                                            </a>
-
-                                            <a
-                                                href="/catalogue.html"
-                                                className="block w-full text-center px-6 py-3 border-2 border-gray-300 rounded text-gray-700 font-semibold hover:border-red-600"
-                                            >
-                                                Continuer mes achats
-                                            </a>
-
-                                            <div className="mt-6 p-4 bg-gray-50 rounded text-sm text-gray-600">
-                                                <div className="font-bold text-gray-900 mb-2">🚀 Livraison express 48-72h</div>
-                                                <div>✓ Paiement sécurisé Stripe</div>
-                                                <div>✓ Production sous 24-48h</div>
-                                                <div>✓ Qualité garantie</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    </section>
-
-                    {/* Footer */}
-                    <footer className="bg-gray-900 text-gray-300 py-12 mt-12">
-                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                            <div className="grid md:grid-cols-4 gap-8 mb-8">
-                                <div>
-                                    <div className="text-2xl font-black text-white mb-4">
-                                        Imprixo<span className="text-red-600">Pro</span>
-                                    </div>
-                                    <p className="text-sm text-gray-400">
-                                        Impression professionnelle grand format
-                                    </p>
-                                </div>
-                                <div>
-                                    <h4 className="font-bold text-white mb-4 text-sm">Produits</h4>
-                                    <ul className="space-y-2 text-sm">
-                                        <li><a href="#" className="hover:text-white">Panneaux rigides</a></li>
-                                        <li><a href="#" className="hover:text-white">Bâches & textiles</a></li>
-                                        <li><a href="#" className="hover:text-white">Supports aluminium</a></li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h4 className="font-bold text-white mb-4 text-sm">Services</h4>
-                                    <ul className="space-y-2 text-sm">
-                                        <li><a href="#" className="hover:text-white">Conception graphique</a></li>
-                                        <li><a href="#" className="hover:text-white">Installation</a></li>
-                                        <li><a href="#" className="hover:text-white">Livraison express</a></li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h4 className="font-bold text-white mb-4 text-sm">Contact</h4>
-                                    <ul className="space-y-2 text-sm">
-                                        <li className="font-bold text-white">01 23 45 67 89</li>
-                                        <li>contact@imprixo.fr</li>
-                                        <li className="text-gray-400">Du lundi au vendredi<br/>9h-18h</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-500">
-                                © 2025 Imprixo - Tous droits réservés
-                            </div>
-                        </div>
-                    </footer>
+                    <div class="mt-6 text-center text-sm text-gray-600">
+                        <p>✓ Paiement sécurisé</p>
+                        <p>✓ Livraison rapide Europe</p>
+                        <p>✓ Support client dédié</p>
+                    </div>
                 </div>
-            );
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+    <script>fetch('/includes/footer.html').then(r=>r.text()).then(html=>document.getElementById('footer-placeholder').innerHTML=html)</script>
+
+    <script>
+    // Charger le panier
+    function loadCart() {
+        try {
+            return JSON.parse(localStorage.getItem('visuprint_cart') || '[]');
+        } catch {
+            return [];
+        }
+    }
+
+    // Sauvegarder le panier
+    function saveCart(cart) {
+        localStorage.setItem('visuprint_cart', JSON.stringify(cart));
+    }
+
+    // Afficher le panier
+    function displayCart() {
+        const cart = loadCart();
+        const emptyCart = document.getElementById('empty-cart');
+        const cartContent = document.getElementById('cart-content');
+        const cartItems = document.getElementById('cart-items');
+
+        if (cart.length === 0) {
+            emptyCart.classList.remove('hidden');
+            cartContent.classList.add('hidden');
+            return;
         }
 
-        ReactDOM.render(<App />, document.getElementById('root'));
+        emptyCart.classList.add('hidden');
+        cartContent.classList.remove('hidden');
+
+        let html = '';
+        let subtotal = 0;
+
+        cart.forEach((item, index) => {
+            const itemTotal = item.prix || 0;
+            subtotal += itemTotal;
+
+            // Extraire les infos de config
+            const largeur = item.config?.largeur || '-';
+            const hauteur = item.config?.hauteur || '-';
+            const surface = item.config?.surface ? item.config.surface.toFixed(2) : '-';
+            const quantite = item.config?.quantite || 1;
+            const finition = item.config?.finition || 'Standard';
+
+            html += `
+                <div class="bg-white rounded-xl shadow-lg p-6 border-2 border-gray-200">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex-1">
+                            <h3 class="text-xl font-black text-gray-900 mb-2">${item.nom}</h3>
+                            <div class="space-y-1 text-sm text-gray-600">
+                                <p>📐 Dimensions: <strong>${largeur}×${hauteur} cm</strong> (${surface} m²)</p>
+                                <p>📦 Quantité: <strong>${quantite}</strong></p>
+                                <p>🎨 Finition: <strong>${finition}</strong></p>
+                            </div>
+                        </div>
+                        <div class="text-right ml-4">
+                            <div class="text-2xl font-black text-red-600 mb-1">${itemTotal.toFixed(2)}€</div>
+                            <div class="text-xs text-gray-500">TTC</div>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 pt-4 border-t">
+                        <button onclick="removeItem(${index})" class="flex-1 bg-red-100 hover:bg-red-200 text-red-800 px-4 py-2 rounded-lg font-bold transition">
+                            🗑️ Supprimer
+                        </button>
+                        <a href="/produit/${item.id}.html" class="flex-1 bg-blue-100 hover:bg-blue-200 text-blue-800 px-4 py-2 rounded-lg font-bold text-center transition">
+                            ✏️ Modifier
+                        </a>
+                    </div>
+                </div>
+            `;
+        });
+
+        cartItems.innerHTML = html;
+
+        // Calculer totaux
+        const tva = subtotal * 0.20;
+        const total = subtotal;
+
+        document.getElementById('subtotal').textContent = (subtotal / 1.20).toFixed(2) + '€';
+        document.getElementById('tva').textContent = tva.toFixed(2) + '€';
+        document.getElementById('total').textContent = total.toFixed(2) + '€';
+    }
+
+    // Supprimer un article
+    function removeItem(index) {
+        const cart = loadCart();
+        cart.splice(index, 1);
+        saveCart(cart);
+        displayCart();
+    }
+
+    // Vider le panier
+    function clearCart() {
+        if (confirm('Êtes-vous sûr de vouloir vider votre panier ?')) {
+            saveCart([]);
+            displayCart();
+        }
+    }
+
+    // Passer à la commande
+    function proceedToCheckout() {
+        const cart = loadCart();
+        if (cart.length === 0) {
+            alert('Votre panier est vide !');
+            return;
+        }
+
+        // Vérifier si client connecté
+        const client = JSON.parse(localStorage.getItem('client') || 'null');
+        if (!client) {
+            if (confirm('Vous devez être connecté pour commander. Voulez-vous vous connecter maintenant ?')) {
+                window.location.href = '/login-client.html?redirect=panier.html';
+            }
+            return;
+        }
+
+        // Rediriger vers la page de commande
+        window.location.href = '/commande.html';
+    }
+
+    // Charger au démarrage
+    displayCart();
     </script>
 </body>
 </html>

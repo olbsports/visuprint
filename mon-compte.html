@@ -147,7 +147,7 @@
     <script>
         // Vérifier si client connecté
         const client = JSON.parse(localStorage.getItem('client') || 'null');
-        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        const cart = JSON.parse(localStorage.getItem('visuprint_cart') || '[]');
 
         if (!client) {
             document.getElementById('not-logged-alert').style.display = 'block';
@@ -178,7 +178,7 @@
 
             document.getElementById('stat-commandes').textContent = commandesClient.length;
 
-            const totalDepense = commandesClient.reduce((sum, c) => sum + (c.total || 0), 0);
+            const totalDepense = commandesClient.reduce((sum, c) => sum + (c.total_ttc || 0), 0);
             document.getElementById('stat-total').textContent = totalDepense.toFixed(2) + '€';
 
             document.getElementById('stat-panier').textContent = cart.length;
@@ -186,21 +186,30 @@
             // Afficher les commandes
             if (commandesClient.length > 0) {
                 let html = '';
-                commandesClient.forEach(cmd => {
+                commandesClient.reverse().forEach(cmd => {
+                    const badgeColor = cmd.statut === 'En attente' ? 'yellow' :
+                                      cmd.statut === 'Validée' ? 'green' :
+                                      cmd.statut === 'En production' ? 'blue' : 'gray';
+
                     html += `
                         <div class="border-2 border-gray-200 rounded-lg p-6 mb-4 hover:border-red-600 transition">
                             <div class="flex justify-between items-center mb-4">
                                 <div>
-                                    <div class="text-lg font-black">Commande #${cmd.id}</div>
-                                    <div class="text-sm text-gray-600">${new Date(cmd.date).toLocaleDateString('fr-FR')}</div>
+                                    <div class="text-lg font-black">${cmd.id}</div>
+                                    <div class="text-sm text-gray-600">${new Date(cmd.date).toLocaleDateString('fr-FR', {day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'})}</div>
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-2xl font-black text-red-600">${cmd.total.toFixed(2)}€</div>
-                                    <span class="badge badge-${cmd.statut}">${cmd.statut_label || cmd.statut}</span>
+                                    <div class="text-2xl font-black text-red-600">${cmd.total_ttc.toFixed(2)}€</div>
+                                    <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-${badgeColor}-100 text-${badgeColor}-800 mt-1">${cmd.statut}</span>
                                 </div>
                             </div>
-                            <div class="text-sm text-gray-600">
-                                ${cmd.items.length} article(s)
+                            <div class="text-sm text-gray-700 mb-2">
+                                <strong>${cmd.articles.length} article(s)</strong> • Livraison: ${cmd.livraison.ville}, ${cmd.livraison.pays}
+                            </div>
+                            <div class="flex gap-2 mt-4">
+                                <a href="/confirmation.html?id=${cmd.id}" class="flex-1 bg-blue-100 hover:bg-blue-200 text-blue-800 px-4 py-2 rounded-lg font-bold text-center transition text-sm">
+                                    Voir détails
+                                </a>
                             </div>
                         </div>
                     `;
