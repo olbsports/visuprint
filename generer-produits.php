@@ -128,7 +128,7 @@ function genererPageProduitHTML($p) {
         <div class="grid lg:grid-cols-3 gap-8">
             <div class="lg:col-span-2 space-y-6">
                 <div class="bg-white rounded-xl shadow-lg p-6">
-                    <img src="/assets/products/$id.jpg" alt="$nom" class="w-full h-96 object-cover rounded-lg mb-4" onerror="this.src='https://placehold.co/800x600/667eea/white?text='+encodeURIComponent('$nom')">
+                    <img src="/assets/products/$id.jpg" alt="$nom" class="w-full h-96 object-cover rounded-lg mb-4" onerror="this.src='https://placehold.co/800x600/e63946/white?text='+encodeURIComponent('$nom')">
                     <div class="grid grid-cols-4 gap-2">
                         <img src="/assets/products/$id-1.jpg" alt="Vue 1" class="w-full h-20 object-cover rounded" onerror="this.style.display='none'">
                         <img src="/assets/products/$id-2.jpg" alt="Vue 2" class="w-full h-20 object-cover rounded" onerror="this.style.display='none'">
