@@ -30,7 +30,8 @@ try {
                 pr.id as promo_id, pr.type as promo_type, pr.valeur as promo_valeur,
                 pr.prix_special as promo_prix, pr.titre as promo_titre, pr.badge_texte as promo_badge,
                 pr.date_debut as promo_date_debut, pr.date_fin as promo_date_fin,
-                pr.afficher_countdown as promo_countdown, pr.actif as promo_actif
+                pr.afficher_countdown as promo_countdown, pr.actif as promo_actif,
+                pr.condition_surface_min, pr.condition_surface_max, pr.condition_quantite_min
          FROM produits p
          LEFT JOIN promotions pr ON pr.produit_id = p.id AND pr.actif = 1
          WHERE p.code = ?",
