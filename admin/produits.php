@@ -20,7 +20,7 @@ $recherche = isset($_GET['q']) ? trim($_GET['q']) : '';
 $filtreCategorie = isset($_GET['cat']) ? $_GET['cat'] : '';
 
 // Charger produits depuis BDD
-$where = ['actif = 1'];
+$where = ['p.actif = 1'];
 $params = [];
 
 if ($recherche) {
