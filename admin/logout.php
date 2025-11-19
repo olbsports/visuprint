@@ -1,6 +1,6 @@
 <?php
 /**
- * Déconnexion Admin - VisuPrint Pro
+ * Déconnexion Admin - Imprixo Admin
  */
 
 require_once __DIR__ . '/auth.php';

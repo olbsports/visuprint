@@ -1,6 +1,6 @@
 <?php
 /**
- * Script d'import CSV vers base de données
+ * Script d'import CSV vers base de données - Imprixo Admin
  * À exécuter UNE SEULE FOIS pour importer les produits
  */
 
