@@ -14,71 +14,100 @@ $pageTitle = 'Paramètres & Réglages';
 $success = '';
 $error = '';
 
-// Paramètres par défaut
-$params = [
-    'site_nom' => 'Imprixo',
-    'site_email' => 'contact@imprixo.fr',
-    'site_telephone' => '01 23 45 67 89',
-    'site_adresse' => '',
-    'tva_taux' => 20,
-    'livraison_gratuite_seuil' => 200,
-    'delai_livraison_standard' => 3,
-    'fonds_perdu_cm' => 0.3,
-    'zone_securite_cm' => 0.3,
-    'min_commande_ht' => 25,
-    'stripe_public_key' => '',
-    'stripe_secret_key' => '',
-    'email_expediteur' => 'noreply@imprixo.fr',
-    'email_notifications' => 'admin@imprixo.fr',
-    'maintenance_mode' => 0,
-    'inscription_active' => 1,
-    'remise_quantite_active' => 1
-];
-
-// Charger depuis JSON
-$paramsFile = __DIR__ . '/../config/parametres.json';
-if (file_exists($paramsFile)) {
-    $savedParams = json_decode(file_get_contents($paramsFile), true);
-    if ($savedParams) {
-        $params = array_merge($params, $savedParams);
+// Charger paramètres depuis BDD
+$params = [];
+try {
+    $paramsData = $db->fetchAll("SELECT cle, valeur, type FROM parametres");
+    foreach ($paramsData as $p) {
+        // Convertir selon le type
+        switch ($p['type']) {
+            case 'int':
+                $params[$p['cle']] = (int)$p['valeur'];
+                break;
+            case 'float':
+                $params[$p['cle']] = (float)$p['valeur'];
+                break;
+            case 'bool':
+                $params[$p['cle']] = (bool)$p['valeur'];
+                break;
+            default:
+                $params[$p['cle']] = $p['valeur'];
+        }
     }
+} catch (Exception $e) {
+    $error = "Erreur chargement paramètres : " . $e->getMessage() . " - <a href='/admin/migrer-parametres-bdd.php' style='color: var(--primary); text-decoration: underline;'>Exécuter la migration</a>";
+}
+
+// Valeurs par défaut si vide
+if (empty($params)) {
+    $params = [
+        'site_nom' => 'Imprixo',
+        'site_email' => 'contact@imprixo.fr',
+        'site_telephone' => '01 23 45 67 89',
+        'site_adresse' => '',
+        'tva_taux' => 20,
+        'livraison_gratuite_seuil' => 200,
+        'delai_livraison_standard' => 3,
+        'fonds_perdu_cm' => 0.3,
+        'zone_securite_cm' => 0.3,
+        'min_commande_ht' => 25,
+        'stripe_public_key' => '',
+        'stripe_secret_key' => '',
+        'email_expediteur' => 'noreply@imprixo.fr',
+        'email_notifications' => 'admin@imprixo.fr',
+        'maintenance_mode' => 0,
+        'inscription_active' => 1,
+        'remise_quantite_active' => 1
+    ];
 }
 
 // Sauvegarder
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     switch ($_POST['action']) {
         case 'save_params':
-            $newParams = [
-                'site_nom' => cleanInput($_POST['site_nom']),
-                'site_email' => cleanInput($_POST['site_email']),
-                'site_telephone' => cleanInput($_POST['site_telephone']),
-                'site_adresse' => cleanInput($_POST['site_adresse']),
-                'tva_taux' => (float)$_POST['tva_taux'],
-                'livraison_gratuite_seuil' => (float)$_POST['livraison_gratuite_seuil'],
-                'delai_livraison_standard' => (int)$_POST['delai_livraison_standard'],
-                'fonds_perdu_cm' => (float)$_POST['fonds_perdu_cm'],
-                'zone_securite_cm' => (float)$_POST['zone_securite_cm'],
-                'min_commande_ht' => (float)$_POST['min_commande_ht'],
-                'stripe_public_key' => cleanInput($_POST['stripe_public_key']),
-                'stripe_secret_key' => cleanInput($_POST['stripe_secret_key']),
-                'email_expediteur' => cleanInput($_POST['email_expediteur']),
-                'email_notifications' => cleanInput($_POST['email_notifications']),
-                'maintenance_mode' => isset($_POST['maintenance_mode']) ? 1 : 0,
-                'inscription_active' => isset($_POST['inscription_active']) ? 1 : 0,
-                'remise_quantite_active' => isset($_POST['remise_quantite_active']) ? 1 : 0
-            ];
+            try {
+                $newParams = [
+                    'site_nom' => ['value' => cleanInput($_POST['site_nom']), 'type' => 'string'],
+                    'site_email' => ['value' => cleanInput($_POST['site_email']), 'type' => 'string'],
+                    'site_telephone' => ['value' => cleanInput($_POST['site_telephone']), 'type' => 'string'],
+                    'site_adresse' => ['value' => cleanInput($_POST['site_adresse']), 'type' => 'string'],
+                    'tva_taux' => ['value' => (float)$_POST['tva_taux'], 'type' => 'float'],
+                    'livraison_gratuite_seuil' => ['value' => (float)$_POST['livraison_gratuite_seuil'], 'type' => 'float'],
+                    'delai_livraison_standard' => ['value' => (int)$_POST['delai_livraison_standard'], 'type' => 'int'],
+                    'fonds_perdu_cm' => ['value' => (float)$_POST['fonds_perdu_cm'], 'type' => 'float'],
+                    'zone_securite_cm' => ['value' => (float)$_POST['zone_securite_cm'], 'type' => 'float'],
+                    'min_commande_ht' => ['value' => (float)$_POST['min_commande_ht'], 'type' => 'float'],
+                    'stripe_public_key' => ['value' => cleanInput($_POST['stripe_public_key']), 'type' => 'string'],
+                    'stripe_secret_key' => ['value' => cleanInput($_POST['stripe_secret_key']), 'type' => 'string'],
+                    'email_expediteur' => ['value' => cleanInput($_POST['email_expediteur']), 'type' => 'string'],
+                    'email_notifications' => ['value' => cleanInput($_POST['email_notifications']), 'type' => 'string'],
+                    'maintenance_mode' => ['value' => isset($_POST['maintenance_mode']) ? 1 : 0, 'type' => 'bool'],
+                    'inscription_active' => ['value' => isset($_POST['inscription_active']) ? 1 : 0, 'type' => 'bool'],
+                    'remise_quantite_active' => ['value' => isset($_POST['remise_quantite_active']) ? 1 : 0, 'type' => 'bool']
+                ];
 
-            $configDir = __DIR__ . '/../config';
-            if (!is_dir($configDir)) {
-                mkdir($configDir, 0755, true);
-            }
+                // Sauvegarder dans la BDD
+                foreach ($newParams as $cle => $data) {
+                    $existing = $db->fetchOne("SELECT id FROM parametres WHERE cle = ?", [$cle]);
 
-            if (file_put_contents($paramsFile, json_encode($newParams, JSON_PRETTY_PRINT))) {
-                $params = $newParams;
-                $success = 'Paramètres sauvegardés avec succès';
+                    if ($existing) {
+                        $db->query(
+                            "UPDATE parametres SET valeur = ?, type = ?, updated_at = NOW() WHERE cle = ?",
+                            [$data['value'], $data['type'], $cle]
+                        );
+                    } else {
+                        $db->query(
+                            "INSERT INTO parametres (cle, valeur, type) VALUES (?, ?, ?)",
+                            [$cle, $data['value'], $data['type']]
+                        );
+                    }
+                    $params[$cle] = $data['value'];
+                }
+
+                $success = '✅ Paramètres sauvegardés dans la base de données';
                 logAdminAction($admin['id'], 'update_params', 'Mise à jour des paramètres');
-            } else {
-                $error = 'Erreur lors de la sauvegarde';
+            } catch (Exception $e) {
+                $error = 'Erreur lors de la sauvegarde : ' . $e->getMessage();
             }
             break;
 
