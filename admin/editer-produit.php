@@ -232,14 +232,32 @@ try {
 } catch (Exception $e) {
     // Erreur silencieuse, on continuera avec une liste vide
 }
+
+$pageTitle = 'Éditer un produit';
+include __DIR__ . '/includes/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Éditer un produit - Imprixo Admin</title>
-    <style>
+
+<?php if ($error): ?>
+    <div class="alert alert-error">✗ <?php echo $error; ?></div>
+<?php endif; ?>
+
+<?php if ($success): ?>
+    <div class="alert alert-success">✓ <?php echo $success; ?></div>
+<?php endif; ?>
+
+<div class="top-bar">
+    <div>
+        <h1 class="page-title">✏️ Éditer un produit</h1>
+        <p class="page-subtitle">Modification : <?php echo htmlspecialchars($produit['nom_produit']); ?></p>
+    </div>
+    <div class="top-bar-actions">
+        <a href="/admin/produits.php" class="btn btn-secondary">← Retour aux produits</a>
+    </div>
+</div>
+
+<div class="card">
+    <form method="POST" action="">
+        <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
