@@ -323,31 +323,11 @@ function genererPageProduitHTML($p) {
                         <div class="text-xs text-red-700 mt-1">sur les grandes quantités</div>
                     </div>
 
-                    <!-- Dimensions personnalisées toujours visibles -->
-                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                        <h3 class="text-sm font-bold text-gray-900 mb-3"><i class="fas fa-ruler-combined text-blue-600"></i> Dimensions personnalisées</h3>
-                        <div class="grid grid-cols-2 gap-2 mb-2">
-                            <div>
-                                <label class="text-xs text-gray-600 block mb-1">Largeur (cm)</label>
-                                <input type="number" id="width" value="100" min="1" max="500" class="w-full px-2 py-2 border border-gray-300 rounded text-sm">
-                            </div>
-                            <div>
-                                <label class="text-xs text-gray-600 block mb-1">Hauteur (cm)</label>
-                                <input type="number" id="height" value="100" min="1" max="500" class="w-full px-2 py-2 border border-gray-300 rounded text-sm">
-                            </div>
-                        </div>
-                        <div class="text-xs text-gray-600 mb-2"><i class="fas fa-info-circle text-blue-600"></i> Format max : $formatMax cm</div>
-                        <div class="bg-white rounded p-2 border border-blue-200">
-                            <div class="text-xs text-gray-600">Surface : <span class="font-black text-gray-900" id="surface">1.00 m²</span></div>
-                            <div class="text-xs text-gray-600">Prix estimé : <span class="font-black text-red-600" id="prix-estime">{$prix010}€</span></div>
-                        </div>
-                    </div>
-
-                    <button onclick="window.location.href='/contact.php?produit=$id'" class="w-full btn-primary text-white py-4 rounded-lg font-black text-lg mb-3 shadow-lg flex items-center justify-center gap-2">
+                    <button class="w-full btn-primary text-white py-4 rounded-lg font-black text-lg mb-3 shadow-lg flex items-center justify-center gap-2">
                         <i class="fas fa-shopping-cart"></i> CONFIGURER & COMMANDER
                     </button>
 
-                    <button onclick="window.location.href='/contact.php?devis=1&produit=$id'" class="w-full border-2 border-gray-300 text-gray-700 py-3 rounded-lg font-bold hover:border-red-600 hover:text-red-600 transition mb-6 flex items-center justify-center gap-2">
+                    <button class="w-full border-2 border-gray-300 text-gray-700 py-3 rounded-lg font-bold hover:border-red-600 hover:text-red-600 transition mb-6 flex items-center justify-center gap-2">
                         <i class="fas fa-file-invoice"></i> Demander un devis
                     </button>
 
@@ -381,41 +361,8 @@ function genererPageProduitHTML($p) {
         </div>
     </div>
 
-    <!-- Section Applications par secteur -->
-    <section class="bg-white py-12 mt-12">
-        <div class="max-w-7xl mx-auto px-4">
-            <h2 class="text-3xl font-black text-gray-900 mb-8 text-center"><i class="fas fa-briefcase text-blue-600"></i> Applications professionnelles</h2>
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="bg-gray-50 rounded-lg p-6 border-l-4 border-blue-600">
-                    <h3 class="font-bold text-gray-900 mb-2 flex items-center gap-2"><i class="fas fa-store text-blue-600"></i> Commerce & Retail</h3>
-                    <p class="text-sm text-gray-700">Signalétique magasin, PLV, vitrines, affichage prix</p>
-                </div>
-                <div class="bg-gray-50 rounded-lg p-6 border-l-4 border-green-600">
-                    <h3 class="font-bold text-gray-900 mb-2 flex items-center gap-2"><i class="fas fa-users text-green-600"></i> Salons & Événements</h3>
-                    <p class="text-sm text-gray-700">Stands, kakémonos, backdrops, panneaux expo</p>
-                </div>
-                <div class="bg-gray-50 rounded-lg p-6 border-l-4 border-orange-600">
-                    <h3 class="font-bold text-gray-900 mb-2 flex items-center gap-2"><i class="fas fa-hard-hat text-orange-600"></i> BTP & Construction</h3>
-                    <p class="text-sm text-gray-700">Panneaux chantier, signalisation, permis construire</p>
-                </div>
-                <div class="bg-gray-50 rounded-lg p-6 border-l-4 border-purple-600">
-                    <h3 class="font-bold text-gray-900 mb-2 flex items-center gap-2"><i class="fas fa-home text-purple-600"></i> Immobilier</h3>
-                    <p class="text-sm text-gray-700">Panneaux A VENDRE/LOUER, vitrophanies, mandats</p>
-                </div>
-                <div class="bg-gray-50 rounded-lg p-6 border-l-4 border-red-600">
-                    <h3 class="font-bold text-gray-900 mb-2 flex items-center gap-2"><i class="fas fa-bullhorn text-red-600"></i> Communication & Pub</h3>
-                    <p class="text-sm text-gray-700">Affichage extérieur, campagnes, street marketing</p>
-                </div>
-                <div class="bg-gray-50 rounded-lg p-6 border-l-4 border-yellow-600">
-                    <h3 class="font-bold text-gray-900 mb-2 flex items-center gap-2"><i class="fas fa-utensils text-yellow-600"></i> CHR & Restauration</h3>
-                    <p class="text-sm text-gray-700">Menus, cartes, terrasses, stop-trottoirs</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Section SEO enrichie -->
-    <section class="bg-gray-100 py-12 mt-0">
+    <section class="bg-gray-100 py-12 mt-12">
         <div class="max-w-7xl mx-auto px-4">
             <div class="bg-white rounded-xl shadow-md p-8">
                 <h2 class="text-3xl font-black text-gray-900 mb-6">
@@ -460,9 +407,6 @@ function genererPageProduitHTML($p) {
                         <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">livraison europe</span>
                         <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">$certification</span>
                         <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">prix dégressifs</span>
-                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">signalétique</span>
-                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">PLV</span>
-                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">panneaux</span>
                     </div>
                 </div>
             </div>
@@ -545,44 +489,8 @@ function genererPageProduitHTML($p) {
         nom: '$nom',
         prix_min: $prix300plus,
         prix_max: $prix010,
-        delai: $delai,
-        prix: {
-            p0_10: $prix010,
-            p11_50: $prix1150,
-            p51_100: $prix51100,
-            p101_300: $prix101300,
-            p300plus: $prix300plus
-        }
+        delai: $delai
     };
-
-    // Calculateur dimensions et prix
-    document.addEventListener('DOMContentLoaded', function() {
-        const widthInput = document.getElementById('width');
-        const heightInput = document.getElementById('height');
-        const surfaceDisplay = document.getElementById('surface');
-        const prixDisplay = document.getElementById('prix-estime');
-
-        function calculatePrice() {
-            const width = parseFloat(widthInput.value) || 100;
-            const height = parseFloat(heightInput.value) || 100;
-            const surfaceM2 = (width * height) / 10000;
-            surfaceDisplay.textContent = surfaceM2.toFixed(2) + ' m²';
-
-            let prixM2;
-            if (surfaceM2 <= 10) prixM2 = window.productData.prix.p0_10;
-            else if (surfaceM2 <= 50) prixM2 = window.productData.prix.p11_50;
-            else if (surfaceM2 <= 100) prixM2 = window.productData.prix.p51_100;
-            else if (surfaceM2 <= 300) prixM2 = window.productData.prix.p101_300;
-            else prixM2 = window.productData.prix.p300plus;
-
-            const prixTotal = (surfaceM2 * prixM2).toFixed(2);
-            prixDisplay.textContent = prixTotal + '€';
-        }
-
-        calculatePrice();
-        widthInput.addEventListener('input', calculatePrice);
-        heightInput.addEventListener('input', calculatePrice);
-    });
     </script>
 </body>
 </html>
