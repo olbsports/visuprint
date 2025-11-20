@@ -14,14 +14,16 @@ require_once __DIR__ . '/api/config.php';
 /**
  * Nettoyer les données utilisateur
  */
-function cleanInput($data) {
-    if (is_null($data)) {
-        return '';
+if (!function_exists('cleanInput')) {
+    function cleanInput($data) {
+        if (is_null($data)) {
+            return '';
+        }
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+        return $data;
     }
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
-    return $data;
 }
 
 /**

@@ -218,11 +218,13 @@ function envoyerEmail($destinataire, $sujet, $message, $html = true) {
 /**
  * Nettoyer les entrées
  */
-function cleanInput($data) {
-    if (is_array($data)) {
-        return array_map('cleanInput', $data);
+if (!function_exists('cleanInput')) {
+    function cleanInput($data) {
+        if (is_array($data)) {
+            return array_map('cleanInput', $data);
+        }
+        return htmlspecialchars(strip_tags(trim($data)), ENT_QUOTES, 'UTF-8');
     }
-    return htmlspecialchars(strip_tags(trim($data)), ENT_QUOTES, 'UTF-8');
 }
 
 /**
