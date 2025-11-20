@@ -321,7 +321,7 @@
                         <div class="font-bold text-green-900 mb-2">
                             <i class="fas fa-globe-europe"></i> Fabrication européenne
                         </div>
-                        <p class="text-sm text-green-800">Produit fabriqué en Europe par <strong>OLB SPORTS OOD</strong>. Livraison Europe en 3 jours.</p>
+                        <p class="text-sm text-green-800">Fabrication européenne certifiée. Livraison dans toute l'Europe en 3 jours ouvrés.</p>
                     </div>
                 </div>
 
@@ -378,45 +378,6 @@
                                 <i class="fas fa-shipping-fast"></i> Délai
                             </div>
                             <div class="text-lg font-black text-gray-900">3 jours</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- CAS D'UTILISATION -->
-                <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-6">
-                    <h2 class="text-2xl font-black text-gray-900 mb-6">
-                        <i class="fas fa-briefcase"></i> Cas d'utilisation professionnels
-                    </h2>
-                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div class="bg-gray-50 border-2 border-gray-200 rounded-lg p-5">
-                            <div class="text-3xl mb-3"><i class="fas fa-store text-red-600"></i></div>
-                            <h3 class="font-bold text-gray-900 mb-2">Commerce & Retail</h3>
-                            <p class="text-sm text-gray-700">PLV, vitrines, signalétique magasin</p>
-                        </div>
-                        <div class="bg-gray-50 border-2 border-gray-200 rounded-lg p-5">
-                            <div class="text-3xl mb-3"><i class="fas fa-handshake text-blue-600"></i></div>
-                            <h3 class="font-bold text-gray-900 mb-2">Salons & Événements</h3>
-                            <p class="text-sm text-gray-700">Stands, kakemonos, roll-ups</p>
-                        </div>
-                        <div class="bg-gray-50 border-2 border-gray-200 rounded-lg p-5">
-                            <div class="text-3xl mb-3"><i class="fas fa-hard-hat text-orange-600"></i></div>
-                            <h3 class="font-bold text-gray-900 mb-2">BTP & Construction</h3>
-                            <p class="text-sm text-gray-700">Panneaux chantier, signalisation</p>
-                        </div>
-                        <div class="bg-gray-50 border-2 border-gray-200 rounded-lg p-5">
-                            <div class="text-3xl mb-3"><i class="fas fa-building text-green-600"></i></div>
-                            <h3 class="font-bold text-gray-900 mb-2">Immobilier</h3>
-                            <p class="text-sm text-gray-700">A VENDRE/À LOUER, affichage</p>
-                        </div>
-                        <div class="bg-gray-50 border-2 border-gray-200 rounded-lg p-5">
-                            <div class="text-3xl mb-3"><i class="fas fa-bullhorn text-purple-600"></i></div>
-                            <h3 class="font-bold text-gray-900 mb-2">Communication</h3>
-                            <p class="text-sm text-gray-700">Campagnes pub, événementiel</p>
-                        </div>
-                        <div class="bg-gray-50 border-2 border-gray-200 rounded-lg p-5">
-                            <div class="text-3xl mb-3"><i class="fas fa-utensils text-yellow-600"></i></div>
-                            <h3 class="font-bold text-gray-900 mb-2">CHR & Restauration</h3>
-                            <p class="text-sm text-gray-700">Menus, affichage terrasse</p>
                         </div>
                     </div>
                 </div>
@@ -528,16 +489,20 @@
     <script>fetch('/includes/footer.html').then(r=>r.text()).then(html=>document.getElementById('footer-placeholder').innerHTML=html)</script>
 
     <script>
-    // Toggle specs collapsible
+    // Toggle specs collapsible - Fonction globale
     function toggleSpecs() {
         const content = document.getElementById('specs-content');
         const icon = document.getElementById('specs-icon');
-        content.classList.toggle('active');
-        icon.style.transform = content.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0deg)';
+        if (content && icon) {
+            content.classList.toggle('active');
+            icon.style.transform = content.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
     }
 
-    // Attendre que le DOM soit chargé
-    document.addEventListener('DOMContentLoaded', function() {
+    // Attendre le chargement complet
+    window.addEventListener('load', function() {
+        console.log('Initialisation configurateur...');
+
         const PRODUIT = {
             id: 'DB-3MM',
             nom: 'Dibond Alu 3mm',
@@ -562,8 +527,14 @@
         };
 
         // Sélection format
-        document.querySelectorAll('[data-format]').forEach(el => {
-            el.addEventListener('click', function() {
+        const formatElements = document.querySelectorAll('[data-format]');
+        console.log('Formats trouvés:', formatElements.length);
+
+        formatElements.forEach(el => {
+            el.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Format cliqué:', this.dataset.format);
+
                 document.querySelectorAll('[data-format]').forEach(e => e.classList.remove('selected'));
                 this.classList.add('selected');
 
@@ -572,22 +543,32 @@
                 config.hauteur = parseFloat(this.dataset.h);
 
                 const isCustom = this.dataset.custom === 'true';
-                document.getElementById('custom-dimensions').style.display = isCustom ? 'grid' : 'none';
+                const customDims = document.getElementById('custom-dimensions');
+                if (customDims) {
+                    customDims.style.display = isCustom ? 'grid' : 'none';
+                }
 
                 if (!isCustom) {
-                    document.getElementById('largeur').value = config.largeur;
-                    document.getElementById('hauteur').value = config.hauteur;
+                    const largeurEl = document.getElementById('largeur');
+                    const hauteurEl = document.getElementById('hauteur');
+                    if (largeurEl) largeurEl.value = config.largeur;
+                    if (hauteurEl) hauteurEl.value = config.hauteur;
                 }
 
                 calculerPrix();
             });
         });
 
-        // Premier format sélectionné par défaut
-        const firstFormat = document.querySelector('[data-format]');
-        if (firstFormat) {
-            firstFormat.click();
-        }
+        // Premier format sélectionné par défaut - avec timeout
+        setTimeout(function() {
+            const firstFormat = document.querySelector('[data-format]');
+            if (firstFormat) {
+                console.log('Sélection du premier format');
+                firstFormat.click();
+            } else {
+                console.error('Aucun format trouvé!');
+            }
+        }, 100);
 
         // Dimensions personnalisées
         ['largeur', 'hauteur'].forEach(dim => {
@@ -610,8 +591,14 @@
         }
 
         // Options finition
-        document.querySelectorAll('[data-option]').forEach(el => {
-            el.addEventListener('click', function() {
+        const finitionElements = document.querySelectorAll('[data-option]');
+        console.log('Finitions trouvées:', finitionElements.length);
+
+        finitionElements.forEach(el => {
+            el.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Finition cliquée:', this.dataset.option);
+
                 document.querySelectorAll('[data-option]').forEach(e => e.classList.remove('selected'));
                 this.classList.add('selected');
                 config.finition = this.dataset.option;
