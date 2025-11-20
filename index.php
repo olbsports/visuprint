@@ -1,130 +1,60 @@
 <?php
-$pageTitle = 'Impression Grand Format Professionnelle | Prix -40% | Livraison 48h | Imprixo';
-$pageDescription = 'Imprimeur grand format professionnel : Forex, Dibond, Bâches PVC, Textiles. Prix dégressifs jusqu\'à -40%. Livraison express 48h. +50 supports disponibles. Qualité certifiée B1/M1. Devis gratuit instantané.';
+$pageTitle = 'Impression Grand Format Professionnelle | Fabrication Européenne | Livraison Europe | Imprixo';
+$pageDescription = 'Imprimeur grand format professionnel fabrication européenne : Forex, Dibond, Bâches PVC, Textiles. Prix dégressifs jusqu\'à -40%. Livraison express Europe. +50 supports disponibles. Qualité certifiée B1/M1.';
 include __DIR__ . '/includes/header.php';
 ?>
 
-<!-- ===== HERO SECTION - OPTIMISÉ CONVERSION ===== -->
-<section class="hero-gradient text-white py-16 md:py-24">
+<!-- ===== HERO SECTION - STYLE PIXARTPRINTING ===== -->
+<section class="hero-gradient text-white py-12 md:py-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-                <!-- Badge -->
-                <div class="inline-flex items-center gap-2 bg-green-500/20 border border-green-400 text-green-300 px-4 py-2 rounded-full text-sm font-bold mb-6">
-                    <i class="fas fa-check-circle"></i>
-                    <span>N°1 en France • +10 000 clients satisfaits</span>
-                </div>
-
-                <!-- H1 - Optimisé SEO -->
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-black mb-6 leading-tight">
-                    Impression Grand Format
-                    <span class="text-red-400">Profes sionnelle</span>
-                </h1>
-
-                <!-- Sous-titre value proposition -->
-                <p class="text-xl md:text-2xl mb-8 text-gray-200 leading-relaxed">
-                    Forex • Dibond • Bâches • Textiles<br/>
-                    <span class="text-yellow-300 font-bold">Prix dégressifs -40%</span> • Livraison 48h
-                </p>
-
-                <!-- USPs - Optimisés -->
-                <div class="grid grid-cols-2 gap-3 mb-8">
-                    <div class="flex items-center gap-2 text-sm">
-                        <i class="fas fa-check-circle text-green-400"></i>
-                        <span>+50 supports disponibles</span>
-                    </div>
-                    <div class="flex items-center gap-2 text-sm">
-                        <i class="fas fa-check-circle text-green-400"></i>
-                        <span>Qualité certifiée B1/M1</span>
-                    </div>
-                    <div class="flex items-center gap-2 text-sm">
-                        <i class="fas fa-check-circle text-green-400"></i>
-                        <span>Devis instantané gratuit</span>
-                    </div>
-                    <div class="flex items-center gap-2 text-sm">
-                        <i class="fas fa-check-circle text-green-400"></i>
-                        <span>Impression HD garantie</span>
-                    </div>
-                </div>
-
-                <!-- CTAs - OPTIMISÉS CONVERSION -->
-                <div class="flex flex-col sm:flex-row gap-4 mb-8">
-                    <a href="/produits.php" class="inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-xl text-lg font-bold shadow-2xl transition transform hover:scale-105">
-                        <i class="fas fa-box-open"></i>
-                        <span>Voir le Catalogue</span>
-                    </a>
-                    <a href="/contact.php" class="inline-flex items-center justify-center gap-2 bg-white text-gray-900 px-8 py-4 rounded-xl text-lg font-bold hover:bg-gray-100 transition shadow-xl">
-                        <i class="fas fa-phone"></i>
-                        <span>Devis Gratuit</span>
-                    </a>
-                </div>
-
-                <!-- Preuve sociale -->
-                <div class="flex items-center gap-8 pt-6 border-t border-white/20">
-                    <div>
-                        <div class="text-3xl font-black text-yellow-400">4.9/5</div>
-                        <div class="text-yellow-400 text-sm">★★★★★</div>
-                        <div class="text-xs text-gray-300">328 avis Google</div>
-                    </div>
-                    <div>
-                        <div class="text-3xl font-black text-green-400">10 000+</div>
-                        <div class="text-sm text-gray-300">Clients pro</div>
-                    </div>
-                    <div>
-                        <div class="text-3xl font-black text-blue-400">48h</div>
-                        <div class="text-sm text-gray-300">Livraison express</div>
-                    </div>
-                </div>
+        <div class="max-w-4xl mx-auto text-center">
+            <!-- Badge Promo -->
+            <div class="inline-flex items-center gap-2 bg-yellow-400 text-gray-900 px-6 py-3 rounded-full text-base font-black mb-6 shadow-lg">
+                <i class="fas fa-bolt"></i>
+                <span>JUSQU'À -40% SUR VOS IMPRESSIONS GRAND FORMAT</span>
             </div>
 
-            <!-- Simulateur de prix -->
-            <div class="hidden lg:block">
-                <div class="bg-white rounded-2xl shadow-2xl p-8">
-                    <div class="text-center mb-6">
-                        <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
-                            <i class="fas fa-calculator text-3xl text-red-600"></i>
-                        </div>
-                        <h3 class="text-2xl font-black text-gray-900 mb-2">Calculez votre prix</h3>
-                        <p class="text-gray-600">Estimation instantanée</p>
-                    </div>
+            <!-- H1 - Simple et puissant -->
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-black mb-6 leading-tight">
+                Impression Grand Format
+                <span class="text-red-400">Professionnelle</span>
+            </h1>
 
-                    <form class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Support</label>
-                            <select class="w-full border-2 border-gray-200 rounded-lg p-3 font-semibold text-gray-900 focus:border-red-500 focus:outline-none">
-                                <option>Forex 3mm</option>
-                                <option>Dibond 3mm</option>
-                                <option>Bâche PVC 500g</option>
-                                <option>Textile Polyester</option>
-                            </select>
-                        </div>
+            <!-- Value proposition -->
+            <p class="text-xl md:text-2xl mb-10 text-gray-200 leading-relaxed max-w-3xl mx-auto">
+                <strong>Fabrication européenne</strong> • Livraison partout en Europe<br/>
+                Forex • Dibond • Bâches • Textiles • +50 supports disponibles
+            </p>
 
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2">Largeur (cm)</label>
-                                <input type="number" value="100" class="w-full border-2 border-gray-200 rounded-lg p-3 font-bold text-gray-900 focus:border-red-500 focus:outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2">Hauteur (cm)</label>
-                                <input type="number" value="150" class="w-full border-2 border-gray-200 rounded-lg p-3 font-bold text-gray-900 focus:border-red-500 focus:outline-none">
-                            </div>
-                        </div>
+            <!-- CTAs - Simples et efficaces -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-10">
+                <a href="/produits.php" class="inline-flex items-center justify-center gap-3 bg-red-600 hover:bg-red-700 text-white px-10 py-5 rounded-xl text-lg font-black shadow-2xl transition transform hover:scale-105">
+                    <i class="fas fa-box-open"></i>
+                    <span>Voir le Catalogue</span>
+                </a>
+                <a href="/contact.php" class="inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-10 py-5 rounded-xl text-lg font-black hover:bg-gray-100 transition shadow-xl">
+                    <i class="fas fa-envelope"></i>
+                    <span>Devis Gratuit</span>
+                </a>
+            </div>
 
-                        <div class="bg-gradient-to-r from-red-50 to-pink-50 border-2 border-red-500 rounded-xl p-6 text-center">
-                            <div class="text-sm text-gray-600 mb-1">Prix estimé</div>
-                            <div class="text-4xl font-black text-red-600 mb-1">39,90€</div>
-                            <div class="text-sm text-gray-500">HT • Livraison incluse</div>
-                        </div>
-
-                        <button type="button" onclick="window.location.href='/produits.php'" class="w-full bg-red-600 hover:bg-red-700 text-white px-6 py-4 rounded-xl font-bold text-lg transition shadow-lg">
-                            Commander maintenant
-                        </button>
-                    </form>
-
-                    <div class="mt-6 pt-6 border-t border-gray-200 text-center text-sm text-gray-600">
-                        <i class="fas fa-shield-alt text-green-600"></i>
-                        <strong>Paiement sécurisé</strong> • Livraison garantie
-                    </div>
+            <!-- USPs en ligne - Style Pixartprinting -->
+            <div class="flex flex-wrap items-center justify-center gap-6 text-sm font-bold">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-check-circle text-green-400 text-lg"></i>
+                    <span>Fabrication européenne</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-check-circle text-green-400 text-lg"></i>
+                    <span>Livraison Europe 48-72h</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-check-circle text-green-400 text-lg"></i>
+                    <span>+10 000 clients pro</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-check-circle text-green-400 text-lg"></i>
+                    <span>Qualité certifiée B1/M1</span>
                 </div>
             </div>
         </div>
@@ -288,7 +218,7 @@ include __DIR__ . '/includes/header.php';
                 </div>
                 <h3 class="text-2xl font-black text-gray-900 mb-3">Livraison express</h3>
                 <p class="text-gray-600 mb-4">
-                    <strong>48-72h partout en France</strong>. Production rapide et livraison garantie. Service express 24h disponible.
+                    <strong>48-72h partout en Europe</strong>. Fabrication européenne, production rapide et livraison garantie. Service express 24h disponible.
                 </p>
                 <ul class="space-y-2 text-sm text-gray-600">
                     <li class="flex items-center gap-2">
@@ -587,11 +517,11 @@ include __DIR__ . '/includes/header.php';
             <!-- FAQ 5 -->
             <details class="bg-white rounded-xl border-2 border-gray-200 p-6 group">
                 <summary class="font-bold text-lg text-gray-900 cursor-pointer flex items-center justify-between">
-                    <span>Livrez-vous partout en France ?</span>
+                    <span>Livrez-vous partout en Europe ?</span>
                     <i class="fas fa-chevron-down group-open:rotate-180 transition"></i>
                 </summary>
                 <p class="mt-4 text-gray-600 leading-relaxed">
-                    Oui, nous livrons <strong>partout en France métropolitaine</strong> en 48-72h. Nous travaillons avec des transporteurs spécialisés pour garantir la sécurité de vos impressions. Un numéro de suivi vous est communiqué dès l'expédition. Livraison en Europe également disponible.
+                    Oui, nous livrons <strong>partout en Europe</strong> en 48-72h. Fabrication européenne avec des transporteurs spécialisés pour garantir la sécurité de vos impressions. Un numéro de suivi vous est communiqué dès l'expédition.
                 </p>
             </details>
 
@@ -623,20 +553,22 @@ include __DIR__ . '/includes/header.php';
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "Imprixo",
-    "description": "Imprimeur professionnel grand format - Forex, Dibond, Bâches, Textiles",
+    "legalName": "OLB SPORTS ODD",
+    "description": "Imprimeur professionnel grand format fabrication européenne - Forex, Dibond, Bâches, Textiles",
     "url": "https://imprixo.fr",
     "logo": "https://imprixo.fr/logo.png",
     "foundingDate": "2010",
+    "taxID": "BG208208044",
     "address": {
         "@type": "PostalAddress",
-        "addressCountry": "FR"
+        "addressCountry": "BG"
     },
     "contactPoint": {
         "@type": "ContactPoint",
         "telephone": "+33-1-23-45-67-89",
         "contactType": "customer service",
-        "availableLanguage": ["French"],
-        "areaServed": "FR"
+        "availableLanguage": ["French", "English", "German", "Spanish", "Italian"],
+        "areaServed": ["FR", "DE", "ES", "IT", "BE", "LU", "NL", "CH", "AT", "PT"]
     },
     "aggregateRating": {
         "@type": "AggregateRating",
