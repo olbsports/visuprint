@@ -100,7 +100,6 @@ function genererPageProduitHTML($p) {
 </head>
 <body class="bg-gray-50">
     <!-- Header chargé dynamiquement -->
-    <div id="header-placeholder"></div>
     <script>
     fetch('/includes/header.html')
         .then(r => r.text())
@@ -286,7 +285,6 @@ function genererPageProduitHTML($p) {
     </div>
 
     <!-- Footer chargé dynamiquement -->
-    <div id="footer-placeholder"></div>
     <script>
     fetch('/includes/footer.html')
         .then(r => r.text())
