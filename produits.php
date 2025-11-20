@@ -218,7 +218,7 @@ include __DIR__ . '/includes/header.php';
                 Notre équipe vous conseille gratuitement sur le support idéal pour votre projet
             </p>
             <div class="flex flex-wrap justify-center gap-4">
-                <a href="/contact.html" class="btn-primary text-white px-10 py-4 rounded-lg font-bold text-lg shadow-2xl inline-flex items-center gap-2">
+                <a href="/contact.php" class="btn-primary text-white px-10 py-4 rounded-lg font-bold text-lg shadow-2xl inline-flex items-center gap-2">
                     <i class="fas fa-envelope"></i> Contactez-nous
                 </a>
                 <a href="tel:0123456789" class="bg-white text-gray-900 px-10 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition shadow-xl inline-flex items-center gap-2">

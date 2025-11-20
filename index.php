@@ -52,10 +52,10 @@ include __DIR__ . '/includes/header.php';
 
                     <!-- CTAs -->
                     <div class="flex flex-wrap gap-4">
-                        <a href="/catalogue.html" class="btn-primary text-white px-10 py-4 rounded-lg text-lg font-bold shadow-2xl inline-flex items-center gap-2">
+                        <a href="/produits.php" class="btn-primary text-white px-10 py-4 rounded-lg text-lg font-bold shadow-2xl inline-flex items-center gap-2">
                             <i class="fas fa-box-open"></i> Voir le Catalogue
                         </a>
-                        <a href="#contact" class="bg-white text-gray-900 px-10 py-4 rounded-lg text-lg font-bold hover:bg-gray-100 transition shadow-xl inline-flex items-center gap-2">
+                        <a href="/contact.php" class="bg-white text-gray-900 px-10 py-4 rounded-lg text-lg font-bold hover:bg-gray-100 transition shadow-xl inline-flex items-center gap-2">
                             <i class="fas fa-phone"></i> Nous Contacter
                         </a>
                     </div>
@@ -430,12 +430,12 @@ include __DIR__ . '/includes/header.php';
                 Besoin d'un Devis Personnalisé ?
             </h2>
             <p class="text-xl mb-10 text-gray-300">
-                Obtenez votre devis gratuit en moins de 2 minutes avec notre configurateur
+                Contactez-nous pour obtenir votre devis gratuit personnalisé
             </p>
 
             <div class="flex flex-wrap justify-center gap-4 mb-10">
-                <a href="/configurateur.html" class="bg-red-600 hover:bg-red-700 text-white px-10 py-4 rounded-lg font-bold text-lg transition shadow-2xl inline-flex items-center gap-2">
-                    <i class="fas fa-sliders-h"></i> Configurateur en Ligne
+                <a href="/contact.php" class="bg-red-600 hover:bg-red-700 text-white px-10 py-4 rounded-lg font-bold text-lg transition shadow-2xl inline-flex items-center gap-2">
+                    <i class="fas fa-envelope"></i> Demander un Devis
                 </a>
                 <a href="tel:0123456789" class="bg-white text-gray-900 px-10 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition shadow-xl inline-flex items-center gap-2">
                     <i class="fas fa-phone"></i> 01 23 45 67 89

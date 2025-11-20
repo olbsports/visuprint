@@ -69,13 +69,13 @@ if (file_exists(__DIR__ . '/../auth-client.php')) {
         </div>
 
         <div class="header-actions">
-            <a href="/devis-express.html" class="btn btn-primary">
-                <i class="fas fa-file-invoice"></i><span>Devis gratuit</span>
+            <a href="/contact.php" class="btn btn-primary">
+                <i class="fas fa-envelope"></i><span>Contact</span>
             </a>
-            <a href="<?php echo $client_connecte ? '/compte/tableau-de-bord.html' : '/inscription.html'; ?>" class="btn btn-secondary">
+            <a href="<?php echo $client_connecte ? '/mon-compte.php' : '/inscription.php'; ?>" class="btn btn-secondary">
                 <i class="fas fa-user"></i><span><?php echo $client_connecte ? 'Mon compte' : 'Inscription'; ?></span>
             </a>
-            <a href="/panier.html" class="btn btn-secondary cart-btn">
+            <a href="/panier.php" class="btn btn-secondary cart-btn">
                 <i class="fas fa-shopping-cart"></i>
                 <span class="cart-count" id="cartCount">0</span>
             </a>
@@ -126,18 +126,6 @@ if (file_exists(__DIR__ . '/../auth-client.php')) {
                                 <li><a href="/tarifs.html"><i class="fas fa-table"></i> Grille Tarifaire</a></li>
                             </ul>
                         </div>
-                    </div>
-                </li>
-
-                <li class="dropdown">
-                    <a href="#"><i class="fas fa-wrench"></i> Outils <i class="fas fa-chevron-down"></i></a>
-                    <div class="dropdown-menu">
-                        <a href="/devis-express.html"><strong><i class="fas fa-file-invoice"></i> Devis Express</strong></a>
-                        <a href="/calculateur-prix.html"><i class="fas fa-calculator"></i> Calculateur Prix</a>
-                        <a href="/comparateur-supports.html"><i class="fas fa-balance-scale"></i> Comparateur</a>
-                        <a href="/guide-choix.html"><i class="fas fa-compass"></i> Guide Choix</a>
-                        <a href="/configurateur.html"><i class="fas fa-sliders-h"></i> Configurateur</a>
-                        <a href="/upload-fichier.html"><i class="fas fa-cloud-upload-alt"></i> Upload</a>
                     </div>
                 </li>
 

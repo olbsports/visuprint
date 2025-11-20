@@ -26,22 +26,15 @@
 </ul>
 </div>
 
-<!-- Outils -->
+<!-- Ressources -->
 <div>
-<h3 style="color:#e63946;font-size:1.2rem;margin-bottom:20px;display:flex;align-items:center;gap:8px"><i class="fas fa-wrench"></i> Outils</h3>
+<h3 style="color:#e63946;font-size:1.2rem;margin-bottom:20px;display:flex;align-items:center;gap:8px"><i class="fas fa-book"></i> Ressources</h3>
 <ul style="list-style:none;line-height:2">
-<li><a href="/devis-express.html" style="color:#06d6a0;opacity:1;text-decoration:none;font-weight:600"><i class="fas fa-file-invoice"></i> Devis Express Gratuit</a></li>
-<li><a href="/calculateur-prix.html" style="color:#fff;opacity:0.8;text-decoration:none"><i class="fas fa-calculator"></i> Calculateur Prix</a></li>
-<li><a href="/comparateur-supports.html" style="color:#fff;opacity:0.8;text-decoration:none"><i class="fas fa-balance-scale"></i> Comparateur</a></li>
-<li><a href="/guide-choix.html" style="color:#fff;opacity:0.8;text-decoration:none"><i class="fas fa-compass"></i> Guide de Choix</a></li>
-<li><a href="/configurateur.html" style="color:#fff;opacity:0.8;text-decoration:none"><i class="fas fa-sliders-h"></i> Configurateur</a></li>
-<li><a href="/upload-fichier.html" style="color:#fff;opacity:0.8;text-decoration:none"><i class="fas fa-cloud-upload-alt"></i> Upload Fichiers</a></li>
-</ul>
-<h4 style="color:#fff;opacity:0.9;font-size:0.9rem;margin:20px 0 10px"><i class="fas fa-book"></i> Ressources</h4>
-<ul style="list-style:none;line-height:2;font-size:0.9rem">
-<li><a href="/guides/guide-impression-grand-format.html" style="color:#fff;opacity:0.8;text-decoration:none">Guide Complet</a></li>
-<li><a href="/blog/" style="color:#fff;opacity:0.8;text-decoration:none">Blog & Conseils</a></li>
-<li><a href="/faq.html" style="color:#fff;opacity:0.8;text-decoration:none">FAQ</a></li>
+<li><a href="/guides/guide-impression-grand-format.html" style="color:#fff;opacity:0.8;text-decoration:none"><i class="fas fa-book-open"></i> Guide Complet</a></li>
+<li><a href="/guides/guide-supports-pvc.html" style="color:#fff;opacity:0.8;text-decoration:none"><i class="fas fa-file-alt"></i> Guide PVC</a></li>
+<li><a href="/guides/guide-baches-publicitaires.html" style="color:#fff;opacity:0.8;text-decoration:none"><i class="fas fa-file-alt"></i> Guide Bâches</a></li>
+<li><a href="/blog/" style="color:#fff;opacity:0.8;text-decoration:none"><i class="fas fa-blog"></i> Blog & Conseils</a></li>
+<li><a href="/faq.php" style="color:#fff;opacity:0.8;text-decoration:none"><i class="fas fa-question-circle"></i> FAQ</a></li>
 </ul>
 </div>
 
@@ -49,16 +42,14 @@
 <div>
 <h3 style="color:#e63946;font-size:1.2rem;margin-bottom:20px;display:flex;align-items:center;gap:8px"><i class="fas fa-user"></i> Mon Compte</h3>
 <ul style="list-style:none;line-height:2">
-<li><a href="/inscription.html" style="color:#06d6a0;opacity:1;text-decoration:none;font-weight:600"><i class="fas fa-user-plus"></i> Créer mon compte</a></li>
+<li><a href="/inscription.php" style="color:#06d6a0;opacity:1;text-decoration:none;font-weight:600"><i class="fas fa-user-plus"></i> Créer mon compte</a></li>
 <li><a href="/connexion.php" style="color:#fff;opacity:0.8;text-decoration:none"><i class="fas fa-sign-in-alt"></i> Connexion</a></li>
-<li><a href="/compte/tableau-de-bord.html" style="color:#fff;opacity:0.8;text-decoration:none"><i class="fas fa-tachometer-alt"></i> Tableau de bord</a></li>
-<li><a href="/compte/mes-commandes.html" style="color:#fff;opacity:0.8;text-decoration:none"><i class="fas fa-shopping-bag"></i> Mes commandes</a></li>
-<li><a href="/compte/mes-devis.html" style="color:#fff;opacity:0.8;text-decoration:none"><i class="fas fa-file-invoice-dollar"></i> Mes devis</a></li>
-<li><a href="/compte/mes-fichiers.html" style="color:#fff;opacity:0.8;text-decoration:none"><i class="fas fa-folder"></i> Mes fichiers</a></li>
+<li><a href="/mon-compte.php" style="color:#fff;opacity:0.8;text-decoration:none"><i class="fas fa-tachometer-alt"></i> Mon Compte</a></li>
+<li><a href="/suivi-commande.php" style="color:#fff;opacity:0.8;text-decoration:none"><i class="fas fa-search"></i> Suivi Commande</a></li>
 </ul>
 <h4 style="color:#fff;opacity:0.9;font-size:0.9rem;margin:20px 0 10px">Avantages</h4>
 <ul style="list-style:none;line-height:1.8;font-size:0.85rem;color:#fff;opacity:0.7">
-<li><i class="fas fa-check"></i> Devis sauvegardés</li>
+<li><i class="fas fa-check"></i> Commandes sauvegardées</li>
 <li><i class="fas fa-check"></i> Prix préférentiels -5%</li>
 <li><i class="fas fa-check"></i> Support prioritaire</li>
 </ul>
@@ -86,17 +77,16 @@
 <div>
 <h3 style="color:#e63946;font-size:1.2rem;margin-bottom:20px;display:flex;align-items:center;gap:8px"><i class="fas fa-life-ring"></i> Support</h3>
 <ul style="list-style:none;line-height:2">
-<li><a href="/faq.html" style="color:#fff;opacity:0.8;text-decoration:none">FAQ</a></li>
-<li><a href="/contact.html" style="color:#fff;opacity:0.8;text-decoration:none">Nous Contacter</a></li>
-<li><a href="/livraison.html" style="color:#fff;opacity:0.8;text-decoration:none">Livraison</a></li>
-<li><a href="/suivi-commande.php" style="color:#fff;opacity:0.8;text-decoration:none">Suivi Commande</a></li>
+<li><a href="/faq.php" style="color:#fff;opacity:0.8;text-decoration:none"><i class="fas fa-question-circle"></i> FAQ</a></li>
+<li><a href="/contact.php" style="color:#fff;opacity:0.8;text-decoration:none"><i class="fas fa-envelope"></i> Nous Contacter</a></li>
+<li><a href="/livraison.php" style="color:#fff;opacity:0.8;text-decoration:none"><i class="fas fa-shipping-fast"></i> Livraison</a></li>
 </ul>
 <h4 style="color:#fff;opacity:0.9;font-size:0.9rem;margin:20px 0 10px">Informations Légales</h4>
 <ul style="list-style:none;line-height:2;font-size:0.85rem">
-<li><a href="/mentions-legales.html" style="color:#fff;opacity:0.7;text-decoration:none">Mentions Légales</a></li>
-<li><a href="/cgv.html" style="color:#fff;opacity:0.7;text-decoration:none">CGV</a></li>
-<li><a href="/politique-confidentialite.html" style="color:#fff;opacity:0.7;text-decoration:none">Confidentialité</a></li>
-<li><a href="/cookies.html" style="color:#fff;opacity:0.7;text-decoration:none">Cookies</a></li>
+<li><a href="/mentions-legales.php" style="color:#fff;opacity:0.7;text-decoration:none">Mentions Légales</a></li>
+<li><a href="/cgv.php" style="color:#fff;opacity:0.7;text-decoration:none">CGV</a></li>
+<li><a href="/politique-confidentialite.php" style="color:#fff;opacity:0.7;text-decoration:none">Confidentialité</a></li>
+<li><a href="/cookies.php" style="color:#fff;opacity:0.7;text-decoration:none">Cookies</a></li>
 </ul>
 </div>
 
