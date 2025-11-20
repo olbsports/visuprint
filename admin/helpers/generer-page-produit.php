@@ -148,11 +148,11 @@ function genererPageProduitHTML($p) {
                     <span class="text-yellow-500 text-xl">★★★★★</span>
                     <span class="text-sm text-gray-600">4.8/5 (247 avis)</span>
                 </div>
-                <div class="bg-green-100 text-green-800 px-4 py-2 rounded-full font-semibold text-sm">
-                    ✓ En stock - Livraison Europe {$delai}j
+                <div class="bg-green-100 text-green-800 px-4 py-2 rounded-full font-semibold text-sm flex items-center gap-2">
+                    <i class="fas fa-check-circle"></i> En stock - Livraison Europe {$delai}j
                 </div>
-                <div class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-semibold text-sm">
-                    🔥 Prix dégressifs -40%
+                <div class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-semibold text-sm flex items-center gap-2">
+                    <i class="fas fa-fire text-orange-600"></i> Prix dégressifs -40%
                 </div>
             </div>
         </div>
@@ -316,95 +316,346 @@ function genererPageProduitHTML($p) {
                     <div class="text-lg text-gray-600 mb-6">/m²</div>
 
                     <div class="bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 rounded-lg p-4 mb-6">
-                        <div class="text-sm font-semibold text-red-900 mb-2">🔥 Économisez jusqu'à</div>
+                        <div class="text-sm font-semibold text-red-900 mb-2 flex items-center gap-2">
+                            <i class="fas fa-fire text-red-600"></i> Économisez jusqu'à
+                        </div>
                         <div class="text-3xl font-black text-red-600">-{round((($prix010-$prix300plus)/$prix010)*100)}%</div>
                         <div class="text-xs text-red-700 mt-1">sur les grandes quantités</div>
                     </div>
 
-                    <button class="w-full btn-primary text-white py-4 rounded-lg font-black text-lg mb-3 shadow-lg">
-                        🛒 CONFIGURER & COMMANDER
+                    <!-- Configurateur dimensions toujours visible -->
+                    <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-4 mb-6">
+                        <h3 class="text-sm font-black text-gray-900 mb-3 flex items-center gap-2">
+                            <i class="fas fa-ruler-combined text-blue-600"></i> Dimensions personnalisées
+                        </h3>
+                        <div class="grid grid-cols-2 gap-3 mb-3">
+                            <div>
+                                <label class="text-xs text-gray-600 mb-1 block">Largeur (cm)</label>
+                                <input type="number" id="width" min="1" max="500" value="100" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label class="text-xs text-gray-600 mb-1 block">Hauteur (cm)</label>
+                                <input type="number" id="height" min="1" max="500" value="100" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                        </div>
+                        <div class="text-xs text-gray-600 mb-2">
+                            <i class="fas fa-info-circle text-blue-600"></i> Format max : $formatMax cm
+                        </div>
+                        <div class="bg-white rounded-lg p-3 border border-blue-200">
+                            <div class="text-xs text-gray-600">Surface</div>
+                            <div class="text-xl font-black text-gray-900" id="surface">1.00 m²</div>
+                            <div class="text-xs text-gray-600 mt-2">Prix estimé</div>
+                            <div class="text-2xl font-black text-red-600" id="prix-estime">{$prix010}€</div>
+                        </div>
+                    </div>
+
+                    <button onclick="window.location.href='/contact.php?produit=$id'" class="w-full btn-primary text-white py-4 rounded-lg font-black text-lg mb-3 shadow-lg flex items-center justify-center gap-2">
+                        <i class="fas fa-shopping-cart"></i> CONFIGURER & COMMANDER
                     </button>
 
-                    <button class="w-full border-2 border-gray-300 text-gray-700 py-3 rounded-lg font-bold hover:border-red-600 hover:text-red-600 transition mb-6">
-                        📄 Demander un devis
+                    <button onclick="window.location.href='/contact.php?devis=1&produit=$id'" class="w-full border-2 border-gray-300 text-gray-700 py-3 rounded-lg font-bold hover:border-red-600 hover:text-red-600 transition mb-6 flex items-center justify-center gap-2">
+                        <i class="fas fa-file-invoice"></i> Demander un devis
                     </button>
 
                     <!-- Trust badges -->
                     <div class="grid grid-cols-2 gap-3 mb-6">
                         <div class="text-center p-3 bg-gray-50 rounded-lg">
-                            <div class="text-2xl mb-1">🚚</div>
+                            <i class="fas fa-shipping-fast text-2xl text-blue-600 mb-1"></i>
                             <div class="text-xs font-bold text-gray-700">Livraison {$delai}j</div>
                         </div>
                         <div class="text-center p-3 bg-gray-50 rounded-lg">
-                            <div class="text-2xl mb-1">🔒</div>
+                            <i class="fas fa-lock text-2xl text-green-600 mb-1"></i>
                             <div class="text-xs font-bold text-gray-700">Paiement sécurisé</div>
                         </div>
                         <div class="text-center p-3 bg-gray-50 rounded-lg">
-                            <div class="text-2xl mb-1">✓</div>
+                            <i class="fas fa-certificate text-2xl text-purple-600 mb-1"></i>
                             <div class="text-xs font-bold text-gray-700">Garantie qualité</div>
                         </div>
                         <div class="text-center p-3 bg-gray-50 rounded-lg">
-                            <div class="text-2xl mb-1">⭐</div>
+                            <i class="fas fa-star text-2xl text-yellow-500 mb-1"></i>
                             <div class="text-xs font-bold text-gray-700">4.8/5 avis</div>
                         </div>
                     </div>
 
                     <div class="border-t pt-4">
-                        <div class="text-sm text-gray-600 mb-3">✓ Livraison Europe gratuite dès 200€</div>
-                        <div class="text-sm text-gray-600 mb-3">✓ Fichiers techniques fournis</div>
-                        <div class="text-sm text-gray-600">✓ Support client 6j/7</div>
+                        <div class="text-sm text-gray-600 mb-3 flex items-center gap-2">
+                            <i class="fas fa-check text-green-600"></i> Livraison Europe gratuite dès 200€
+                        </div>
+                        <div class="text-sm text-gray-600 mb-3 flex items-center gap-2">
+                            <i class="fas fa-check text-green-600"></i> Fichiers techniques fournis
+                        </div>
+                        <div class="text-sm text-gray-600 flex items-center gap-2">
+                            <i class="fas fa-check text-green-600"></i> Support client 6j/7
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Section Applications Professionnelles -->
+    <section class="bg-gradient-to-br from-blue-50 to-indigo-50 py-16 mt-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-black text-gray-900 mb-4 flex items-center justify-center gap-3">
+                    <i class="fas fa-briefcase text-blue-600"></i>
+                    Applications professionnelles
+                </h2>
+                <p class="text-xl text-gray-700">Le $nom est utilisé dans de nombreux secteurs d'activité</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-store text-2xl text-blue-600"></i>
+                        </div>
+                        <h3 class="text-lg font-black text-gray-900">Commerce & Retail</h3>
+                    </div>
+                    <p class="text-gray-700">Signalétique en magasin, PLV, promotions, vitrines, affichage prix</p>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-users text-2xl text-green-600"></i>
+                        </div>
+                        <h3 class="text-lg font-black text-gray-900">Salons & Événements</h3>
+                    </div>
+                    <p class="text-gray-700">Stands, kakémonos, backdrops, panneaux expo, roll-ups</p>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-hard-hat text-2xl text-orange-600"></i>
+                        </div>
+                        <h3 class="text-lg font-black text-gray-900">BTP & Construction</h3>
+                    </div>
+                    <p class="text-gray-700">Panneaux chantier, signalisation, sécurité, permis de construire</p>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-home text-2xl text-purple-600"></i>
+                        </div>
+                        <h3 class="text-lg font-black text-gray-900">Immobilier</h3>
+                    </div>
+                    <p class="text-gray-700">Panneaux A VENDRE, A LOUER, vitrophanies, affichage mandats</p>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-bullhorn text-2xl text-red-600"></i>
+                        </div>
+                        <h3 class="text-lg font-black text-gray-900">Communication & Pub</h3>
+                    </div>
+                    <p class="text-gray-700">Affichage extérieur, campagnes, street marketing, décoration</p>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-utensils text-2xl text-yellow-600"></i>
+                        </div>
+                        <h3 class="text-lg font-black text-gray-900">CHR & Restauration</h3>
+                    </div>
+                    <p class="text-gray-700">Menus, cartes, signalétique, terrasses, stop-trottoirs</p>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center">
+                <div class="bg-white rounded-xl shadow-lg p-8 max-w-3xl mx-auto">
+                    <h3 class="text-2xl font-black text-gray-900 mb-4 flex items-center justify-center gap-2">
+                        <i class="fas fa-question-circle text-blue-600"></i>
+                        Besoin de conseils pour votre projet ?
+                    </h3>
+                    <p class="text-gray-700 mb-6">
+                        Nos experts vous accompagnent dans le choix du support le plus adapté à votre secteur d'activité et à vos contraintes techniques.
+                    </p>
+                    <button onclick="window.location.href='/contact.php?produit=$id&conseil=1'" class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-lg font-bold hover:shadow-xl transition flex items-center gap-2 mx-auto">
+                        <i class="fas fa-phone"></i> Contacter un expert
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Section SEO enrichie -->
-    <section class="bg-gray-100 py-12 mt-12">
+    <section class="bg-gray-100 py-12 mt-0">
         <div class="max-w-7xl mx-auto px-4">
             <div class="bg-white rounded-xl shadow-md p-8">
-                <h2 class="text-3xl font-black text-gray-900 mb-6">
-                    $nom - Informations complémentaires
+                <h2 class="text-3xl font-black text-gray-900 mb-8 flex items-center gap-3">
+                    <i class="fas fa-info-circle text-blue-600"></i>
+                    $nom - Guide complet et informations techniques
                 </h2>
 
-                <div class="grid md:grid-cols-2 gap-8">
-                    <div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-4">Pourquoi choisir ce produit ?</h3>
-                        <p class="text-gray-700 mb-4">
-                            Le <strong>$nom</strong> est parfait pour vos besoins d'impression grand format.
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border-l-4 border-blue-600">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                            <i class="fas fa-star text-blue-600"></i>
+                            Pourquoi choisir le $nom ?
+                        </h3>
+                        <p class="text-gray-700 mb-4 leading-relaxed">
+                            Le <strong>$nom</strong> est le choix idéal pour vos projets d'impression grand format professionnels.
                             Avec une épaisseur de <strong>$epaisseur</strong> et un poids de <strong>$poids kg/m²</strong>,
-                            ce support offre le meilleur compromis entre qualité et prix.
+                            ce support offre le meilleur compromis entre robustesse, qualité d'impression et prix compétitif.
                         </p>
-                        <p class="text-gray-700">
-                            Idéal pour <strong>$usage</strong>, avec une durée de vie de <strong>$dureeVie</strong>.
-                            Certification <strong>$certification</strong> garantie.
+                        <p class="text-gray-700 leading-relaxed">
+                            Parfaitement adapté pour <strong>$usage</strong>, ce matériau garantit une excellente durée de vie de <strong>$dureeVie</strong>.
+                            La certification <strong>$certification</strong> assure une conformité totale aux normes européennes les plus strictes.
                         </p>
                     </div>
 
-                    <div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-4">Livraison et fabrication</h3>
-                        <p class="text-gray-700 mb-4">
-                            <strong>Fabrication européenne</strong> de qualité supérieure. Nous assurons une livraison
-                            express partout en Europe en <strong>{$delai} jours</strong> ouvrés.
+                    <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border-l-4 border-green-600">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                            <i class="fas fa-truck text-green-600"></i>
+                            Fabrication européenne & Livraison express
+                        </h3>
+                        <p class="text-gray-700 mb-4 leading-relaxed">
+                            Tous nos produits bénéficient d'une <strong>fabrication 100% européenne</strong> réalisée dans nos ateliers certifiés.
+                            Cette proximité nous permet de garantir une qualité irréprochable et une livraison express partout en Europe
+                            en seulement <strong>{$delai} jours ouvrés</strong>.
                         </p>
-                        <p class="text-gray-700">
-                            Nos impressions grand format sont réalisées avec des équipements de dernière génération
-                            pour garantir une qualité HD exceptionnelle. Format maximum disponible : <strong>$formatMax cm</strong>.
+                        <p class="text-gray-700 leading-relaxed">
+                            Nos impressions grand format sont réalisées sur des équipements de dernière génération utilisant
+                            les technologies UV et latex pour une qualité HD exceptionnelle et des couleurs éclatantes.
+                            Format maximum disponible : <strong>$formatMax cm</strong>.
                         </p>
                     </div>
                 </div>
 
-                <div class="mt-8 pt-8 border-t border-gray-200">
-                    <h3 class="text-xl font-bold text-gray-900 mb-4">Mots-clés associés</h3>
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                            <i class="fas fa-cog text-orange-600"></i>
+                            Caractéristiques techniques détaillées
+                        </h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-green-600 mt-1"></i>
+                                <span class="text-gray-700"><strong>Épaisseur :</strong> $epaisseur - Garantit une excellente rigidité</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-green-600 mt-1"></i>
+                                <span class="text-gray-700"><strong>Poids :</strong> $poids kg/m² - Optimal pour la manipulation et l'installation</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-green-600 mt-1"></i>
+                                <span class="text-gray-700"><strong>Format max :</strong> $formatMax cm - Pour vos plus grands projets</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-green-600 mt-1"></i>
+                                <span class="text-gray-700"><strong>Finition :</strong> $finition - Aspect professionnel garanti</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-green-600 mt-1"></i>
+                                <span class="text-gray-700"><strong>Certification :</strong> $certification - Normes européennes</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                            <i class="fas fa-lightbulb text-yellow-600"></i>
+                            Conseils d'utilisation et d'installation
+                        </h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-arrow-right text-blue-600 mt-1"></i>
+                                <span class="text-gray-700">Stockage à plat dans un endroit sec et à température ambiante</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-arrow-right text-blue-600 mt-1"></i>
+                                <span class="text-gray-700">Installation facile avec adhésif double-face, vis ou système de fixation adapté</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-arrow-right text-blue-600 mt-1"></i>
+                                <span class="text-gray-700">Nettoyage simple avec chiffon doux et produit non-abrasif</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-arrow-right text-blue-600 mt-1"></i>
+                                <span class="text-gray-700">Découpe possible sur mesure selon vos besoins spécifiques</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-arrow-right text-blue-600 mt-1"></i>
+                                <span class="text-gray-700">Recyclable en fin de vie - Respect de l'environnement</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-red-50 to-orange-50 rounded-xl p-6 mb-8">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <i class="fas fa-euro-sign text-red-600"></i>
+                        Tarification et économies - Prix dégressifs jusqu'à -40%
+                    </h3>
+                    <p class="text-gray-700 mb-4 leading-relaxed">
+                        Nous proposons une tarification dégressive particulièrement avantageuse qui vous permet de réaliser
+                        jusqu'à <strong>-40% d'économies</strong> sur vos commandes importantes. Plus vous commandez, plus le prix au m² diminue :
+                    </p>
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                        <div class="bg-white rounded-lg p-3 text-center border-2 border-gray-200">
+                            <div class="text-xs text-gray-600 mb-1">0-10 m²</div>
+                            <div class="text-lg font-black text-red-600">{$prix010}€/m²</div>
+                        </div>
+                        <div class="bg-white rounded-lg p-3 text-center border-2 border-gray-200">
+                            <div class="text-xs text-gray-600 mb-1">11-50 m²</div>
+                            <div class="text-lg font-black text-red-600">{$prix1150}€/m²</div>
+                        </div>
+                        <div class="bg-white rounded-lg p-3 text-center border-2 border-gray-200">
+                            <div class="text-xs text-gray-600 mb-1">51-100 m²</div>
+                            <div class="text-lg font-black text-red-600">{$prix51100}€/m²</div>
+                        </div>
+                        <div class="bg-white rounded-lg p-3 text-center border-2 border-gray-200">
+                            <div class="text-xs text-gray-600 mb-1">101-300 m²</div>
+                            <div class="text-lg font-black text-red-600">{$prix101300}€/m²</div>
+                        </div>
+                        <div class="bg-white rounded-lg p-3 text-center border-2 border-red-600 bg-red-50">
+                            <div class="text-xs text-red-700 mb-1 font-bold">300+ m²</div>
+                            <div class="text-lg font-black text-red-600">{$prix300plus}€/m²</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-blue-50 rounded-xl p-6 text-center">
+                        <i class="fas fa-shield-alt text-4xl text-blue-600 mb-3"></i>
+                        <h4 class="font-bold text-gray-900 mb-2">Garantie qualité</h4>
+                        <p class="text-sm text-gray-700">100% de nos produits sont contrôlés avant expédition</p>
+                    </div>
+                    <div class="bg-green-50 rounded-xl p-6 text-center">
+                        <i class="fas fa-headset text-4xl text-green-600 mb-3"></i>
+                        <h4 class="font-bold text-gray-900 mb-2">Support expert</h4>
+                        <p class="text-sm text-gray-700">Assistance technique 6j/7 pour tous vos projets</p>
+                    </div>
+                    <div class="bg-purple-50 rounded-xl p-6 text-center">
+                        <i class="fas fa-file-alt text-4xl text-purple-600 mb-3"></i>
+                        <h4 class="font-bold text-gray-900 mb-2">Fichiers techniques</h4>
+                        <p class="text-sm text-gray-700">Gabarits et guides d'impression fournis gratuitement</p>
+                    </div>
+                </div>
+
+                <div class="pt-8 border-t border-gray-200">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <i class="fas fa-tags text-gray-600"></i>
+                        Mots-clés et recherches associées
+                    </h3>
                     <div class="flex flex-wrap gap-2">
-                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">$nom</span>
-                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">$categorie</span>
-                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">impression grand format</span>
-                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">$epaisseur</span>
-                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">fabrication européenne</span>
-                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">livraison europe</span>
-                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">$certification</span>
-                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">prix dégressifs</span>
+                        <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">$nom</span>
+                        <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">$categorie</span>
+                        <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">impression grand format</span>
+                        <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">$epaisseur</span>
+                        <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">fabrication européenne</span>
+                        <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">livraison europe</span>
+                        <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">$certification</span>
+                        <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">prix dégressifs</span>
+                        <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">signalétique professionnelle</span>
+                        <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">PLV sur mesure</span>
+                        <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">panneaux publicitaires</span>
+                        <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">impression HD Europe</span>
                     </div>
                 </div>
             </div>
@@ -487,8 +738,57 @@ function genererPageProduitHTML($p) {
         nom: '$nom',
         prix_min: $prix300plus,
         prix_max: $prix010,
-        delai: $delai
+        delai: $delai,
+        prix: {
+            p0_10: $prix010,
+            p11_50: $prix1150,
+            p51_100: $prix51100,
+            p101_300: $prix101300,
+            p300plus: $prix300plus
+        }
     };
+
+    // Calculateur de dimensions et prix
+    document.addEventListener('DOMContentLoaded', function() {
+        const widthInput = document.getElementById('width');
+        const heightInput = document.getElementById('height');
+        const surfaceDisplay = document.getElementById('surface');
+        const prixDisplay = document.getElementById('prix-estime');
+
+        function calculatePrice() {
+            const width = parseFloat(widthInput.value) || 100;
+            const height = parseFloat(heightInput.value) || 100;
+
+            // Calculer la surface en m²
+            const surfaceM2 = (width * height) / 10000;
+            surfaceDisplay.textContent = surfaceM2.toFixed(2) + ' m²';
+
+            // Déterminer le prix au m² selon la surface
+            let prixM2;
+            if (surfaceM2 <= 10) {
+                prixM2 = window.productData.prix.p0_10;
+            } else if (surfaceM2 <= 50) {
+                prixM2 = window.productData.prix.p11_50;
+            } else if (surfaceM2 <= 100) {
+                prixM2 = window.productData.prix.p51_100;
+            } else if (surfaceM2 <= 300) {
+                prixM2 = window.productData.prix.p101_300;
+            } else {
+                prixM2 = window.productData.prix.p300plus;
+            }
+
+            // Calculer le prix total
+            const prixTotal = (surfaceM2 * prixM2).toFixed(2);
+            prixDisplay.textContent = prixTotal + '€';
+        }
+
+        // Calculer au chargement
+        calculatePrice();
+
+        // Recalculer à chaque modification
+        widthInput.addEventListener('input', calculatePrice);
+        heightInput.addEventListener('input', calculatePrice);
+    });
     </script>
 </body>
 </html>
