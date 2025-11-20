@@ -1,7 +1,7 @@
 <?php
 /**
  * Helper pour générer une page HTML de produit
- * Version avec configurateur complet + Icons Font Awesome + SEO
+ * Version simplifiée avec photo + configurateur fonctionnel
  */
 
 /**
@@ -43,38 +43,6 @@ function genererPageProduitHTML($p) {
     <meta name="description" content="$descCourte ✓ Prix dégressifs {$prix300plus}€→{$prix010}€/m² ✓ Livraison {$delai}j ✓ $certification">
     <link rel="canonical" href="https://imprixo.fr/produit/$id.html">
 
-    <!-- Open Graph -->
-    <meta property="og:title" content="$nom - Imprixo">
-    <meta property="og:description" content="$descCourte">
-    <meta property="og:type" content="product">
-    <meta property="og:url" content="https://imprixo.fr/produit/$id.html">
-
-    <!-- Schema.org Product -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org/",
-        "@type": "Product",
-        "name": "$nom",
-        "description": "$descCourte",
-        "brand": {
-            "@type": "Brand",
-            "name": "Imprixo"
-        },
-        "offers": {
-            "@type": "AggregateOffer",
-            "lowPrice": "$prix300plus",
-            "highPrice": "$prix010",
-            "priceCurrency": "EUR",
-            "availability": "https://schema.org/InStock"
-        },
-        "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "4.7",
-            "reviewCount": "183"
-        }
-    }
-    </script>
-
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -88,6 +56,8 @@ function genererPageProduitHTML($p) {
         .config-option.selected{border-color:#e63946;background:#fff1f2;font-weight:700}
         .price-badge{animation:pulse 2s infinite}
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.8}}
+        .collapsible-content{max-height:0;overflow:hidden;transition:max-height 0.3s ease}
+        .collapsible-content.active{max-height:2000px}
     </style>
 </head>
 <body class="bg-gray-50">
@@ -103,18 +73,26 @@ function genererPageProduitHTML($p) {
             <span class="text-gray-900 font-semibold">$nom</span>
         </nav>
 
-        <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-6">
-            <h1 class="text-4xl font-black text-gray-900 mb-2">$nom</h1>
-            <p class="text-xl text-gray-600 mb-4">$soustitre</p>
-            <div class="flex flex-wrap items-center gap-4">
-                <div class="bg-green-100 text-green-800 px-4 py-2 rounded-full font-semibold text-sm">
-                    <i class="fas fa-check-circle"></i> Fabrication UE
+        <!-- ENCART PHOTO + TITRE -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-6">
+            <div class="grid md:grid-cols-2 gap-0">
+                <div class="p-8">
+                    <h1 class="text-4xl font-black text-gray-900 mb-2">$nom</h1>
+                    <p class="text-xl text-gray-600 mb-4">$soustitre</p>
+                    <div class="flex flex-wrap gap-3 mb-4">
+                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">
+                            <i class="fas fa-check-circle"></i> Fabrication UE
+                        </span>
+                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">
+                            <i class="fas fa-truck"></i> Livraison {$delai}j
+                        </span>
+                        <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-semibold">
+                            <i class="fas fa-fire"></i> Prix dégressifs
+                        </span>
+                    </div>
                 </div>
-                <div class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-semibold text-sm">
-                    <i class="fas fa-globe-europe"></i> Livraison Europe {$delai}j
-                </div>
-                <div class="bg-red-100 text-red-800 px-4 py-2 rounded-full font-semibold text-sm">
-                    <i class="fas fa-fire"></i> Prix dégressifs
+                <div class="bg-gray-100 p-8 flex items-center justify-center">
+                    <img src="/assets/products/$id.jpg" alt="$nom" class="w-full h-64 object-cover rounded-lg" onerror="this.src='https://placehold.co/600x400/667eea/white?text=' + encodeURIComponent('$nom')">
                 </div>
             </div>
         </div>
@@ -123,14 +101,14 @@ function genererPageProduitHTML($p) {
             <!-- CONFIGURATEUR PRINCIPAL -->
             <div class="lg:col-span-2">
                 <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-6">
-                    <h2 class="text-2xl font-black text-gray-900 mb-6 flex items-center gap-3">
-                        <i class="fas fa-cog text-3xl text-blue-600"></i> Configurez votre produit
+                    <h2 class="text-2xl font-black text-gray-900 mb-6">
+                        <i class="fas fa-cog text-blue-600"></i> Configurez votre produit
                     </h2>
 
                     <!-- Format -->
                     <div class="mb-6">
                         <label class="block text-sm font-bold text-gray-700 mb-3">
-                            <i class="fas fa-ruler-combined text-blue-600"></i> Format
+                            <i class="fas fa-ruler-combined"></i> Format
                         </label>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="format-selector">
                             <div class="config-option rounded-lg p-3 text-center" data-format="A0 (84×119 cm)" data-w="84" data-h="119" data-custom="false">
@@ -212,7 +190,7 @@ function genererPageProduitHTML($p) {
                     </div>
 
                     <!-- Dimensions personnalisées -->
-                    <div class="grid grid-cols-2 gap-4 mb-6" id="custom-dimensions" style="display:none">
+                    <div class="grid grid-cols-2 gap-4 mb-6" id="custom-dimensions">
                         <div>
                             <label class="block text-sm font-bold text-gray-700 mb-2">Largeur (cm)</label>
                             <input type="number" id="largeur" value="100" min="10" max="500" step="1" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none font-bold text-lg">
@@ -226,7 +204,7 @@ function genererPageProduitHTML($p) {
                     <!-- Quantité -->
                     <div class="mb-6">
                         <label class="block text-sm font-bold text-gray-700 mb-2">
-                            <i class="fas fa-boxes text-blue-600"></i> Quantité
+                            <i class="fas fa-boxes"></i> Quantité
                         </label>
                         <input type="number" id="quantite" value="1" min="1" max="1000" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none font-bold text-lg">
                         <p class="text-xs text-gray-500 mt-1">Prix dégressifs selon quantité</p>
@@ -235,7 +213,7 @@ function genererPageProduitHTML($p) {
                     <!-- Options -->
                     <div class="mb-6">
                         <label class="block text-sm font-bold text-gray-700 mb-3">
-                            <i class="fas fa-palette text-blue-600"></i> Finition
+                            <i class="fas fa-palette"></i> Finition
                         </label>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                             <div class="config-option rounded-lg p-4 selected" data-option="standard" data-prix="0">
@@ -256,7 +234,7 @@ function genererPageProduitHTML($p) {
                     <!-- Upload fichier -->
                     <div class="mb-6">
                         <label class="block text-sm font-bold text-gray-700 mb-3">
-                            <i class="fas fa-file-upload text-blue-600"></i> Votre fichier (optionnel)
+                            <i class="fas fa-file-upload"></i> Votre fichier (optionnel)
                         </label>
                         <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-red-600 transition cursor-pointer" id="upload-zone">
                             <div class="text-4xl mb-3"><i class="fas fa-cloud-upload-alt text-gray-400"></i></div>
@@ -270,63 +248,53 @@ function genererPageProduitHTML($p) {
                         </p>
                     </div>
 
-                    <!-- Notice technique fichier -->
-                    <div class="bg-yellow-50 border-2 border-yellow-400 rounded-lg p-6 mb-6">
-                        <h3 class="font-bold text-yellow-900 mb-4 flex items-center gap-2 text-lg">
-                            <i class="fas fa-ruler-combined text-2xl"></i> Spécifications techniques du fichier
-                        </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4">
-                            <div class="bg-white p-3 rounded border border-yellow-300">
-                                <div class="text-yellow-800 font-semibold mb-1">
-                                    <i class="fas fa-ruler"></i> Format fini (après coupe)
+                    <!-- Notice technique fichier - COLLAPSIBLE -->
+                    <div class="border-2 border-gray-300 rounded-lg mb-6">
+                        <button onclick="toggleSpecs()" class="w-full p-4 flex items-center justify-between font-bold text-gray-900 hover:bg-gray-50">
+                            <span><i class="fas fa-ruler-combined"></i> Spécifications techniques du fichier</span>
+                            <i class="fas fa-chevron-down transition-transform" id="specs-icon"></i>
+                        </button>
+                        <div id="specs-content" class="collapsible-content">
+                            <div class="p-6 border-t-2 border-gray-300">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4">
+                                    <div class="bg-gray-50 p-3 rounded border-2 border-gray-300">
+                                        <div class="text-gray-700 font-semibold mb-1">
+                                            <i class="fas fa-ruler"></i> Format fini (après coupe)
+                                        </div>
+                                        <div class="text-xl font-black text-gray-900" id="spec-format-fini">100 × 100 cm</div>
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded border-2 border-red-300">
+                                        <div class="text-red-700 font-semibold mb-1">
+                                            <i class="fas fa-expand-arrows-alt"></i> Format à fournir (avec fond perdu)
+                                        </div>
+                                        <div class="text-xl font-black text-red-600" id="spec-format-fourni">100.6 × 100.6 cm</div>
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded border-2 border-green-300">
+                                        <div class="text-green-700 font-semibold mb-1">
+                                            <i class="fas fa-check-circle"></i> Zone de sécurité (textes/logos)
+                                        </div>
+                                        <div class="text-lg font-bold text-green-600" id="spec-zone-securite">94 × 94 cm</div>
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded border-2 border-blue-300">
+                                        <div class="text-blue-700 font-semibold mb-1">
+                                            <i class="fas fa-print"></i> Résolution minimale
+                                        </div>
+                                        <div class="text-lg font-bold text-gray-900">300 DPI</div>
+                                    </div>
                                 </div>
-                                <div class="text-xl font-black text-gray-900" id="spec-format-fini">100 × 100 cm</div>
-                            </div>
-                            <div class="bg-white p-3 rounded border border-red-300">
-                                <div class="text-red-700 font-semibold mb-1">
-                                    <i class="fas fa-expand-arrows-alt"></i> Format à fournir (avec fond perdu)
+                                <div class="bg-gray-50 rounded border-2 border-gray-300 p-4">
+                                    <div class="font-bold text-gray-900 mb-3">
+                                        <i class="fas fa-info-circle"></i> Informations importantes
+                                    </div>
+                                    <ul class="text-xs text-gray-700 space-y-2">
+                                        <li><i class="fas fa-circle text-xs text-red-600"></i> <strong>Fond perdu (3mm):</strong> Prolongez vos visuels de 3mm de chaque côté</li>
+                                        <li><i class="fas fa-circle text-xs text-green-600"></i> <strong>Zone de sécurité:</strong> Placez textes et logos à 3mm minimum du bord</li>
+                                        <li><i class="fas fa-circle text-xs text-blue-600"></i> <strong>Formats acceptés:</strong> PDF (vectoriel), AI, EPS, PNG, JPG, TIFF</li>
+                                        <li><i class="fas fa-circle text-xs text-purple-600"></i> <strong>Profil couleur:</strong> CMJN (CMYK) obligatoire</li>
+                                        <li><i class="fas fa-circle text-xs text-orange-600"></i> <strong>Résolution:</strong> 300 DPI minimum</li>
+                                    </ul>
                                 </div>
-                                <div class="text-xl font-black text-red-600" id="spec-format-fourni">100.6 × 100.6 cm</div>
                             </div>
-                            <div class="bg-white p-3 rounded border border-green-300">
-                                <div class="text-green-700 font-semibold mb-1">
-                                    <i class="fas fa-check-circle"></i> Zone de sécurité (textes/logos)
-                                </div>
-                                <div class="text-lg font-bold text-green-600" id="spec-zone-securite">94 × 94 cm</div>
-                            </div>
-                            <div class="bg-white p-3 rounded border border-blue-300">
-                                <div class="text-blue-700 font-semibold mb-1">
-                                    <i class="fas fa-print"></i> Résolution minimale
-                                </div>
-                                <div class="text-lg font-bold text-gray-900">300 DPI (haute qualité)</div>
-                            </div>
-                        </div>
-                        <div class="bg-white rounded border-2 border-yellow-300 p-4">
-                            <div class="font-bold text-gray-900 mb-3 flex items-center gap-2">
-                                <i class="fas fa-info-circle text-yellow-600"></i> Informations importantes pour votre fichier
-                            </div>
-                            <ul class="text-xs text-gray-700 space-y-2">
-                                <li class="flex items-start gap-2">
-                                    <i class="fas fa-circle text-red-600 text-xs mt-1"></i>
-                                    <span><strong>Fond perdu (3mm):</strong> Prolongez vos visuels de 3mm de chaque côté pour éviter les liserés blancs après découpe</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <i class="fas fa-circle text-green-600 text-xs mt-1"></i>
-                                    <span><strong>Zone de sécurité:</strong> Placez vos textes et logos importants à minimum 3mm du bord de coupe</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <i class="fas fa-circle text-blue-600 text-xs mt-1"></i>
-                                    <span><strong>Formats acceptés:</strong> PDF (vectoriel recommandé), AI, EPS, PNG, JPG, TIFF</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <i class="fas fa-circle text-purple-600 text-xs mt-1"></i>
-                                    <span><strong>Profil couleur:</strong> CMJN (CMYK) obligatoire pour l'impression professionnelle</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <i class="fas fa-circle text-orange-600 text-xs mt-1"></i>
-                                    <span><strong>Résolution:</strong> 300 DPI minimum pour une qualité optimale • 150 DPI acceptable pour grands formats (>2m)</span>
-                                </li>
-                            </ul>
                         </div>
                     </div>
 
@@ -346,106 +314,103 @@ function genererPageProduitHTML($p) {
                     </div>
                 </div>
 
-                <!-- Description produit AMÉLIORATION VISUELLE -->
+                <!-- Description produit -->
                 <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-6">
-                    <h2 class="text-2xl font-black text-gray-900 mb-4 flex items-center gap-3">
-                        <i class="fas fa-file-alt text-blue-600"></i> Description
+                    <h2 class="text-2xl font-black text-gray-900 mb-4">
+                        <i class="fas fa-file-alt"></i> Description
                     </h2>
                     <p class="text-lg text-gray-700 mb-4 font-medium">$descCourte</p>
-
-                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border-l-4 border-blue-600 rounded-lg p-6 mb-4">
+                    <div class="bg-gray-50 rounded-lg p-4 mb-4">
                         <p class="text-gray-700 leading-relaxed mb-4">$descLongue</p>
-
-                        <div class="grid md:grid-cols-2 gap-3 mt-4">
-                            <div class="flex items-start gap-3 bg-white/70 p-3 rounded-lg">
+                        <div class="grid md:grid-cols-2 gap-3">
+                            <div class="flex items-start gap-3 bg-white p-3 rounded-lg border-2 border-gray-200">
                                 <i class="fas fa-check-circle text-green-600 text-xl mt-1"></i>
                                 <div>
                                     <div class="font-bold text-gray-900">Qualité professionnelle</div>
-                                    <div class="text-sm text-gray-600">Impression haute définition garantie</div>
+                                    <div class="text-sm text-gray-600">Impression HD garantie</div>
                                 </div>
                             </div>
-                            <div class="flex items-start gap-3 bg-white/70 p-3 rounded-lg">
+                            <div class="flex items-start gap-3 bg-white p-3 rounded-lg border-2 border-gray-200">
                                 <i class="fas fa-shipping-fast text-blue-600 text-xl mt-1"></i>
                                 <div>
                                     <div class="font-bold text-gray-900">Livraison rapide</div>
-                                    <div class="text-sm text-gray-600">Expédition sous $delai jours ouvrés</div>
+                                    <div class="text-sm text-gray-600">$delai jours ouvrés</div>
                                 </div>
                             </div>
-                            <div class="flex items-start gap-3 bg-white/70 p-3 rounded-lg">
+                            <div class="flex items-start gap-3 bg-white p-3 rounded-lg border-2 border-gray-200">
                                 <i class="fas fa-euro-sign text-purple-600 text-xl mt-1"></i>
                                 <div>
                                     <div class="font-bold text-gray-900">Prix dégressifs</div>
-                                    <div class="text-sm text-gray-600">Économisez sur les grandes quantités</div>
+                                    <div class="text-sm text-gray-600">Grandes quantités</div>
                                 </div>
                             </div>
-                            <div class="flex items-start gap-3 bg-white/70 p-3 rounded-lg">
+                            <div class="flex items-start gap-3 bg-white p-3 rounded-lg border-2 border-gray-200">
                                 <i class="fas fa-headset text-orange-600 text-xl mt-1"></i>
                                 <div>
                                     <div class="font-bold text-gray-900">Support expert</div>
-                                    <div class="text-sm text-gray-600">Assistance technique 7j/7</div>
+                                    <div class="text-sm text-gray-600">7j/7</div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="bg-green-50 border-l-4 border-green-600 p-4 rounded">
-                        <div class="font-bold text-green-900 mb-2 flex items-center gap-2">
-                            <i class="fas fa-globe-europe"></i> Fabrication européenne de qualité
+                    <div class="bg-green-50 border-2 border-green-500 p-4 rounded-lg">
+                        <div class="font-bold text-green-900 mb-2">
+                            <i class="fas fa-globe-europe"></i> Fabrication européenne
                         </div>
-                        <p class="text-sm text-green-800">Produit fabriqué en Europe par <strong>OLB SPORTS OOD</strong>. Livraison dans toute l'Europe en $delai jours ouvrés.</p>
+                        <p class="text-sm text-green-800">Produit fabriqué en Europe par <strong>OLB SPORTS OOD</strong>. Livraison Europe en $delai jours.</p>
                     </div>
                 </div>
 
-                <!-- Caractéristiques AMÉLIORATION VISUELLE -->
+                <!-- Caractéristiques -->
                 <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-6">
-                    <h2 class="text-2xl font-black text-gray-900 mb-6 flex items-center gap-3">
-                        <i class="fas fa-cogs text-blue-600"></i> Caractéristiques techniques
+                    <h2 class="text-2xl font-black text-gray-900 mb-6">
+                        <i class="fas fa-cogs"></i> Caractéristiques techniques
                     </h2>
                     <div class="grid md:grid-cols-2 gap-4">
-                        <div class="bg-gradient-to-br from-blue-50 to-blue-100 border-l-4 border-blue-600 rounded-lg p-4">
-                            <div class="text-sm text-blue-700 font-medium flex items-center gap-2">
+                        <div class="bg-gray-50 rounded-lg p-4 border-2 border-gray-200">
+                            <div class="text-sm text-gray-700 font-medium mb-1">
                                 <i class="fas fa-weight"></i> Poids
                             </div>
                             <div class="text-lg font-black text-gray-900">$poids kg/m²</div>
                         </div>
-                        <div class="bg-gradient-to-br from-purple-50 to-purple-100 border-l-4 border-purple-600 rounded-lg p-4">
-                            <div class="text-sm text-purple-700 font-medium flex items-center gap-2">
+                        <div class="bg-gray-50 rounded-lg p-4 border-2 border-gray-200">
+                            <div class="text-sm text-gray-700 font-medium mb-1">
                                 <i class="fas fa-arrows-alt-v"></i> Épaisseur
                             </div>
                             <div class="text-lg font-black text-gray-900">$epaisseur</div>
                         </div>
-                        <div class="bg-gradient-to-br from-green-50 to-green-100 border-l-4 border-green-600 rounded-lg p-4">
-                            <div class="text-sm text-green-700 font-medium flex items-center gap-2">
+                        <div class="bg-gray-50 rounded-lg p-4 border-2 border-gray-200">
+                            <div class="text-sm text-gray-700 font-medium mb-1">
                                 <i class="fas fa-expand"></i> Format maximum
                             </div>
                             <div class="text-lg font-black text-gray-900">$formatMax cm</div>
                         </div>
-                        <div class="bg-gradient-to-br from-orange-50 to-orange-100 border-l-4 border-orange-600 rounded-lg p-4">
-                            <div class="text-sm text-orange-700 font-medium flex items-center gap-2">
+                        <div class="bg-gray-50 rounded-lg p-4 border-2 border-gray-200">
+                            <div class="text-sm text-gray-700 font-medium mb-1">
                                 <i class="fas fa-home"></i> Usage
                             </div>
                             <div class="text-lg font-black text-gray-900">$usage</div>
                         </div>
-                        <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 border-l-4 border-yellow-600 rounded-lg p-4">
-                            <div class="text-sm text-yellow-700 font-medium flex items-center gap-2">
+                        <div class="bg-gray-50 rounded-lg p-4 border-2 border-gray-200">
+                            <div class="text-sm text-gray-700 font-medium mb-1">
                                 <i class="fas fa-clock"></i> Durée de vie
                             </div>
                             <div class="text-lg font-black text-gray-900">$dureeVie</div>
                         </div>
-                        <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 border-l-4 border-indigo-600 rounded-lg p-4">
-                            <div class="text-sm text-indigo-700 font-medium flex items-center gap-2">
+                        <div class="bg-gray-50 rounded-lg p-4 border-2 border-gray-200">
+                            <div class="text-sm text-gray-700 font-medium mb-1">
                                 <i class="fas fa-certificate"></i> Certification
                             </div>
                             <div class="text-lg font-black text-gray-900">$certification</div>
                         </div>
-                        <div class="bg-gradient-to-br from-pink-50 to-pink-100 border-l-4 border-pink-600 rounded-lg p-4">
-                            <div class="text-sm text-pink-700 font-medium flex items-center gap-2">
+                        <div class="bg-gray-50 rounded-lg p-4 border-2 border-gray-200">
+                            <div class="text-sm text-gray-700 font-medium mb-1">
                                 <i class="fas fa-magic"></i> Finition
                             </div>
                             <div class="text-lg font-black text-gray-900">$finition</div>
                         </div>
-                        <div class="bg-gradient-to-br from-teal-50 to-teal-100 border-l-4 border-teal-600 rounded-lg p-4">
-                            <div class="text-sm text-teal-700 font-medium flex items-center gap-2">
+                        <div class="bg-gray-50 rounded-lg p-4 border-2 border-gray-200">
+                            <div class="text-sm text-gray-700 font-medium mb-1">
                                 <i class="fas fa-shipping-fast"></i> Délai
                             </div>
                             <div class="text-lg font-black text-gray-900">{$delai} jours</div>
@@ -453,113 +418,96 @@ function genererPageProduitHTML($p) {
                     </div>
                 </div>
 
-                <!-- CAS D'UTILISATION PROFESSIONNELS -->
+                <!-- CAS D'UTILISATION -->
                 <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-6">
-                    <h2 class="text-2xl font-black text-gray-900 mb-6 flex items-center gap-3">
-                        <i class="fas fa-briefcase text-blue-600"></i> Cas d'utilisation professionnels
+                    <h2 class="text-2xl font-black text-gray-900 mb-6">
+                        <i class="fas fa-briefcase"></i> Cas d'utilisation professionnels
                     </h2>
                     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div class="bg-gradient-to-br from-red-50 to-red-100 border-2 border-red-200 rounded-lg p-5">
+                        <div class="bg-gray-50 border-2 border-gray-200 rounded-lg p-5">
                             <div class="text-3xl mb-3"><i class="fas fa-store text-red-600"></i></div>
                             <h3 class="font-bold text-gray-900 mb-2">Commerce & Retail</h3>
-                            <p class="text-sm text-gray-700">PLV, vitrines, signalétique magasin, promotions, affichage prix</p>
+                            <p class="text-sm text-gray-700">PLV, vitrines, signalétique magasin</p>
                         </div>
-                        <div class="bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 rounded-lg p-5">
+                        <div class="bg-gray-50 border-2 border-gray-200 rounded-lg p-5">
                             <div class="text-3xl mb-3"><i class="fas fa-handshake text-blue-600"></i></div>
                             <h3 class="font-bold text-gray-900 mb-2">Salons & Événements</h3>
-                            <p class="text-sm text-gray-700">Stands, kakemonos, roll-ups, panneaux d'exposition, signalétique</p>
+                            <p class="text-sm text-gray-700">Stands, kakemonos, roll-ups</p>
                         </div>
-                        <div class="bg-gradient-to-br from-orange-50 to-orange-100 border-2 border-orange-200 rounded-lg p-5">
+                        <div class="bg-gray-50 border-2 border-gray-200 rounded-lg p-5">
                             <div class="text-3xl mb-3"><i class="fas fa-hard-hat text-orange-600"></i></div>
                             <h3 class="font-bold text-gray-900 mb-2">BTP & Construction</h3>
-                            <p class="text-sm text-gray-700">Panneaux chantier, signalisation, affichage permis, sécurité</p>
+                            <p class="text-sm text-gray-700">Panneaux chantier, signalisation</p>
                         </div>
-                        <div class="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 rounded-lg p-5">
+                        <div class="bg-gray-50 border-2 border-gray-200 rounded-lg p-5">
                             <div class="text-3xl mb-3"><i class="fas fa-building text-green-600"></i></div>
                             <h3 class="font-bold text-gray-900 mb-2">Immobilier</h3>
-                            <p class="text-sm text-gray-700">Panneaux A VENDRE/À LOUER, affichage vitrine, plans</p>
+                            <p class="text-sm text-gray-700">A VENDRE/À LOUER, affichage</p>
                         </div>
-                        <div class="bg-gradient-to-br from-purple-50 to-purple-100 border-2 border-purple-200 rounded-lg p-5">
+                        <div class="bg-gray-50 border-2 border-gray-200 rounded-lg p-5">
                             <div class="text-3xl mb-3"><i class="fas fa-bullhorn text-purple-600"></i></div>
                             <h3 class="font-bold text-gray-900 mb-2">Communication</h3>
-                            <p class="text-sm text-gray-700">Campagnes pub, affichage urbain, événementiel, marketing</p>
+                            <p class="text-sm text-gray-700">Campagnes pub, événementiel</p>
                         </div>
-                        <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 border-2 border-yellow-200 rounded-lg p-5">
+                        <div class="bg-gray-50 border-2 border-gray-200 rounded-lg p-5">
                             <div class="text-3xl mb-3"><i class="fas fa-utensils text-yellow-600"></i></div>
                             <h3 class="font-bold text-gray-900 mb-2">CHR & Restauration</h3>
-                            <p class="text-sm text-gray-700">Menus, affichage terrasse, déco murale, signalétique</p>
+                            <p class="text-sm text-gray-700">Menus, affichage terrasse</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- SEO ENRICHI -->
-                <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl shadow-lg p-6 md:p-8">
-                    <h2 class="text-2xl font-black text-gray-900 mb-6 flex items-center gap-3">
-                        <i class="fas fa-search text-blue-600"></i> Guide complet d'achat
+                <!-- SEO -->
+                <div class="bg-gray-50 rounded-xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-2xl font-black text-gray-900 mb-6">
+                        <i class="fas fa-search"></i> Guide complet
                     </h2>
-
                     <div class="prose max-w-none text-gray-700">
-                        <h3 class="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-                            <i class="fas fa-question-circle text-blue-600"></i> Pourquoi choisir ce produit ?
+                        <h3 class="text-lg font-bold text-gray-900 mb-3">
+                            <i class="fas fa-question-circle"></i> Pourquoi choisir ce produit ?
                         </h3>
                         <p class="mb-4 leading-relaxed">
                             <strong>$nom</strong> est la solution idéale pour vos besoins d'impression grand format professionnelle.
-                            Avec une certification <strong>$certification</strong> et une durée de vie de <strong>$dureeVie</strong>,
-                            ce support garantit des résultats exceptionnels pour usage <strong>$usage</strong>.
+                            Certification <strong>$certification</strong>, durée de vie <strong>$dureeVie</strong>,
+                            usage <strong>$usage</strong>.
                         </p>
-
-                        <h3 class="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-                            <i class="fas fa-star text-yellow-500"></i> Points forts du produit
+                        <h3 class="text-lg font-bold text-gray-900 mb-3">
+                            <i class="fas fa-star text-yellow-500"></i> Points forts
                         </h3>
                         <ul class="list-none space-y-2 mb-4">
-                            <li class="flex items-start gap-2">
-                                <i class="fas fa-check text-green-600 mt-1"></i>
-                                <span><strong>Prix compétitifs :</strong> De {$prix010}€/m² à {$prix300plus}€/m² selon quantité</span>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <i class="fas fa-check text-green-600 mt-1"></i>
-                                <span><strong>Livraison rapide :</strong> Expédition sous $delai jours ouvrés dans toute l'Europe</span>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <i class="fas fa-check text-green-600 mt-1"></i>
-                                <span><strong>Format flexible :</strong> Jusqu'à $formatMax cm avec découpe personnalisée</span>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <i class="fas fa-check text-green-600 mt-1"></i>
-                                <span><strong>Qualité garantie :</strong> Fabrication européenne certifiée $certification</span>
-                            </li>
+                            <li><i class="fas fa-check text-green-600"></i> Prix : {$prix010}€/m² à {$prix300plus}€/m²</li>
+                            <li><i class="fas fa-check text-green-600"></i> Livraison : $delai jours ouvrés Europe</li>
+                            <li><i class="fas fa-check text-green-600"></i> Format : jusqu'à $formatMax cm</li>
+                            <li><i class="fas fa-check text-green-600"></i> Qualité : Fabrication UE certifiée</li>
                         </ul>
-
-                        <h3 class="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-                            <i class="fas fa-tags text-red-600"></i> Mots-clés : Trouvez votre solution
+                        <h3 class="text-lg font-bold text-gray-900 mb-3">
+                            <i class="fas fa-tags"></i> Mots-clés
                         </h3>
                         <div class="flex flex-wrap gap-2">
-                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">impression grand format</span>
-                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">$categorie</span>
-                            <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-semibold">panneau publicitaire</span>
-                            <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-semibold">signalétique professionnelle</span>
-                            <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-semibold">PLV</span>
-                            <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-semibold">stand salon</span>
-                            <span class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-semibold">affichage extérieur</span>
-                            <span class="bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-sm font-semibold">communication visuelle</span>
+                            <span class="bg-white border-2 border-gray-300 px-3 py-1 rounded-full text-sm font-semibold">impression grand format</span>
+                            <span class="bg-white border-2 border-gray-300 px-3 py-1 rounded-full text-sm font-semibold">$categorie</span>
+                            <span class="bg-white border-2 border-gray-300 px-3 py-1 rounded-full text-sm font-semibold">panneau publicitaire</span>
+                            <span class="bg-white border-2 border-gray-300 px-3 py-1 rounded-full text-sm font-semibold">signalétique</span>
+                            <span class="bg-white border-2 border-gray-300 px-3 py-1 rounded-full text-sm font-semibold">PLV</span>
+                            <span class="bg-white border-2 border-gray-300 px-3 py-1 rounded-full text-sm font-semibold">stand salon</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- SIDEBAR PRIX & COMMANDE -->
+            <!-- SIDEBAR -->
             <div class="lg:col-span-1">
                 <div class="sticky top-24 bg-white rounded-xl shadow-lg p-6">
                     <div class="text-sm text-gray-600 mb-2">Prix TTC à partir de</div>
                     <div class="text-5xl font-black text-gray-900 mb-1 price-badge" id="prix-unitaire">{$prix300plus}€</div>
                     <div class="text-lg text-gray-600 mb-6">/m²</div>
 
-                    <div class="bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 rounded-lg p-4 mb-6">
+                    <div class="bg-red-50 border-2 border-red-200 rounded-lg p-4 mb-6">
                         <div class="text-sm font-semibold text-red-900 mb-2">
                             <i class="fas fa-calculator"></i> PRIX TOTAL TTC
                         </div>
                         <div class="text-3xl font-black text-red-600" id="prix-total">-</div>
-                        <div class="text-xs text-red-700 mt-2">TVA incluse • Livraison Europe</div>
+                        <div class="text-xs text-red-700 mt-2">TVA incluse</div>
                     </div>
 
                     <button class="w-full btn-primary text-white py-4 rounded-lg font-black text-lg mb-3 shadow-lg" id="btn-add-cart">
@@ -570,7 +518,6 @@ function genererPageProduitHTML($p) {
                         <i class="fas fa-file-invoice"></i> Demander un devis
                     </button>
 
-                    <!-- Trust badges -->
                     <div class="grid grid-cols-2 gap-3 mb-6">
                         <div class="text-center p-3 bg-gray-50 rounded-lg">
                             <div class="text-2xl mb-1"><i class="fas fa-globe-europe text-blue-600"></i></div>
@@ -594,20 +541,18 @@ function genererPageProduitHTML($p) {
                         <div><i class="fas fa-check text-green-600"></i> Livraison gratuite dès 200€</div>
                         <div><i class="fas fa-check text-green-600"></i> Fichiers techniques fournis</div>
                         <div><i class="fas fa-check text-green-600"></i> Support client 7j/7</div>
-                        <div><i class="fas fa-check text-green-600"></i> Paiement sécurisé (CB, PayPal)</div>
                     </div>
 
-                    <!-- Prix dégressifs -->
                     <div class="mt-6 pt-6 border-t">
                         <h3 class="font-bold text-gray-900 mb-3">
-                            <i class="fas fa-coins"></i> Prix dégressifs au m²
+                            <i class="fas fa-coins"></i> Prix dégressifs/m²
                         </h3>
                         <div class="space-y-2 text-sm">
-                            <div class="flex justify-between"><span>0-10 m²</span><span class="font-bold">{$prix010}€/m²</span></div>
-                            <div class="flex justify-between"><span>11-50 m²</span><span class="font-bold text-green-700">{$prix1150}€/m²</span></div>
-                            <div class="flex justify-between"><span>51-100 m²</span><span class="font-bold text-green-700">{$prix51100}€/m²</span></div>
-                            <div class="flex justify-between"><span>101-300 m²</span><span class="font-bold text-green-700">{$prix101300}€/m²</span></div>
-                            <div class="flex justify-between bg-red-50 p-2 rounded"><span class="font-bold">300+ m²</span><span class="font-black text-red-600">{$prix300plus}€/m²</span></div>
+                            <div class="flex justify-between"><span>0-10 m²</span><span class="font-bold">{$prix010}€</span></div>
+                            <div class="flex justify-between"><span>11-50 m²</span><span class="font-bold text-green-700">{$prix1150}€</span></div>
+                            <div class="flex justify-between"><span>51-100 m²</span><span class="font-bold text-green-700">{$prix51100}€</span></div>
+                            <div class="flex justify-between"><span>101-300 m²</span><span class="font-bold text-green-700">{$prix101300}€</span></div>
+                            <div class="flex justify-between bg-red-50 p-2 rounded"><span class="font-bold">300+ m²</span><span class="font-black text-red-600">{$prix300plus}€</span></div>
                         </div>
                     </div>
                 </div>
@@ -619,183 +564,218 @@ function genererPageProduitHTML($p) {
     <script>fetch('/includes/footer.html').then(r=>r.text()).then(html=>document.getElementById('footer-placeholder').innerHTML=html)</script>
 
     <script>
-    // CONFIGURATEUR PRODUIT COMPLET
-    const PRODUIT = {
-        id: '$id',
-        nom: '$nom',
-        prix: {
-            '0-10': $prix010,
-            '11-50': $prix1150,
-            '51-100': $prix51100,
-            '101-300': $prix101300,
-            '300+': $prix300plus
-        },
-        delai: $delai
-    };
+    // Toggle specs collapsible
+    function toggleSpecs() {
+        const content = document.getElementById('specs-content');
+        const icon = document.getElementById('specs-icon');
+        content.classList.toggle('active');
+        icon.style.transform = content.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0deg)';
+    }
 
-    let config = {
-        largeur: 100,
-        hauteur: 100,
-        quantite: 1,
-        finition: 'standard',
-        prixFinition: 0,
-        format: 'Personnalisé',
-        fichier: null
-    };
+    // Attendre que le DOM soit chargé
+    document.addEventListener('DOMContentLoaded', function() {
+        const PRODUIT = {
+            id: '$id',
+            nom: '$nom',
+            prix: {
+                '0-10': $prix010,
+                '11-50': $prix1150,
+                '51-100': $prix51100,
+                '101-300': $prix101300,
+                '300+': $prix300plus
+            },
+            delai: $delai
+        };
 
-    // Sélection format
-    document.querySelectorAll('[data-format]').forEach(el => {
-        el.addEventListener('click', function() {
-            document.querySelectorAll('[data-format]').forEach(e => e.classList.remove('selected'));
-            this.classList.add('selected');
+        let config = {
+            largeur: 100,
+            hauteur: 100,
+            quantite: 1,
+            finition: 'standard',
+            prixFinition: 0,
+            format: 'A0 (84×119 cm)',
+            fichier: null
+        };
 
-            config.format = this.dataset.format;
-            config.largeur = parseFloat(this.dataset.w);
-            config.hauteur = parseFloat(this.dataset.h);
+        // Sélection format
+        document.querySelectorAll('[data-format]').forEach(el => {
+            el.addEventListener('click', function() {
+                document.querySelectorAll('[data-format]').forEach(e => e.classList.remove('selected'));
+                this.classList.add('selected');
 
-            const isCustom = this.dataset.custom === 'true';
-            document.getElementById('custom-dimensions').style.display = isCustom ? 'grid' : 'none';
+                config.format = this.dataset.format;
+                config.largeur = parseFloat(this.dataset.w);
+                config.hauteur = parseFloat(this.dataset.h);
 
-            if (!isCustom) {
-                document.getElementById('largeur').value = config.largeur;
-                document.getElementById('hauteur').value = config.hauteur;
+                const isCustom = this.dataset.custom === 'true';
+                document.getElementById('custom-dimensions').style.display = isCustom ? 'grid' : 'none';
+
+                if (!isCustom) {
+                    document.getElementById('largeur').value = config.largeur;
+                    document.getElementById('hauteur').value = config.hauteur;
+                }
+
+                calculerPrix();
+            });
+        });
+
+        // Premier format sélectionné par défaut
+        const firstFormat = document.querySelector('[data-format]');
+        if (firstFormat) {
+            firstFormat.click();
+        }
+
+        // Dimensions personnalisées
+        ['largeur', 'hauteur'].forEach(dim => {
+            const el = document.getElementById(dim);
+            if (el) {
+                el.addEventListener('input', function() {
+                    config[dim] = parseFloat(this.value) || 0;
+                    calculerPrix();
+                });
             }
-
-            calculerPrix();
         });
-    });
 
-    // Premier format sélectionné par défaut
-    document.querySelector('[data-format]').click();
+        // Quantité
+        const qteEl = document.getElementById('quantite');
+        if (qteEl) {
+            qteEl.addEventListener('input', function() {
+                config.quantite = parseInt(this.value) || 1;
+                calculerPrix();
+            });
+        }
 
-    // Dimensions personnalisées
-    ['largeur', 'hauteur'].forEach(dim => {
-        document.getElementById(dim).addEventListener('input', function() {
-            config[dim] = parseFloat(this.value) || 0;
-            config.format = 'Personnalisé';
-            calculerPrix();
+        // Options finition
+        document.querySelectorAll('[data-option]').forEach(el => {
+            el.addEventListener('click', function() {
+                document.querySelectorAll('[data-option]').forEach(e => e.classList.remove('selected'));
+                this.classList.add('selected');
+                config.finition = this.dataset.option;
+                config.prixFinition = parseFloat(this.dataset.prix);
+                const resumeEl = document.getElementById('resume-finition');
+                if (resumeEl) {
+                    resumeEl.textContent = this.querySelector('.font-bold').textContent;
+                }
+                calculerPrix();
+            });
         });
-    });
 
-    // Quantité
-    document.getElementById('quantite').addEventListener('input', function() {
-        config.quantite = parseInt(this.value) || 1;
+        // Upload fichier
+        const uploadZone = document.getElementById('upload-zone');
+        const fileInput = document.getElementById('file-input');
+
+        if (uploadZone && fileInput) {
+            uploadZone.addEventListener('click', () => fileInput.click());
+
+            uploadZone.addEventListener('dragover', e => {
+                e.preventDefault();
+                uploadZone.classList.add('border-red-600');
+            });
+
+            uploadZone.addEventListener('dragleave', () => {
+                uploadZone.classList.remove('border-red-600');
+            });
+
+            uploadZone.addEventListener('drop', e => {
+                e.preventDefault();
+                uploadZone.classList.remove('border-red-600');
+                if (e.dataTransfer.files.length) {
+                    handleFile(e.dataTransfer.files[0]);
+                }
+            });
+
+            fileInput.addEventListener('change', function() {
+                if (this.files.length) {
+                    handleFile(this.files[0]);
+                }
+            });
+        }
+
+        function handleFile(file) {
+            config.fichier = file;
+            if (uploadZone) {
+                uploadZone.innerHTML = \`
+                    <div class="text-4xl mb-3"><i class="fas fa-check-circle text-green-600"></i></div>
+                    <div class="font-bold text-green-700 mb-2">\${file.name}</div>
+                    <div class="text-sm text-gray-600">\${(file.size / 1024 / 1024).toFixed(2)} Mo</div>
+                \`;
+            }
+        }
+
+        // Calcul prix
+        function calculerPrix() {
+            const surface = (config.largeur * config.hauteur) / 10000;
+            const surfaceTotale = surface * config.quantite;
+
+            // Prix dégressif
+            let prixM2;
+            if (surfaceTotale > 300) prixM2 = PRODUIT.prix['300+'];
+            else if (surfaceTotale > 100) prixM2 = PRODUIT.prix['101-300'];
+            else if (surfaceTotale > 50) prixM2 = PRODUIT.prix['51-100'];
+            else if (surfaceTotale > 10) prixM2 = PRODUIT.prix['11-50'];
+            else prixM2 = PRODUIT.prix['0-10'];
+
+            const prixImpression = prixM2 * surface * config.quantite;
+            const prixOptions = config.prixFinition * (config.prixFinition > 20 ? 1 : surface) * config.quantite;
+            const prixTotal = prixImpression + prixOptions;
+
+            // Affichage
+            const prixUnitEl = document.getElementById('prix-unitaire');
+            const prixTotalEl = document.getElementById('prix-total');
+            if (prixUnitEl) prixUnitEl.textContent = prixM2.toFixed(2) + '€';
+            if (prixTotalEl) prixTotalEl.textContent = prixTotal.toFixed(2) + ' €';
+
+            // Résumé
+            const resumeFormat = document.getElementById('resume-format');
+            const resumeDims = document.getElementById('resume-dims');
+            const resumeSurface = document.getElementById('resume-surface');
+            const resumeQte = document.getElementById('resume-qte');
+
+            if (resumeFormat) resumeFormat.textContent = config.format;
+            if (resumeDims) resumeDims.textContent = \`\${config.largeur}×\${config.hauteur} cm\`;
+            if (resumeSurface) resumeSurface.textContent = surface.toFixed(2) + ' m²';
+            if (resumeQte) resumeQte.textContent = config.quantite;
+
+            // Spécifications techniques fichier
+            const fondPerdu = 0.3;
+            const largeurAvecFondPerdu = config.largeur + (fondPerdu * 2);
+            const hauteurAvecFondPerdu = config.hauteur + (fondPerdu * 2);
+            const largeurSecurite = config.largeur - (fondPerdu * 2);
+            const hauteurSecurite = config.hauteur - (fondPerdu * 2);
+
+            const specFini = document.getElementById('spec-format-fini');
+            const specFourni = document.getElementById('spec-format-fourni');
+            const specSecu = document.getElementById('spec-zone-securite');
+
+            if (specFini) specFini.textContent = \`\${config.largeur} × \${config.hauteur} cm\`;
+            if (specFourni) specFourni.textContent = \`\${largeurAvecFondPerdu.toFixed(1)} × \${hauteurAvecFondPerdu.toFixed(1)} cm\`;
+            if (specSecu) specSecu.textContent = \`\${largeurSecurite.toFixed(1)} × \${hauteurSecurite.toFixed(1)} cm\`;
+        }
+
+        // Ajout au panier
+        const btnCart = document.getElementById('btn-add-cart');
+        if (btnCart) {
+            btnCart.addEventListener('click', function() {
+                const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+                cart.push({
+                    id: PRODUIT.id,
+                    nom: PRODUIT.nom,
+                    config: {...config},
+                    prix: parseFloat(document.getElementById('prix-total').textContent),
+                    date: new Date().toISOString()
+                });
+                localStorage.setItem('cart', JSON.stringify(cart));
+                this.innerHTML = '<i class="fas fa-check"></i> AJOUTÉ';
+                this.style.background = '#10b981';
+                setTimeout(() => {
+                    window.location.href = '/panier.html';
+                }, 1000);
+            });
+        }
+
+        // Calcul initial
         calculerPrix();
     });
-
-    // Options finition
-    document.querySelectorAll('[data-option]').forEach(el => {
-        el.addEventListener('click', function() {
-            document.querySelectorAll('[data-option]').forEach(e => e.classList.remove('selected'));
-            this.classList.add('selected');
-            config.finition = this.dataset.option;
-            config.prixFinition = parseFloat(this.dataset.prix);
-            document.getElementById('resume-finition').textContent = this.querySelector('.font-bold').textContent;
-            calculerPrix();
-        });
-    });
-
-    // Upload fichier
-    const uploadZone = document.getElementById('upload-zone');
-    const fileInput = document.getElementById('file-input');
-
-    uploadZone.addEventListener('click', () => fileInput.click());
-
-    uploadZone.addEventListener('dragover', e => {
-        e.preventDefault();
-        uploadZone.classList.add('border-red-600');
-    });
-
-    uploadZone.addEventListener('dragleave', () => {
-        uploadZone.classList.remove('border-red-600');
-    });
-
-    uploadZone.addEventListener('drop', e => {
-        e.preventDefault();
-        uploadZone.classList.remove('border-red-600');
-        if (e.dataTransfer.files.length) {
-            handleFile(e.dataTransfer.files[0]);
-        }
-    });
-
-    fileInput.addEventListener('change', function() {
-        if (this.files.length) {
-            handleFile(this.files[0]);
-        }
-    });
-
-    function handleFile(file) {
-        config.fichier = file;
-        uploadZone.innerHTML = \`
-            <div class="text-4xl mb-3"><i class="fas fa-check-circle text-green-600"></i></div>
-            <div class="font-bold text-green-700 mb-2">\${file.name}</div>
-            <div class="text-sm text-gray-600">\${(file.size / 1024 / 1024).toFixed(2)} Mo</div>
-        \`;
-    }
-
-    // Calcul prix
-    function calculerPrix() {
-        const surface = (config.largeur * config.hauteur) / 10000;
-        const surfaceTotale = surface * config.quantite;
-
-        // Prix dégressif
-        let prixM2;
-        if (surfaceTotale > 300) prixM2 = PRODUIT.prix['300+'];
-        else if (surfaceTotale > 100) prixM2 = PRODUIT.prix['101-300'];
-        else if (surfaceTotale > 50) prixM2 = PRODUIT.prix['51-100'];
-        else if (surfaceTotale > 10) prixM2 = PRODUIT.prix['11-50'];
-        else prixM2 = PRODUIT.prix['0-10'];
-
-        const prixImpression = prixM2 * surface * config.quantite;
-        const prixOptions = config.prixFinition * (config.prixFinition > 20 ? 1 : surface) * config.quantite;
-        const prixTotal = prixImpression + prixOptions;
-
-        // Affichage
-        document.getElementById('prix-unitaire').textContent = prixM2.toFixed(2) + '€';
-        document.getElementById('prix-total').textContent = prixTotal.toFixed(2) + ' €';
-
-        // Résumé
-        document.getElementById('resume-format').textContent = config.format;
-        document.getElementById('resume-dims').textContent = \`\${config.largeur}×\${config.hauteur} cm\`;
-        document.getElementById('resume-surface').textContent = surface.toFixed(2) + ' m²';
-        document.getElementById('resume-qte').textContent = config.quantite;
-
-        // Spécifications techniques fichier
-        const fondPerdu = 0.3; // 3mm = 0.3cm de chaque côté
-        const largeurAvecFondPerdu = config.largeur + (fondPerdu * 2);
-        const hauteurAvecFondPerdu = config.hauteur + (fondPerdu * 2);
-        const largeurSecurite = config.largeur - (fondPerdu * 2);
-        const hauteurSecurite = config.hauteur - (fondPerdu * 2);
-
-        document.getElementById('spec-format-fini').textContent = \`\${config.largeur} × \${config.hauteur} cm\`;
-        document.getElementById('spec-format-fourni').textContent = \`\${largeurAvecFondPerdu.toFixed(1)} × \${hauteurAvecFondPerdu.toFixed(1)} cm\`;
-        document.getElementById('spec-zone-securite').textContent = \`\${largeurSecurite.toFixed(1)} × \${hauteurSecurite.toFixed(1)} cm\`;
-    }
-
-    // Ajout au panier
-    document.getElementById('btn-add-cart').addEventListener('click', function() {
-        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-
-        cart.push({
-            id: PRODUIT.id,
-            nom: PRODUIT.nom,
-            config: {...config},
-            prix: parseFloat(document.getElementById('prix-total').textContent),
-            date: new Date().toISOString()
-        });
-
-        localStorage.setItem('cart', JSON.stringify(cart));
-
-        this.innerHTML = '<i class="fas fa-check"></i> AJOUTÉ AU PANIER';
-        this.style.background = '#10b981';
-
-        setTimeout(() => {
-            window.location.href = '/panier.html';
-        }, 1000);
-    });
-
-    // Calcul initial
-    calculerPrix();
     </script>
 </body>
 </html>
@@ -806,28 +786,19 @@ HTML;
 
 /**
  * Générer et sauvegarder la page HTML d'un produit
- *
- * @param array $produit Données du produit
- * @param string $outputDir Dossier de sortie
- * @return bool Succès ou échec
  */
 function genererEtSauvegarderPageProduit($produit, $outputDir = null) {
     if ($outputDir === null) {
         $outputDir = __DIR__ . '/../../produit/';
     }
 
-    // Créer le dossier si nécessaire
     if (!is_dir($outputDir)) {
         mkdir($outputDir, 0755, true);
     }
 
-    // Nettoyer l'ID pour le nom de fichier
     $fileId = preg_replace('/[^A-Za-z0-9\-_]/', '', $produit['ID_PRODUIT']);
     $fileName = $outputDir . $fileId . '.html';
-
-    // Générer le HTML
     $html = genererPageProduitHTML($produit);
 
-    // Sauvegarder
     return file_put_contents($fileName, $html) !== false;
 }
