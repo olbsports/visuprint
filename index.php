@@ -21,28 +21,28 @@ include __DIR__ . '/includes/header.php';
                     <!-- USPs -->
                     <div class="grid sm:grid-cols-2 gap-4 mb-10">
                         <div class="flex items-center gap-3 bg-white/10 rounded-lg p-4 backdrop-blur">
-                            <span class="text-3xl">✓</span>
+                            <span class="text-3xl"><i class="fas fa-tag"></i></span>
                             <div>
                                 <div class="font-bold text-lg">Tarifs Dégressifs</div>
                                 <div class="text-sm text-gray-300">Jusqu'à -40% en volume</div>
                             </div>
                         </div>
                         <div class="flex items-center gap-3 bg-white/10 rounded-lg p-4 backdrop-blur">
-                            <span class="text-3xl">⚡</span>
+                            <span class="text-3xl"><i class="fas fa-shipping-fast"></i></span>
                             <div>
                                 <div class="font-bold text-lg">Livraison Rapide</div>
                                 <div class="text-sm text-gray-300">48-72h partout en France</div>
                             </div>
                         </div>
                         <div class="flex items-center gap-3 bg-white/10 rounded-lg p-4 backdrop-blur">
-                            <span class="text-3xl">🏆</span>
+                            <span class="text-3xl"><i class="fas fa-trophy"></i></span>
                             <div>
                                 <div class="font-bold text-lg">Qualité Certifiée</div>
                                 <div class="text-sm text-gray-300">Normes B1/M1</div>
                             </div>
                         </div>
                         <div class="flex items-center gap-3 bg-white/10 rounded-lg p-4 backdrop-blur">
-                            <span class="text-3xl">💰</span>
+                            <span class="text-3xl"><i class="fas fa-calculator"></i></span>
                             <div>
                                 <div class="font-bold text-lg">Devis Instantané</div>
                                 <div class="text-sm text-gray-300">Configurateur en ligne</div>
@@ -52,11 +52,11 @@ include __DIR__ . '/includes/header.php';
 
                     <!-- CTAs -->
                     <div class="flex flex-wrap gap-4">
-                        <a href="/catalogue.html" class="btn-primary text-white px-10 py-4 rounded-lg text-lg font-bold shadow-2xl">
-                            🛒 Voir le Catalogue
+                        <a href="/catalogue.html" class="btn-primary text-white px-10 py-4 rounded-lg text-lg font-bold shadow-2xl inline-flex items-center gap-2">
+                            <i class="fas fa-box-open"></i> Voir le Catalogue
                         </a>
-                        <a href="#contact" class="bg-white text-gray-900 px-10 py-4 rounded-lg text-lg font-bold hover:bg-gray-100 transition shadow-xl">
-                            📞 Nous Contacter
+                        <a href="#contact" class="bg-white text-gray-900 px-10 py-4 rounded-lg text-lg font-bold hover:bg-gray-100 transition shadow-xl inline-flex items-center gap-2">
+                            <i class="fas fa-phone"></i> Nous Contacter
                         </a>
                     </div>
 
@@ -82,7 +82,7 @@ include __DIR__ . '/includes/header.php';
                 <div class="hidden lg:block">
                     <div class="bg-white/10 backdrop-blur rounded-2xl p-8 border-2 border-white/20">
                         <div class="text-center mb-6">
-                            <div class="text-7xl mb-4">🎨</div>
+                            <div class="text-7xl mb-4"><i class="fas fa-palette"></i></div>
                             <h3 class="text-2xl font-bold mb-2">Configurateur Instantané</h3>
                             <p class="text-gray-300">Prix en temps réel</p>
                         </div>
@@ -131,7 +131,7 @@ include __DIR__ . '/includes/header.php';
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Supports Rigides PVC -->
                 <a href="/categorie/supports-rigides-pvc.html" class="category-card group bg-gray-50 rounded-2xl p-8 border-2 border-gray-200 hover:border-red-600 transition cursor-pointer">
-                    <div class="text-5xl mb-4">📄</div>
+                    <div class="text-5xl mb-4"><i class="fas fa-file"></i></div>
                     <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-red-600 transition">
                         Supports Rigides PVC
                     </h3>
@@ -146,7 +146,7 @@ include __DIR__ . '/includes/header.php';
 
                 <!-- Supports Aluminium -->
                 <a href="/categorie/supports-aluminium.html" class="category-card group bg-gray-50 rounded-2xl p-8 border-2 border-gray-200 hover:border-red-600 transition cursor-pointer">
-                    <div class="text-5xl mb-4">✨</div>
+                    <div class="text-5xl mb-4"><i class="fas fa-gem"></i></div>
                     <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-red-600 transition">
                         Aluminium Premium
                     </h3>
@@ -161,7 +161,7 @@ include __DIR__ . '/includes/header.php';
 
                 <!-- Bâches -->
                 <a href="/categorie/baches-souples.html" class="category-card group bg-gray-50 rounded-2xl p-8 border-2 border-gray-200 hover:border-red-600 transition cursor-pointer">
-                    <div class="text-5xl mb-4">🎪</div>
+                    <div class="text-5xl mb-4"><i class="fas fa-flag"></i></div>
                     <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-red-600 transition">
                         Bâches & Souples
                     </h3>
@@ -176,7 +176,7 @@ include __DIR__ . '/includes/header.php';
 
                 <!-- Textiles -->
                 <a href="/categorie/textiles.html" class="category-card group bg-gray-50 rounded-2xl p-8 border-2 border-gray-200 hover:border-red-600 transition cursor-pointer">
-                    <div class="text-5xl mb-4">🎨</div>
+                    <div class="text-5xl mb-4"><i class="fas fa-tshirt"></i></div>
                     <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-red-600 transition">
                         Textiles Imprimables
                     </h3>
@@ -223,7 +223,7 @@ include __DIR__ . '/includes/header.php';
                                 </h3>
                                 <p class="text-sm text-gray-500 font-semibold">PVC Expansé Standard</p>
                             </div>
-                            <span class="text-4xl">📄</span>
+                            <span class="text-4xl"><i class="fas fa-file"></i></span>
                         </div>
 
                         <p class="text-gray-600 mb-6">
@@ -276,7 +276,7 @@ include __DIR__ . '/includes/header.php';
                                 </h3>
                                 <p class="text-sm text-gray-500 font-semibold">Composite Aluminium</p>
                             </div>
-                            <span class="text-4xl">✨</span>
+                            <span class="text-4xl"><i class="fas fa-gem"></i></span>
                         </div>
 
                         <p class="text-gray-600 mb-6">
@@ -329,7 +329,7 @@ include __DIR__ . '/includes/header.php';
                                 </h3>
                                 <p class="text-sm text-gray-500 font-semibold">Frontlit Coated B1</p>
                             </div>
-                            <span class="text-4xl">🎪</span>
+                            <span class="text-4xl"><i class="fas fa-flag"></i></span>
                         </div>
 
                         <p class="text-gray-600 mb-6">
@@ -389,7 +389,7 @@ include __DIR__ . '/includes/header.php';
 
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div class="text-center p-8">
-                    <div class="text-6xl mb-6">📦</div>
+                    <div class="text-6xl mb-6"><i class="fas fa-shipping-fast"></i></div>
                     <h3 class="text-xl font-bold text-gray-900 mb-3">Livraison 48-72h</h3>
                     <p class="text-gray-600">
                         Production rapide et livraison partout en France. Express disponible.
@@ -397,7 +397,7 @@ include __DIR__ . '/includes/header.php';
                 </div>
 
                 <div class="text-center p-8">
-                    <div class="text-6xl mb-6">💰</div>
+                    <div class="text-6xl mb-6"><i class="fas fa-tags"></i></div>
                     <h3 class="text-xl font-bold text-gray-900 mb-3">Prix Dégressifs</h3>
                     <p class="text-gray-600">
                         Jusqu'à -40% sur les grandes quantités. Devis immédiat en ligne.
@@ -405,7 +405,7 @@ include __DIR__ . '/includes/header.php';
                 </div>
 
                 <div class="text-center p-8">
-                    <div class="text-6xl mb-6">🏆</div>
+                    <div class="text-6xl mb-6"><i class="fas fa-trophy"></i></div>
                     <h3 class="text-xl font-bold text-gray-900 mb-3">Qualité Certifiée</h3>
                     <p class="text-gray-600">
                         Matériaux certifiés B1/M1. Impression HD haute résolution garantie.
@@ -413,7 +413,7 @@ include __DIR__ . '/includes/header.php';
                 </div>
 
                 <div class="text-center p-8">
-                    <div class="text-6xl mb-6">💬</div>
+                    <div class="text-6xl mb-6"><i class="fas fa-comments"></i></div>
                     <h3 class="text-xl font-bold text-gray-900 mb-3">Service Expert</h3>
                     <p class="text-gray-600">
                         Conseils techniques et accompagnement projet par des professionnels.
@@ -434,16 +434,16 @@ include __DIR__ . '/includes/header.php';
             </p>
 
             <div class="flex flex-wrap justify-center gap-4 mb-10">
-                <a href="/configurateur.html" class="bg-red-600 hover:bg-red-700 text-white px-10 py-4 rounded-lg font-bold text-lg transition shadow-2xl">
-                    🛒 Configurateur en Ligne
+                <a href="/configurateur.html" class="bg-red-600 hover:bg-red-700 text-white px-10 py-4 rounded-lg font-bold text-lg transition shadow-2xl inline-flex items-center gap-2">
+                    <i class="fas fa-sliders-h"></i> Configurateur en Ligne
                 </a>
-                <a href="tel:0123456789" class="bg-white text-gray-900 px-10 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition shadow-xl">
-                    📞 01 23 45 67 89
+                <a href="tel:0123456789" class="bg-white text-gray-900 px-10 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition shadow-xl inline-flex items-center gap-2">
+                    <i class="fas fa-phone"></i> 01 23 45 67 89
                 </a>
             </div>
 
             <div class="text-sm text-gray-300">
-                ✓ Réponse sous 1h • ✓ Sans engagement • ✓ Conseils gratuits
+                <i class="fas fa-check"></i> Réponse sous 1h • <i class="fas fa-check"></i> Sans engagement • <i class="fas fa-check"></i> Conseils gratuits
             </div>
         </div>
     </section>

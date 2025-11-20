@@ -40,7 +40,7 @@ include __DIR__ . '/includes/header.php';
             <!-- SUPPORTS RIGIDES PVC -->
             <div class="mb-16" data-category="pvc">
                 <h2 class="text-3xl font-black text-gray-900 mb-8 flex items-center">
-                    <span class="text-4xl mr-3">📄</span> Supports Rigides PVC
+                    <span class="text-4xl mr-3"><i class="fas fa-file"></i></span> Supports Rigides PVC
                 </h2>
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     <a href="/produit/FX-2MM.html" class="product-card bg-white rounded-2xl border-2 border-gray-200 overflow-hidden p-6 hover:border-red-600">
@@ -95,7 +95,7 @@ include __DIR__ . '/includes/header.php';
             <!-- SUPPORTS ALUMINIUM -->
             <div class="mb-16" data-category="alu">
                 <h2 class="text-3xl font-black text-gray-900 mb-8 flex items-center">
-                    <span class="text-4xl mr-3">✨</span> Supports Aluminium Premium
+                    <span class="text-4xl mr-3"><i class="fas fa-gem"></i></span> Supports Aluminium Premium
                 </h2>
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     <a href="/produit/DB-2MM.html" class="product-card bg-white rounded-2xl border-2 border-gray-200 overflow-hidden p-6 hover:border-red-600">
@@ -120,7 +120,7 @@ include __DIR__ . '/includes/header.php';
             <!-- BÂCHES -->
             <div class="mb-16" data-category="bache">
                 <h2 class="text-3xl font-black text-gray-900 mb-8 flex items-center">
-                    <span class="text-4xl mr-3">🎪</span> Bâches & Supports Souples
+                    <span class="text-4xl mr-3"><i class="fas fa-flag"></i></span> Bâches & Supports Souples
                 </h2>
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     <a href="/produit/FRONTLIT-COATED-500G-B1.html" class="product-card bg-white rounded-2xl border-2 border-gray-200 overflow-hidden p-6 hover:border-red-600">
@@ -160,7 +160,7 @@ include __DIR__ . '/includes/header.php';
             <!-- TEXTILES -->
             <div class="mb-16" data-category="textile">
                 <h2 class="text-3xl font-black text-gray-900 mb-8 flex items-center">
-                    <span class="text-4xl mr-3">🎨</span> Textiles Imprimables
+                    <span class="text-4xl mr-3"><i class="fas fa-tshirt"></i></span> Textiles Imprimables
                 </h2>
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     <a href="/produit/POLYGLANS-115G.html" class="product-card bg-white rounded-2xl border-2 border-gray-200 overflow-hidden p-6 hover:border-red-600">
@@ -218,11 +218,11 @@ include __DIR__ . '/includes/header.php';
                 Notre équipe vous conseille gratuitement sur le support idéal pour votre projet
             </p>
             <div class="flex flex-wrap justify-center gap-4">
-                <a href="/contact.html" class="btn-primary text-white px-10 py-4 rounded-lg font-bold text-lg shadow-2xl">
-                    📧 Contactez-nous
+                <a href="/contact.html" class="btn-primary text-white px-10 py-4 rounded-lg font-bold text-lg shadow-2xl inline-flex items-center gap-2">
+                    <i class="fas fa-envelope"></i> Contactez-nous
                 </a>
-                <a href="tel:0123456789" class="bg-white text-gray-900 px-10 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition shadow-xl">
-                    📞 01 23 45 67 89
+                <a href="tel:0123456789" class="bg-white text-gray-900 px-10 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition shadow-xl inline-flex items-center gap-2">
+                    <i class="fas fa-phone"></i> 01 23 45 67 89
                 </a>
             </div>
         </div>
