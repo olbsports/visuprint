@@ -74,82 +74,34 @@
                         <label class="block text-sm font-bold text-gray-700 mb-3">
                             <i class="fas fa-ruler-combined"></i> Format
                         </label>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="format-selector">
-                            <div class="config-option rounded-lg p-3 text-center" data-format="A0 (84×119 cm)" data-w="84" data-h="119" data-custom="false">
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3" id="format-selector">
+                            <button type="button" class="config-option rounded-lg p-3 text-center" data-format="A0 (84×119 cm)" data-w="84" data-h="119" data-custom="false">
                                 <div class="font-semibold text-sm">A0 (84×119 cm)</div>
-                            </div>
-                            <div class="config-option rounded-lg p-3 text-center" data-format="A1 (59×84 cm)" data-w="59" data-h="84" data-custom="false">
+                            </button>
+                            <button type="button" class="config-option rounded-lg p-3 text-center" data-format="A1 (59×84 cm)" data-w="59" data-h="84" data-custom="false">
                                 <div class="font-semibold text-sm">A1 (59×84 cm)</div>
-                            </div>
-                            <div class="config-option rounded-lg p-3 text-center" data-format="A2 (42×59 cm)" data-w="42" data-h="59" data-custom="false">
+                            </button>
+                            <button type="button" class="config-option rounded-lg p-3 text-center" data-format="A2 (42×59 cm)" data-w="42" data-h="59" data-custom="false">
                                 <div class="font-semibold text-sm">A2 (42×59 cm)</div>
-                            </div>
-                            <div class="config-option rounded-lg p-3 text-center" data-format="A3 (30×42 cm)" data-w="30" data-h="42" data-custom="false">
+                            </button>
+                            <button type="button" class="config-option rounded-lg p-3 text-center" data-format="A3 (30×42 cm)" data-w="30" data-h="42" data-custom="false">
                                 <div class="font-semibold text-sm">A3 (30×42 cm)</div>
-                            </div>
-                            <div class="config-option rounded-lg p-3 text-center" data-format="A4 (21×30 cm)" data-w="21" data-h="30" data-custom="false">
-                                <div class="font-semibold text-sm">A4 (21×30 cm)</div>
-                            </div>
-                            <div class="config-option rounded-lg p-3 text-center" data-format="Kakemono 85×200 cm" data-w="85" data-h="200" data-custom="false">
-                                <div class="font-semibold text-sm">Kakemono 85×200 cm</div>
-                            </div>
-                            <div class="config-option rounded-lg p-3 text-center" data-format="Kakemono 100×200 cm" data-w="100" data-h="200" data-custom="false">
-                                <div class="font-semibold text-sm">Kakemono 100×200 cm</div>
-                            </div>
-                            <div class="config-option rounded-lg p-3 text-center" data-format="Roll-up 85×200 cm" data-w="85" data-h="200" data-custom="false">
-                                <div class="font-semibold text-sm">Roll-up 85×200 cm</div>
-                            </div>
-                            <div class="config-option rounded-lg p-3 text-center" data-format="Roll-up 100×200 cm" data-w="100" data-h="200" data-custom="false">
-                                <div class="font-semibold text-sm">Roll-up 100×200 cm</div>
-                            </div>
-                            <div class="config-option rounded-lg p-3 text-center" data-format="Roll-up 120×200 cm" data-w="120" data-h="200" data-custom="false">
-                                <div class="font-semibold text-sm">Roll-up 120×200 cm</div>
-                            </div>
-                            <div class="config-option rounded-lg p-3 text-center" data-format="X-Banner 60×160 cm" data-w="60" data-h="160" data-custom="false">
-                                <div class="font-semibold text-sm">X-Banner 60×160 cm</div>
-                            </div>
-                            <div class="config-option rounded-lg p-3 text-center" data-format="X-Banner 80×180 cm" data-w="80" data-h="180" data-custom="false">
-                                <div class="font-semibold text-sm">X-Banner 80×180 cm</div>
-                            </div>
-                            <div class="config-option rounded-lg p-3 text-center" data-format="L-Banner 80×200 cm" data-w="80" data-h="200" data-custom="false">
-                                <div class="font-semibold text-sm">L-Banner 80×200 cm</div>
-                            </div>
-                            <div class="config-option rounded-lg p-3 text-center" data-format="Panneau 40×60 cm" data-w="40" data-h="60" data-custom="false">
-                                <div class="font-semibold text-sm">Panneau 40×60 cm</div>
-                            </div>
-                            <div class="config-option rounded-lg p-3 text-center" data-format="Panneau 60×80 cm" data-w="60" data-h="80" data-custom="false">
-                                <div class="font-semibold text-sm">Panneau 60×80 cm</div>
-                            </div>
-                            <div class="config-option rounded-lg p-3 text-center" data-format="Panneau 80×120 cm" data-w="80" data-h="120" data-custom="false">
-                                <div class="font-semibold text-sm">Panneau 80×120 cm</div>
-                            </div>
-                            <div class="config-option rounded-lg p-3 text-center" data-format="Panneau 100×150 cm" data-w="100" data-h="150" data-custom="false">
-                                <div class="font-semibold text-sm">Panneau 100×150 cm</div>
-                            </div>
-                            <div class="config-option rounded-lg p-3 text-center" data-format="Carré 50×50 cm" data-w="50" data-h="50" data-custom="false">
-                                <div class="font-semibold text-sm">Carré 50×50 cm</div>
-                            </div>
-                            <div class="config-option rounded-lg p-3 text-center" data-format="Carré 80×80 cm" data-w="80" data-h="80" data-custom="false">
-                                <div class="font-semibold text-sm">Carré 80×80 cm</div>
-                            </div>
-                            <div class="config-option rounded-lg p-3 text-center" data-format="Carré 100×100 cm" data-w="100" data-h="100" data-custom="false">
-                                <div class="font-semibold text-sm">Carré 100×100 cm</div>
-                            </div>
-                            <div class="config-option rounded-lg p-3 text-center" data-format="200×100 cm" data-w="200" data-h="100" data-custom="false">
+                            </button>
+                            <button type="button" class="config-option rounded-lg p-3 text-center" data-format="100×100 cm" data-w="100" data-h="100" data-custom="false">
+                                <div class="font-semibold text-sm">100×100 cm</div>
+                            </button>
+                            <button type="button" class="config-option rounded-lg p-3 text-center" data-format="200×100 cm" data-w="200" data-h="100" data-custom="false">
                                 <div class="font-semibold text-sm">200×100 cm</div>
-                            </div>
-                            <div class="config-option rounded-lg p-3 text-center" data-format="300×100 cm" data-w="300" data-h="100" data-custom="false">
-                                <div class="font-semibold text-sm">300×100 cm</div>
-                            </div>
-                            <div class="config-option rounded-lg p-3 text-center" data-format="300×200 cm" data-w="300" data-h="200" data-custom="false">
+                            </button>
+                            <button type="button" class="config-option rounded-lg p-3 text-center" data-format="Roll-up 85×200 cm" data-w="85" data-h="200" data-custom="false">
+                                <div class="font-semibold text-sm">Roll-up 85×200</div>
+                            </button>
+                            <button type="button" class="config-option rounded-lg p-3 text-center" data-format="300×200 cm" data-w="300" data-h="200" data-custom="false">
                                 <div class="font-semibold text-sm">300×200 cm</div>
-                            </div>
-                            <div class="config-option rounded-lg p-3 text-center" data-format="400×200 cm" data-w="400" data-h="200" data-custom="false">
-                                <div class="font-semibold text-sm">400×200 cm</div>
-                            </div>
-                            <div class="config-option rounded-lg p-3 text-center" data-format="Personnalisé" data-w="100" data-h="100" data-custom="true">
-                                <div class="font-semibold text-sm">Personnalisé</div>
-                            </div>
+                            </button>
+                            <button type="button" class="config-option bg-blue-100 border-blue-400 rounded-lg p-3 text-center" data-format="Personnalisé" data-w="100" data-h="100" data-custom="true">
+                                <div class="font-semibold text-sm text-blue-900">Personnalisé</div>
+                            </button>
                         </div>
                     </div>
 
@@ -180,18 +132,18 @@
                             <i class="fas fa-palette"></i> Finition
                         </label>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                            <div class="config-option rounded-lg p-4 selected" data-option="standard" data-prix="0">
+                            <button type="button" class="config-option rounded-lg p-4 selected" data-option="standard" data-prix="0">
                                 <div class="font-bold">Standard</div>
                                 <div class="text-sm text-gray-600">Inclus</div>
-                            </div>
-                            <div class="config-option rounded-lg p-4" data-option="oeillets" data-prix="5">
+                            </button>
+                            <button type="button" class="config-option rounded-lg p-4" data-option="oeillets" data-prix="5">
                                 <div class="font-bold">Avec œillets</div>
                                 <div class="text-sm text-gray-600">+5€</div>
-                            </div>
-                            <div class="config-option rounded-lg p-4" data-option="support" data-prix="12">
+                            </button>
+                            <button type="button" class="config-option rounded-lg p-4" data-option="support" data-prix="12">
                                 <div class="font-bold">Sur support</div>
                                 <div class="text-sm text-gray-600">+12€/m²</div>
-                            </div>
+                            </button>
                         </div>
                     </div>
 
@@ -489,242 +441,123 @@
     <script>fetch('/includes/footer.html').then(r=>r.text()).then(html=>document.getElementById('footer-placeholder').innerHTML=html)</script>
 
     <script>
-    // Toggle specs collapsible - Fonction globale
+    var PRODUIT = {
+        id: 'EASY-MESH-270',
+        nom: 'Easy Mesh 270',
+        prix: { '0-10': 9, '11-50': 7.9, '51-100': 7.2, '101-300': 6.5, '300+': 5.8 },
+        delai: 3
+    };
+    var config = { largeur: 100, hauteur: 100, quantite: 1, finition: 'standard', prixFinition: 0, format: 'Personnalisé', fichier: null };
+
     function toggleSpecs() {
-        const content = document.getElementById('specs-content');
-        const icon = document.getElementById('specs-icon');
+        var content = document.getElementById('specs-content');
+        var icon = document.getElementById('specs-icon');
         if (content && icon) {
             content.classList.toggle('active');
             icon.style.transform = content.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0deg)';
         }
     }
 
-    // Attendre le chargement complet
-    window.addEventListener('load', function() {
-        console.log('Initialisation configurateur...');
+    function calculerPrix() {
+        var surface = (config.largeur * config.hauteur) / 10000;
+        var surfaceTotale = surface * config.quantite;
+        var prixM2;
+        if (surfaceTotale > 300) prixM2 = PRODUIT.prix['300+'];
+        else if (surfaceTotale > 100) prixM2 = PRODUIT.prix['101-300'];
+        else if (surfaceTotale > 50) prixM2 = PRODUIT.prix['51-100'];
+        else if (surfaceTotale > 10) prixM2 = PRODUIT.prix['11-50'];
+        else prixM2 = PRODUIT.prix['0-10'];
 
-        const PRODUIT = {
-            id: 'EASY-MESH-270',
-            nom: 'Easy Mesh 270',
-            prix: {
-                '0-10': 9,
-                '11-50': 7.9,
-                '51-100': 7.2,
-                '101-300': 6.5,
-                '300+': 5.8
-            },
-            delai: 3
-        };
+        var prixImpression = prixM2 * surface * config.quantite;
+        var prixOptions = config.prixFinition * (config.prixFinition > 20 ? 1 : surface) * config.quantite;
+        var prixTotal = prixImpression + prixOptions;
 
-        let config = {
-            largeur: 100,
-            hauteur: 100,
-            quantite: 1,
-            finition: 'standard',
-            prixFinition: 0,
-            format: 'A0 (84×119 cm)',
-            fichier: null
-        };
+        var prixUnitEl = document.getElementById('prix-unitaire');
+        var prixTotalEl = document.getElementById('prix-total');
+        if (prixUnitEl) prixUnitEl.textContent = prixM2.toFixed(2) + '€';
+        if (prixTotalEl) prixTotalEl.textContent = prixTotal.toFixed(2) + ' €';
 
-        // Sélection format
-        const formatElements = document.querySelectorAll('[data-format]');
-        console.log('Formats trouvés:', formatElements.length);
+        var resumeFormat = document.getElementById('resume-format');
+        var resumeDims = document.getElementById('resume-dims');
+        var resumeSurface = document.getElementById('resume-surface');
+        var resumeQte = document.getElementById('resume-qte');
+        if (resumeFormat) resumeFormat.textContent = config.format;
+        if (resumeDims) resumeDims.textContent = config.largeur + '×' + config.hauteur + ' cm';
+        if (resumeSurface) resumeSurface.textContent = surface.toFixed(2) + ' m²';
+        if (resumeQte) resumeQte.textContent = config.quantite;
 
-        formatElements.forEach(el => {
-            el.addEventListener('click', function(e) {
-                e.preventDefault();
-                console.log('Format cliqué:', this.dataset.format);
+        var fondPerdu = 0.3;
+        var specFini = document.getElementById('spec-format-fini');
+        var specFourni = document.getElementById('spec-format-fourni');
+        var specSecu = document.getElementById('spec-zone-securite');
+        if (specFini) specFini.textContent = config.largeur + ' × ' + config.hauteur + ' cm';
+        if (specFourni) specFourni.textContent = (config.largeur + fondPerdu * 2).toFixed(1) + ' × ' + (config.hauteur + fondPerdu * 2).toFixed(1) + ' cm';
+        if (specSecu) specSecu.textContent = (config.largeur - fondPerdu * 2).toFixed(1) + ' × ' + (config.hauteur - fondPerdu * 2).toFixed(1) + ' cm';
+    }
 
-                document.querySelectorAll('[data-format]').forEach(e => e.classList.remove('selected'));
+    document.addEventListener('DOMContentLoaded', function() {
+        // Formats
+        var formats = document.querySelectorAll('[data-format]');
+        for (var i = 0; i < formats.length; i++) {
+            formats[i].onclick = function() {
+                for (var j = 0; j < formats.length; j++) formats[j].classList.remove('selected');
                 this.classList.add('selected');
-
-                config.format = this.dataset.format;
-                config.largeur = parseFloat(this.dataset.w);
-                config.hauteur = parseFloat(this.dataset.h);
-
-                const isCustom = this.dataset.custom === 'true';
-                const customDims = document.getElementById('custom-dimensions');
-                if (customDims) {
-                    customDims.style.display = isCustom ? 'grid' : 'none';
-                }
-
-                if (!isCustom) {
-                    const largeurEl = document.getElementById('largeur');
-                    const hauteurEl = document.getElementById('hauteur');
-                    if (largeurEl) largeurEl.value = config.largeur;
-                    if (hauteurEl) hauteurEl.value = config.hauteur;
-                }
-
+                config.format = this.getAttribute('data-format');
+                config.largeur = parseFloat(this.getAttribute('data-w'));
+                config.hauteur = parseFloat(this.getAttribute('data-h'));
+                var isCustom = this.getAttribute('data-custom') === 'true';
+                var customDims = document.getElementById('custom-dimensions');
+                if (customDims) customDims.style.display = isCustom ? 'grid' : 'grid';
+                document.getElementById('largeur').value = config.largeur;
+                document.getElementById('hauteur').value = config.hauteur;
                 calculerPrix();
-            });
-        });
-
-        // Premier format sélectionné par défaut - avec timeout
-        setTimeout(function() {
-            const firstFormat = document.querySelector('[data-format]');
-            if (firstFormat) {
-                console.log('Sélection du premier format');
-                firstFormat.click();
-            } else {
-                console.error('Aucun format trouvé!');
-            }
-        }, 100);
-
-        // Dimensions personnalisées
-        ['largeur', 'hauteur'].forEach(dim => {
-            const el = document.getElementById(dim);
-            if (el) {
-                el.addEventListener('input', function() {
-                    config[dim] = parseFloat(this.value) || 0;
-                    calculerPrix();
-                });
-            }
-        });
-
-        // Quantité
-        const qteEl = document.getElementById('quantite');
-        if (qteEl) {
-            qteEl.addEventListener('input', function() {
-                config.quantite = parseInt(this.value) || 1;
-                calculerPrix();
-            });
+            };
         }
 
-        // Options finition
-        const finitionElements = document.querySelectorAll('[data-option]');
-        console.log('Finitions trouvées:', finitionElements.length);
+        // Dimensions
+        document.getElementById('largeur').oninput = function() { config.largeur = parseFloat(this.value) || 0; calculerPrix(); };
+        document.getElementById('hauteur').oninput = function() { config.hauteur = parseFloat(this.value) || 0; calculerPrix(); };
+        document.getElementById('quantite').oninput = function() { config.quantite = parseInt(this.value) || 1; calculerPrix(); };
 
-        finitionElements.forEach(el => {
-            el.addEventListener('click', function(e) {
-                e.preventDefault();
-                console.log('Finition cliquée:', this.dataset.option);
-
-                document.querySelectorAll('[data-option]').forEach(e => e.classList.remove('selected'));
+        // Finitions
+        var finitions = document.querySelectorAll('[data-option]');
+        for (var i = 0; i < finitions.length; i++) {
+            finitions[i].onclick = function() {
+                for (var j = 0; j < finitions.length; j++) finitions[j].classList.remove('selected');
                 this.classList.add('selected');
-                config.finition = this.dataset.option;
-                config.prixFinition = parseFloat(this.dataset.prix);
-                const resumeEl = document.getElementById('resume-finition');
-                if (resumeEl) {
-                    resumeEl.textContent = this.querySelector('.font-bold').textContent;
-                }
+                config.finition = this.getAttribute('data-option');
+                config.prixFinition = parseFloat(this.getAttribute('data-prix'));
+                document.getElementById('resume-finition').textContent = this.querySelector('.font-bold').textContent;
                 calculerPrix();
-            });
-        });
+            };
+        }
 
-        // Upload fichier
-        const uploadZone = document.getElementById('upload-zone');
-        const fileInput = document.getElementById('file-input');
-
+        // Upload
+        var uploadZone = document.getElementById('upload-zone');
+        var fileInput = document.getElementById('file-input');
         if (uploadZone && fileInput) {
-            uploadZone.addEventListener('click', () => fileInput.click());
-
-            uploadZone.addEventListener('dragover', e => {
-                e.preventDefault();
-                uploadZone.classList.add('border-red-600');
-            });
-
-            uploadZone.addEventListener('dragleave', () => {
-                uploadZone.classList.remove('border-red-600');
-            });
-
-            uploadZone.addEventListener('drop', e => {
-                e.preventDefault();
-                uploadZone.classList.remove('border-red-600');
-                if (e.dataTransfer.files.length) {
-                    handleFile(e.dataTransfer.files[0]);
-                }
-            });
-
-            fileInput.addEventListener('change', function() {
+            uploadZone.onclick = function() { fileInput.click(); };
+            fileInput.onchange = function() {
                 if (this.files.length) {
-                    handleFile(this.files[0]);
+                    var file = this.files[0];
+                    uploadZone.innerHTML = '<div class="text-4xl mb-3"><i class="fas fa-check-circle text-green-600"></i></div><div class="font-bold text-green-700 mb-2">' + file.name + '</div><div class="text-sm text-gray-600">' + (file.size / 1024 / 1024).toFixed(2) + ' Mo</div>';
                 }
-            });
+            };
         }
 
-        function handleFile(file) {
-            config.fichier = file;
-            if (uploadZone) {
-                uploadZone.innerHTML = \`
-                    <div class="text-4xl mb-3"><i class="fas fa-check-circle text-green-600"></i></div>
-                    <div class="font-bold text-green-700 mb-2">${file.name}</div>
-                    <div class="text-sm text-gray-600">${(file.size / 1024 / 1024).toFixed(2)} Mo</div>
-                \`;
-            }
-        }
-
-        // Calcul prix
-        function calculerPrix() {
-            const surface = (config.largeur * config.hauteur) / 10000;
-            const surfaceTotale = surface * config.quantite;
-
-            // Prix dégressif
-            let prixM2;
-            if (surfaceTotale > 300) prixM2 = PRODUIT.prix['300+'];
-            else if (surfaceTotale > 100) prixM2 = PRODUIT.prix['101-300'];
-            else if (surfaceTotale > 50) prixM2 = PRODUIT.prix['51-100'];
-            else if (surfaceTotale > 10) prixM2 = PRODUIT.prix['11-50'];
-            else prixM2 = PRODUIT.prix['0-10'];
-
-            const prixImpression = prixM2 * surface * config.quantite;
-            const prixOptions = config.prixFinition * (config.prixFinition > 20 ? 1 : surface) * config.quantite;
-            const prixTotal = prixImpression + prixOptions;
-
-            // Affichage
-            const prixUnitEl = document.getElementById('prix-unitaire');
-            const prixTotalEl = document.getElementById('prix-total');
-            if (prixUnitEl) prixUnitEl.textContent = prixM2.toFixed(2) + '€';
-            if (prixTotalEl) prixTotalEl.textContent = prixTotal.toFixed(2) + ' €';
-
-            // Résumé
-            const resumeFormat = document.getElementById('resume-format');
-            const resumeDims = document.getElementById('resume-dims');
-            const resumeSurface = document.getElementById('resume-surface');
-            const resumeQte = document.getElementById('resume-qte');
-
-            if (resumeFormat) resumeFormat.textContent = config.format;
-            if (resumeDims) resumeDims.textContent = \`${config.largeur}×${config.hauteur} cm\`;
-            if (resumeSurface) resumeSurface.textContent = surface.toFixed(2) + ' m²';
-            if (resumeQte) resumeQte.textContent = config.quantite;
-
-            // Spécifications techniques fichier
-            const fondPerdu = 0.3;
-            const largeurAvecFondPerdu = config.largeur + (fondPerdu * 2);
-            const hauteurAvecFondPerdu = config.hauteur + (fondPerdu * 2);
-            const largeurSecurite = config.largeur - (fondPerdu * 2);
-            const hauteurSecurite = config.hauteur - (fondPerdu * 2);
-
-            const specFini = document.getElementById('spec-format-fini');
-            const specFourni = document.getElementById('spec-format-fourni');
-            const specSecu = document.getElementById('spec-zone-securite');
-
-            if (specFini) specFini.textContent = \`${config.largeur} × ${config.hauteur} cm\`;
-            if (specFourni) specFourni.textContent = \`${largeurAvecFondPerdu.toFixed(1)} × ${hauteurAvecFondPerdu.toFixed(1)} cm\`;
-            if (specSecu) specSecu.textContent = \`${largeurSecurite.toFixed(1)} × ${hauteurSecurite.toFixed(1)} cm\`;
-        }
-
-        // Ajout au panier
-        const btnCart = document.getElementById('btn-add-cart');
+        // Panier
+        var btnCart = document.getElementById('btn-add-cart');
         if (btnCart) {
-            btnCart.addEventListener('click', function() {
-                const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-                cart.push({
-                    id: PRODUIT.id,
-                    nom: PRODUIT.nom,
-                    config: {...config},
-                    prix: parseFloat(document.getElementById('prix-total').textContent),
-                    date: new Date().toISOString()
-                });
+            btnCart.onclick = function() {
+                var cart = JSON.parse(localStorage.getItem('cart') || '[]');
+                cart.push({ id: PRODUIT.id, nom: PRODUIT.nom, config: config, prix: parseFloat(document.getElementById('prix-total').textContent), date: new Date().toISOString() });
                 localStorage.setItem('cart', JSON.stringify(cart));
                 this.innerHTML = '<i class="fas fa-check"></i> AJOUTÉ';
                 this.style.background = '#10b981';
-                setTimeout(() => {
-                    window.location.href = '/panier.html';
-                }, 1000);
-            });
+                setTimeout(function() { window.location.href = '/panier.html'; }, 1000);
+            };
         }
 
-        // Calcul initial
         calculerPrix();
     });
     </script>
