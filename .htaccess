@@ -50,6 +50,15 @@
 
 RewriteEngine On
 
+# Redirection automatique .html → .php (nouveau système unifié)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)\.html$ /$1.php [L,R=301]
+
+# Si .html demandé mais .php existe, rediriger
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)\.html$ /$1.php [L,R=301]
+
 # Bloquer l'accès aux répertoires sensibles couramment scannés par les bots
 RewriteRule ^(cgi-bin|\.git|\.svn|\.env|wp-admin|phpmyadmin|pma|admin/config)(/.*)?$ - [F,L]
 
