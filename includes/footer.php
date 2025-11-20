@@ -1,92 +1,151 @@
-<!-- Footer Imprixo - À inclure dans toutes les pages -->
-<footer class="bg-gray-900 text-gray-300 py-12 mt-16">
-    <div class="max-w-7xl mx-auto px-4">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <!-- À propos -->
-            <div>
-                <h3 class="text-white font-black text-xl mb-4">Imprixo</h3>
-                <p class="text-sm text-gray-400 mb-4">
-                    Votre spécialiste en impression grand format professionnel depuis 2010.
-                </p>
-                <div class="flex gap-3">
-                    <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600 transition">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                    </a>
-                    <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600 transition">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
-                    </a>
-                    <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600 transition">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/></svg>
-                    </a>
-                </div>
-            </div>
+<?php
+/**
+ * FOOTER UNIVERSEL IMPRIXO - Utilisé sur TOUTES les pages
+ * Navigation complète + Newsletter + SEO
+ */
+?>
 
-            <!-- Catalogue -->
-            <div>
-                <h4 class="text-white font-bold mb-4">Nos produits</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="/catalogue.html" class="hover:text-white transition">Catalogue complet</a></li>
-                    <li><a href="/catalogue.html?categorie=Bâches" class="hover:text-white transition">Bâches & Supports</a></li>
-                    <li><a href="/catalogue.html?categorie=Signalétique" class="hover:text-white transition">Signalétique</a></li>
-                    <li><a href="/catalogue.html?categorie=Adhésifs" class="hover:text-white transition">Adhésifs & Stickers</a></li>
-                    <li><a href="/catalogue.html?categorie=Roll-up" class="hover:text-white transition">Roll-up & Kakemono</a></li>
-                </ul>
-            </div>
+<footer style="background:#2b2d42;color:#fff;padding:60px 0 20px;margin-top:80px">
+<div style="max-width:1400px;margin:0 auto;padding:0 20px">
 
-            <!-- Informations -->
-            <div>
-                <h4 class="text-white font-bold mb-4">Informations</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="/a-propos.html" class="hover:text-white transition">À propos</a></li>
-                    <li><a href="/cgv.html" class="hover:text-white transition">CGV</a></li>
-                    <li><a href="/mentions-legales.html" class="hover:text-white transition">Mentions légales</a></li>
-                    <li><a href="/politique-confidentialite.html" class="hover:text-white transition">Politique de confidentialité</a></li>
-                    <li><a href="/mon-compte.php" class="hover:text-white transition">Mon compte</a></li>
-                </ul>
-            </div>
+<!-- Main Footer -->
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:40px;margin-bottom:50px">
 
-            <!-- Contact -->
-            <div>
-                <h4 class="text-white font-bold mb-4">Contact</h4>
-                <ul class="space-y-3 text-sm">
-                    <li class="flex items-start gap-2">
-                        <svg class="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                        </svg>
-                        <a href="mailto:contact@imprixo.fr" class="hover:text-white transition">contact@imprixo.fr</a>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <svg class="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                        </svg>
-                        <a href="tel:0123456789" class="hover:text-white transition">01 23 45 67 89</a>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <svg class="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <span>Lun-Ven 9h-18h</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
+<!-- Produits -->
+<div>
+<h3 style="color:#e63946;font-size:1.2rem;margin-bottom:20px">📦 Produits</h3>
+<ul style="list-style:none;line-height:2">
+<li><a href="/categorie/supports-rigides-pvc.html" style="color:#fff;opacity:0.8;text-decoration:none">Supports PVC Rigides</a></li>
+<li><a href="/categorie/supports-aluminium.html" style="color:#fff;opacity:0.8;text-decoration:none">Supports Aluminium</a></li>
+<li><a href="/categorie/baches-souples.html" style="color:#fff;opacity:0.8;text-decoration:none">Bâches Souples</a></li>
+<li><a href="/categorie/textiles.html" style="color:#fff;opacity:0.8;text-decoration:none">Textiles</a></li>
+<li><a href="/categorie/panneaux-mousse.html" style="color:#fff;opacity:0.8;text-decoration:none">Panneaux Mousse</a></li>
+<li><a href="/categorie/kakemonos.html" style="color:#fff;opacity:0.8;text-decoration:none">Kakémonos</a></li>
+<li><a href="/meilleures-ventes.html" style="color:#ffd166;opacity:1;text-decoration:none;font-weight:600">🏆 Meilleures Ventes</a></li>
+<li><a href="/promotions.html" style="color:#ff4d5a;opacity:1;text-decoration:none;font-weight:600">🔥 Promotions -40%</a></li>
+</ul>
+</div>
 
-        <!-- Barre inférieure -->
-        <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p class="text-sm text-gray-500">
-                © <?php echo date('Y'); ?> <strong class="text-white">Imprixo</strong> - Tous droits réservés
-            </p>
-            <div class="flex items-center gap-4 text-sm">
-                <span class="text-gray-500">Paiement sécurisé</span>
-                <div class="flex gap-2">
-                    <div class="bg-white px-2 py-1 rounded">
-                        <svg class="h-5" viewBox="0 0 38 24" fill="none"><rect width="38" height="24" rx="3" fill="#fff"/><path d="M11.5 8h3v8h-3V8zm7.5 0l-4 8h3l4-8h-3z" fill="#172B85"/></svg>
-                    </div>
-                    <div class="bg-white px-2 py-1 rounded">
-                        <svg class="h-5" viewBox="0 0 38 24" fill="none"><rect width="38" height="24" rx="3" fill="#fff"/><circle cx="14" cy="12" r="6" fill="#EB001B"/><circle cx="24" cy="12" r="6" fill="#F79E1B"/></svg>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<!-- Outils -->
+<div>
+<h3 style="color:#e63946;font-size:1.2rem;margin-bottom:20px">🛠️ Outils</h3>
+<ul style="list-style:none;line-height:2">
+<li><a href="/devis-express.html" style="color:#06d6a0;opacity:1;text-decoration:none;font-weight:600">📝 Devis Express Gratuit</a></li>
+<li><a href="/calculateur-prix.html" style="color:#fff;opacity:0.8;text-decoration:none">💰 Calculateur Prix</a></li>
+<li><a href="/comparateur-supports.html" style="color:#fff;opacity:0.8;text-decoration:none">🔍 Comparateur</a></li>
+<li><a href="/guide-choix.html" style="color:#fff;opacity:0.8;text-decoration:none">🎯 Guide de Choix</a></li>
+<li><a href="/configurateur.html" style="color:#fff;opacity:0.8;text-decoration:none">🎨 Configurateur</a></li>
+<li><a href="/upload-fichier.html" style="color:#fff;opacity:0.8;text-decoration:none">📤 Upload Fichiers</a></li>
+</ul>
+<h4 style="color:#fff;opacity:0.9;font-size:0.9rem;margin:20px 0 10px">📚 Ressources</h4>
+<ul style="list-style:none;line-height:2;font-size:0.9rem">
+<li><a href="/guides/guide-impression-grand-format.html" style="color:#fff;opacity:0.8;text-decoration:none">Guide Complet</a></li>
+<li><a href="/blog/" style="color:#fff;opacity:0.8;text-decoration:none">Blog & Conseils</a></li>
+<li><a href="/faq.html" style="color:#fff;opacity:0.8;text-decoration:none">FAQ</a></li>
+</ul>
+</div>
+
+<!-- Mon Compte -->
+<div>
+<h3 style="color:#e63946;font-size:1.2rem;margin-bottom:20px">👤 Mon Compte</h3>
+<ul style="list-style:none;line-height:2">
+<li><a href="/inscription.html" style="color:#06d6a0;opacity:1;text-decoration:none;font-weight:600">✨ Créer mon compte</a></li>
+<li><a href="/connexion.php" style="color:#fff;opacity:0.8;text-decoration:none">🔑 Connexion</a></li>
+<li><a href="/compte/tableau-de-bord.html" style="color:#fff;opacity:0.8;text-decoration:none">📊 Tableau de bord</a></li>
+<li><a href="/compte/mes-commandes.html" style="color:#fff;opacity:0.8;text-decoration:none">📦 Mes commandes</a></li>
+<li><a href="/compte/mes-devis.html" style="color:#fff;opacity:0.8;text-decoration:none">💰 Mes devis</a></li>
+<li><a href="/compte/mes-fichiers.html" style="color:#fff;opacity:0.8;text-decoration:none">📁 Mes fichiers</a></li>
+</ul>
+<h4 style="color:#fff;opacity:0.9;font-size:0.9rem;margin:20px 0 10px">Avantages</h4>
+<ul style="list-style:none;line-height:1.8;font-size:0.85rem;color:#fff;opacity:0.7">
+<li>✓ Devis sauvegardés</li>
+<li>✓ Prix préférentiels -5%</li>
+<li>✓ Support prioritaire</li>
+</ul>
+</div>
+
+<!-- Entreprise -->
+<div>
+<h3 style="color:#e63946;font-size:1.2rem;margin-bottom:20px">🏢 Entreprise</h3>
+<ul style="list-style:none;line-height:2">
+<li><a href="/a-propos.html" style="color:#fff;opacity:0.8;text-decoration:none">À Propos</a></li>
+<li><a href="/notre-expertise.html" style="color:#fff;opacity:0.8;text-decoration:none">Notre Expertise</a></li>
+<li><a href="/qualite-certifications.html" style="color:#fff;opacity:0.8;text-decoration:none">Qualité</a></li>
+<li><a href="/engagements-eco.html" style="color:#fff;opacity:0.8;text-decoration:none">Engagements Éco</a></li>
+<li><a href="/contact.html" style="color:#fff;opacity:0.8;text-decoration:none">Contact</a></li>
+</ul>
+<h4 style="color:#fff;opacity:0.9;font-size:0.9rem;margin:20px 0 10px">💼 Solutions Pro</h4>
+<ul style="list-style:none;line-height:2;font-size:0.9rem">
+<li><a href="/espace-pro.html" style="color:#06d6a0;opacity:1;text-decoration:none;font-weight:600">Espace Pro</a></li>
+<li><a href="/tarifs-pro.html" style="color:#fff;opacity:0.8;text-decoration:none">Tarifs Pro</a></li>
+<li><a href="/api-documentation.html" style="color:#fff;opacity:0.8;text-decoration:none">API</a></li>
+</ul>
+</div>
+
+<!-- Support -->
+<div>
+<h3 style="color:#e63946;font-size:1.2rem;margin-bottom:20px">❓ Support</h3>
+<ul style="list-style:none;line-height:2">
+<li><a href="/faq.html" style="color:#fff;opacity:0.8;text-decoration:none">FAQ</a></li>
+<li><a href="/contact.html" style="color:#fff;opacity:0.8;text-decoration:none">Nous Contacter</a></li>
+<li><a href="/livraison.html" style="color:#fff;opacity:0.8;text-decoration:none">Livraison</a></li>
+<li><a href="/suivi-commande.php" style="color:#fff;opacity:0.8;text-decoration:none">Suivi Commande</a></li>
+</ul>
+<h4 style="color:#fff;opacity:0.9;font-size:0.9rem;margin:20px 0 10px">Informations Légales</h4>
+<ul style="list-style:none;line-height:2;font-size:0.85rem">
+<li><a href="/mentions-legales.html" style="color:#fff;opacity:0.7;text-decoration:none">Mentions Légales</a></li>
+<li><a href="/cgv.html" style="color:#fff;opacity:0.7;text-decoration:none">CGV</a></li>
+<li><a href="/politique-confidentialite.html" style="color:#fff;opacity:0.7;text-decoration:none">Confidentialité</a></li>
+<li><a href="/cookies.html" style="color:#fff;opacity:0.7;text-decoration:none">Cookies</a></li>
+</ul>
+</div>
+
+</div>
+
+<!-- Newsletter -->
+<div style="background:rgba(230,57,70,0.1);padding:30px;border-radius:12px;margin-bottom:40px;text-align:center">
+<h3 style="color:#e63946;margin-bottom:15px">📬 Newsletter</h3>
+<p style="color:#fff;opacity:0.8;margin-bottom:20px">Recevez nos promotions exclusives</p>
+<form style="display:flex;gap:10px;max-width:500px;margin:0 auto;flex-wrap:wrap;justify-content:center">
+<input type="email" placeholder="votre@email.com" style="flex:1;min-width:250px;padding:12px 18px;border:2px solid rgba(255,255,255,0.2);border-radius:8px;background:rgba(255,255,255,0.1);color:#fff">
+<button type="submit" style="padding:12px 30px;background:linear-gradient(135deg,#e63946,#d62839);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer">S'inscrire</button>
+</form>
+</div>
+
+<!-- Bottom -->
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.1)">
+<div style="color:#fff;opacity:0.7;font-size:0.9rem">
+© <?php echo date('Y'); ?> <strong style="color:#e63946">Imprixo</strong> · Impression grand format professionnelle
+</div>
+<div style="display:flex;gap:20px">
+<a href="#" style="color:#fff;opacity:0.7;text-decoration:none;font-size:1.3rem">📘</a>
+<a href="#" style="color:#fff;opacity:0.7;text-decoration:none;font-size:1.3rem">📷</a>
+<a href="#" style="color:#fff;opacity:0.7;text-decoration:none;font-size:1.3rem">💼</a>
+</div>
+</div>
+
+<!-- Back to top -->
+<div style="text-align:center;margin-top:20px">
+<a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false" style="color:#e63946;text-decoration:none;font-weight:600">↑ Retour en haut</a>
+</div>
+
+</div>
 </footer>
+
+<script type="application/ld+json">
+{
+"@context":"https://schema.org",
+"@type":"Organization",
+"name":"Imprixo",
+"url":"https://imprixo.fr",
+"description":"Impression professionnelle grand format",
+"contactPoint":{
+"@type":"ContactPoint",
+"telephone":"+33-1-23-45-67-89",
+"contactType":"customer service"
+}
+}
+</script>
+
+</body>
+</html>

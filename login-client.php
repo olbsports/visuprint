@@ -1,221 +1,202 @@
 <?php
-/**
- * Connexion Client - Imprixo
- */
-
-require_once __DIR__ . '/auth-client.php';
-
-// Si déjà connecté, rediriger vers mon compte
-if (estClientConnecte()) {
-    header('Location: /mon-compte.php');
-    exit;
-}
-
-$error = '';
-$success = '';
-$mode = isset($_GET['mode']) ? $_GET['mode'] : 'login'; // login ou register
-$redirect = isset($_GET['redirect']) ? $_GET['redirect'] : '/mon-compte.php';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if ($mode === 'login') {
-        // Connexion
-        $email = cleanInput($_POST['email']);
-        $motDePasse = $_POST['password'];
-
-        $result = connecterClient($email, $motDePasse);
-
-        if ($result['success']) {
-            header('Location: ' . $redirect);
-            exit;
-        } else {
-            $error = $result['error'];
-        }
-    } elseif ($mode === 'register') {
-        // Inscription
-        $email = cleanInput($_POST['email']);
-        $motDePasse = $_POST['password'];
-        $motDePasseConfirm = $_POST['password_confirm'];
-        $prenom = cleanInput($_POST['prenom']);
-        $nom = cleanInput($_POST['nom']);
-        $telephone = cleanInput($_POST['telephone']);
-
-        // Validation
-        if (!$email || !$motDePasse || !$prenom || !$nom) {
-            $error = 'Tous les champs obligatoires doivent être remplis';
-        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $error = 'Email invalide';
-        } elseif (strlen($motDePasse) < 8) {
-            $error = 'Le mot de passe doit contenir au moins 8 caractères';
-        } elseif ($motDePasse !== $motDePasseConfirm) {
-            $error = 'Les mots de passe ne correspondent pas';
-        } else {
-            $result = creerCompteClient($email, $motDePasse, $prenom, $nom, $telephone);
-
-            if ($result['success']) {
-                header('Location: /mon-compte.php?welcome=1');
-                exit;
-            } else {
-                $error = $result['error'];
-            }
-        }
-    }
-}
+$pageTitle = 'Connexion Client - Imprixo';
+$pageDescription = '';
+include __DIR__ . '/includes/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $mode === 'register' ? 'Créer un compte' : 'Connexion'; ?> - Imprixo</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
-        * { font-family: 'Roboto', sans-serif; }
 
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
+<!-- Header -->
+    <div id="header-placeholder"></div>
+    <script>fetch('/includes/header.html').then(r=>r.text()).then(html=>document.getElementById('header-placeholder').innerHTML=html)</script>
 
-        .input-focus:focus {
-            outline: none;
-            border-color: #e63946;
-            box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.1);
-        }
-    </style>
-</head>
-<body class="bg-gray-50">
-    <header class="bg-white border-b-2 border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="/index.html"><span class="text-3xl font-black text-gray-900">Imprixo</span></a>
-            <a href="/index.html" class="text-gray-600 hover:text-gray-900">← Retour à l'accueil</a>
-        </div>
-    </header>
-
-    <div class="min-h-screen flex items-center justify-center py-12 px-4">
-        <div class="max-w-md w-full">
-            <!-- Toggle Login/Register -->
+    <div class="min-h-screen flex items-center justify-center px-4 py-12">
+        <div class="form-container max-w-md w-full p-8">
+            <!-- Logo -->
             <div class="text-center mb-8">
-                <div class="inline-flex rounded-lg overflow-hidden border-2 border-gray-200 bg-white">
-                    <a href="?mode=login<?php echo $redirect !== '/mon-compte.php' ? '&redirect=' . urlencode($redirect) : ''; ?>"
-                       class="px-6 py-3 font-semibold transition <?php echo $mode === 'login' ? 'bg-red-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'; ?>">
-                        Connexion
-                    </a>
-                    <a href="?mode=register<?php echo $redirect !== '/mon-compte.php' ? '&redirect=' . urlencode($redirect) : ''; ?>"
-                       class="px-6 py-3 font-semibold transition <?php echo $mode === 'register' ? 'bg-red-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'; ?>">
-                        Créer un compte
-                    </a>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-lg p-8">
-                <h1 class="text-3xl font-black text-gray-900 mb-2 text-center">
-                    <?php echo $mode === 'register' ? '✨ Créer un compte' : '🔐 Connexion'; ?>
+                <h1 class="text-4xl font-black mb-2">
+                    <span class="text-gray-900">Imprixo</span><span class="text-red-600">Pro</span>
                 </h1>
-                <p class="text-gray-600 text-center mb-8">
-                    <?php echo $mode === 'register' ? 'Accédez à votre espace client en quelques secondes' : 'Accédez à votre espace client'; ?>
+                <p class="text-gray-600">Connexion à votre espace client</p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex mb-6 bg-gray-100 rounded-lg p-1">
+                <button onclick="showTab('login')" id="tab-login" class="flex-1 py-3 rounded-lg font-bold transition bg-white text-gray-900 shadow">
+                    Connexion
+                </button>
+                <button onclick="showTab('register')" id="tab-register" class="flex-1 py-3 rounded-lg font-bold transition text-gray-600">
+                    Inscription
+                </button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form" onsubmit="login(event)">
+                <div class="mb-4">
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Email</label>
+                    <input type="email" id="login-email" required
+                           class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none">
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Mot de passe</label>
+                    <input type="password" id="login-password" required
+                           class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none">
+                </div>
+
+                <div id="login-error" class="mb-4 p-4 bg-red-50 border-l-4 border-red-600 rounded text-red-800" style="display: none;"></div>
+
+                <button type="submit" class="w-full btn-primary text-white py-4 rounded-lg font-bold text-lg shadow-lg">
+                    🔐 Se connecter
+                </button>
+
+                <p class="text-center text-sm text-gray-600 mt-4">
+                    Pas encore de compte ? <button type="button" onclick="showTab('register')" class="text-red-600 font-bold">Inscrivez-vous</button>
                 </p>
+            </form>
 
-                <?php if ($error): ?>
-                    <div class="bg-red-50 border-l-4 border-red-600 p-4 mb-6 rounded">
-                        <p class="text-red-800 font-medium">✗ <?php echo htmlspecialchars($error); ?></p>
+            <!-- Register Form -->
+            <form id="register-form" onsubmit="register(event)" style="display: none;">
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Prénom</label>
+                        <input type="text" id="register-prenom" required
+                               class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none">
                     </div>
-                <?php endif; ?>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Nom</label>
+                        <input type="text" id="register-nom" required
+                               class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none">
+                    </div>
+                </div>
 
-                <form method="POST" class="space-y-6">
-                    <?php if ($mode === 'register'): ?>
-                        <!-- Inscription -->
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Prénom *</label>
-                                <input type="text" name="prenom" value="<?php echo htmlspecialchars($_POST['prenom'] ?? ''); ?>" required
-                                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg input-focus transition">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nom *</label>
-                                <input type="text" name="nom" value="<?php echo htmlspecialchars($_POST['nom'] ?? ''); ?>" required
-                                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg input-focus transition">
-                            </div>
-                        </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Email</label>
+                    <input type="email" id="register-email" required
+                           class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none">
+                </div>
 
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Email *</label>
-                            <input type="email" name="email" value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>" required
-                                   class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg input-focus transition"
-                                   placeholder="votre@email.fr">
-                        </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Téléphone</label>
+                    <input type="tel" id="register-tel" required
+                           class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none">
+                </div>
 
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Téléphone</label>
-                            <input type="tel" name="telephone" value="<?php echo htmlspecialchars($_POST['telephone'] ?? ''); ?>"
-                                   class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg input-focus transition"
-                                   placeholder="06 12 34 56 78">
-                        </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Mot de passe</label>
+                    <input type="password" id="register-password" required minlength="6"
+                           class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none">
+                    <p class="text-xs text-gray-500 mt-1">Minimum 6 caractères</p>
+                </div>
 
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Mot de passe *</label>
-                            <input type="password" name="password" required minlength="8"
-                                   class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg input-focus transition"
-                                   placeholder="Minimum 8 caractères">
-                            <p class="text-xs text-gray-500 mt-1">Minimum 8 caractères</p>
-                        </div>
+                <div id="register-error" class="mb-4 p-4 bg-red-50 border-l-4 border-red-600 rounded text-red-800" style="display: none;"></div>
 
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Confirmer le mot de passe *</label>
-                            <input type="password" name="password_confirm" required minlength="8"
-                                   class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg input-focus transition">
-                        </div>
+                <button type="submit" class="w-full btn-primary text-white py-4 rounded-lg font-bold text-lg shadow-lg">
+                    ✨ Créer mon compte
+                </button>
 
-                        <button type="submit" class="w-full bg-red-600 text-white py-4 rounded-lg font-bold text-lg hover:bg-red-700 transition shadow-lg">
-                            ✓ Créer mon compte
-                        </button>
-
-                        <p class="text-center text-sm text-gray-600">
-                            Déjà un compte ?
-                            <a href="?mode=login<?php echo $redirect !== '/mon-compte.php' ? '&redirect=' . urlencode($redirect) : ''; ?>" class="text-red-600 font-semibold hover:underline">
-                                Se connecter
-                            </a>
-                        </p>
-                    <?php else: ?>
-                        <!-- Connexion -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
-                            <input type="email" name="email" value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>" required
-                                   class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg input-focus transition"
-                                   placeholder="votre@email.fr">
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Mot de passe</label>
-                            <input type="password" name="password" required
-                                   class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg input-focus transition">
-                        </div>
-
-                        <button type="submit" class="w-full bg-red-600 text-white py-4 rounded-lg font-bold text-lg hover:bg-red-700 transition shadow-lg">
-                            → Se connecter
-                        </button>
-
-                        <p class="text-center text-sm text-gray-600">
-                            Pas encore de compte ?
-                            <a href="?mode=register<?php echo $redirect !== '/mon-compte.php' ? '&redirect=' . urlencode($redirect) : ''; ?>" class="text-red-600 font-semibold hover:underline">
-                                Créer un compte
-                            </a>
-                        </p>
-                    <?php endif; ?>
-                </form>
-            </div>
-
-            <!-- Avantages espace client -->
-            <div class="mt-8 bg-blue-50 rounded-lg p-6 border-2 border-blue-200">
-                <h3 class="font-bold text-gray-900 mb-3">✨ Avantages de l'espace client</h3>
-                <ul class="space-y-2 text-sm text-gray-700">
-                    <li>✓ Suivi de toutes vos commandes en temps réel</li>
-                    <li>✓ Téléchargement des spécifications techniques (PDF)</li>
-                    <li>✓ Upload de vos fichiers d'impression directement</li>
-                    <li>✓ Historique complet et factures</li>
-                    <li>✓ Gestion de vos adresses de livraison</li>
-                </ul>
-            </div>
+                <p class="text-center text-sm text-gray-600 mt-4">
+                    Déjà un compte ? <button type="button" onclick="showTab('login')" class="text-red-600 font-bold">Connectez-vous</button>
+                </p>
+            </form>
         </div>
     </div>
-</body>
-</html>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+    <script>fetch('/includes/footer.html').then(r=>r.text()).then(html=>document.getElementById('footer-placeholder').innerHTML=html)</script>
+
+    <script>
+        // Tabs
+        function showTab(tab) {
+            if (tab === 'login') {
+                document.getElementById('login-form').style.display = 'block';
+                document.getElementById('register-form').style.display = 'none';
+                document.getElementById('tab-login').classList.add('bg-white', 'text-gray-900', 'shadow');
+                document.getElementById('tab-login').classList.remove('text-gray-600');
+                document.getElementById('tab-register').classList.remove('bg-white', 'text-gray-900', 'shadow');
+                document.getElementById('tab-register').classList.add('text-gray-600');
+            } else {
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('register-form').style.display = 'block';
+                document.getElementById('tab-register').classList.add('bg-white', 'text-gray-900', 'shadow');
+                document.getElementById('tab-register').classList.remove('text-gray-600');
+                document.getElementById('tab-login').classList.remove('bg-white', 'text-gray-900', 'shadow');
+                document.getElementById('tab-login').classList.add('text-gray-600');
+            }
+        }
+
+        // Login
+        function login(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            // Récupérer les clients enregistrés
+            const clients = JSON.parse(localStorage.getItem('clients') || '[]');
+
+            // Chercher le client
+            const client = clients.find(c => c.email === email && c.password === password);
+
+            if (client) {
+                // Connexion réussie
+                localStorage.setItem('client', JSON.stringify(client));
+                window.location.href = '/mon-compte.html';
+            } else {
+                // Erreur
+                const errorDiv = document.getElementById('login-error');
+                errorDiv.textContent = 'Email ou mot de passe incorrect';
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        // Register
+        function register(e) {
+            e.preventDefault();
+
+            const prenom = document.getElementById('register-prenom').value;
+            const nom = document.getElementById('register-nom').value;
+            const email = document.getElementById('register-email').value;
+            const telephone = document.getElementById('register-tel').value;
+            const password = document.getElementById('register-password').value;
+
+            // Récupérer les clients existants
+            const clients = JSON.parse(localStorage.getItem('clients') || '[]');
+
+            // Vérifier si email existe déjà
+            if (clients.find(c => c.email === email)) {
+                const errorDiv = document.getElementById('register-error');
+                errorDiv.textContent = 'Cet email est déjà utilisé';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            // Créer le nouveau client
+            const newClient = {
+                id: Date.now(),
+                prenom,
+                nom,
+                email,
+                telephone,
+                password,
+                created_at: new Date().toISOString()
+            };
+
+            // Ajouter aux clients
+            clients.push(newClient);
+            localStorage.setItem('clients', JSON.stringify(clients));
+
+            // Connecter automatiquement
+            localStorage.setItem('client', JSON.stringify(newClient));
+
+            // Rediriger
+            window.location.href = '/mon-compte.html?welcome=1';
+        }
+
+        // Vérifier si déjà connecté
+        const client = localStorage.getItem('client');
+        if (client) {
+            window.location.href = '/mon-compte.html';
+        }
+    </script>
+
+<?php include __DIR__ . '/includes/footer.php'; ?>
