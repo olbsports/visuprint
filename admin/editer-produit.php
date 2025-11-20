@@ -117,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             foreach ($allowedFields as $dbField => $postField) {
                 if (isset($_POST[$postField])) {
-                    $updates[] = "$dbField = ?";
+                    $updates[] = "`$dbField` = ?";
                     $params[] = $_POST[$postField];
                 }
             }
