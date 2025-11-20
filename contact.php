@@ -5,7 +5,6 @@ include __DIR__ . '/includes/header.php';
 ?>
 
 <!-- Header chargé dynamiquement -->
-    <div id="header-placeholder"></div>
 
     <!-- Hero Section -->
     <section class="gradient-bg text-white py-20">
@@ -268,7 +267,6 @@ include __DIR__ . '/includes/header.php';
     </section>
 
     <!-- Footer chargé dynamiquement -->
-    <div id="footer-placeholder"></div>
 
     <!-- Scripts -->
     <script>

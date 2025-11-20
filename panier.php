@@ -4,7 +4,6 @@ $pageDescription = '';
 include __DIR__ . '/includes/header.php';
 ?>
 
-<div id="header-placeholder"></div>
     <script>fetch('/includes/header.html').then(r=>r.text()).then(html=>document.getElementById('header-placeholder').innerHTML=html)</script>
 
     <div class="max-w-7xl mx-auto px-4 py-8">
@@ -71,7 +70,6 @@ include __DIR__ . '/includes/header.php';
         </div>
     </div>
 
-    <div id="footer-placeholder"></div>
     <script>fetch('/includes/footer.html').then(r=>r.text()).then(html=>document.getElementById('footer-placeholder').innerHTML=html)</script>
 
     <script>

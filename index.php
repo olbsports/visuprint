@@ -4,11 +4,7 @@ $pageDescription = 'Impression professionnelle grand format ✓ Forex, Dibond, B
 include __DIR__ . '/includes/header.php';
 ?>
 
-<!-- HEADER DYNAMIQUE -->
-    <div id="header-placeholder"></div>
-    <script>fetch('/includes/header.html').then(r=>r.text()).then(html=>document.getElementById('header-placeholder').innerHTML=html)</script>
-
-    <!-- HERO SECTION -->
+<!-- HERO SECTION -->
     <section class="hero-gradient text-white py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-2 gap-12 items-center">
@@ -542,10 +538,6 @@ include __DIR__ . '/includes/header.php';
             </div>
         </div>
     </section>
-
-    <!-- FOOTER DYNAMIQUE -->
-    <div id="footer-placeholder"></div>
-    <script>fetch('/includes/footer.html').then(r=>r.text()).then(html=>document.getElementById('footer-placeholder').innerHTML=html)</script>
 
     <!-- Schema.org FAQ -->
     <script type="application/ld+json">

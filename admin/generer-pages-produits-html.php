@@ -235,7 +235,6 @@ function genererPageProduitHTML($p) {
     </style>
 </head>
 <body class="bg-gray-50">
-    <div id="header-placeholder"></div>
     <script>
     fetch('/includes/header.html').then(r => r.text()).then(html => document.getElementById('header-placeholder').innerHTML = html);
     </script>
@@ -350,7 +349,6 @@ function genererPageProduitHTML($p) {
         </div>
     </div>
 
-    <div id="footer-placeholder"></div>
     <script>
     fetch('/includes/footer.html').then(r => r.text()).then(html => document.getElementById('footer-placeholder').innerHTML = html);
     window.productData = {id: '$id', nom: '$nom', prix_min: $prix300plus, prix_max: $prix010};

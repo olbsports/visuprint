@@ -153,7 +153,6 @@ function genererPageProduitHTML($p) {
     </style>
 </head>
 <body class="bg-gray-50">
-    <div id="header-placeholder"></div>
     <script>fetch('/includes/header.html').then(r=>r.text()).then(html=>document.getElementById('header-placeholder').innerHTML=html)</script>
 
     <div class="max-w-7xl mx-auto px-4 py-8">
@@ -392,7 +391,6 @@ HTML;
         </div>
     </div>
 
-    <div id="footer-placeholder"></div>
     <script>fetch('/includes/footer.html').then(r=>r.text()).then(html=>document.getElementById('footer-placeholder').innerHTML=html)</script>
 
     <script>

@@ -5,7 +5,6 @@ include __DIR__ . '/includes/header.php';
 ?>
 
 <!-- HEADER -->
-    <div id="header-placeholder"></div>
     <script>fetch('/includes/header.html').then(r=>r.text()).then(html=>document.getElementById('header-placeholder').innerHTML=html)</script>
 
     <!-- HERO -->
@@ -230,7 +229,6 @@ include __DIR__ . '/includes/header.php';
     </section>
 
     <!-- FOOTER -->
-    <div id="footer-placeholder"></div>
     <script>fetch('/includes/footer.html').then(r=>r.text()).then(html=>document.getElementById('footer-placeholder').innerHTML=html)</script>
 
     <!-- FILTRES JS -->
