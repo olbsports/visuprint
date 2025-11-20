@@ -158,11 +158,53 @@ function genererPageProduitHTML($p) {
 
                 <!-- Description -->
                 <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
-                    <h2 class="text-2xl font-black text-gray-900 mb-4 flex items-center gap-2">
-                        <i class="fas fa-align-left text-blue-600"></i> Description
+                    <h2 class="text-2xl font-black text-gray-900 mb-6 flex items-center gap-2">
+                        <i class="fas fa-align-left text-blue-600"></i> Description du produit
                     </h2>
-                    <p class="text-lg text-gray-700 mb-4 font-medium">$descCourte</p>
-                    <p class="text-gray-600 leading-relaxed">$descLongue</p>
+
+                    <!-- Description courte en box bleue -->
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-600 rounded-lg p-6 mb-6">
+                        <p class="text-lg font-bold text-gray-900 leading-relaxed">
+                            $descCourte
+                        </p>
+                    </div>
+
+                    <!-- Description longue -->
+                    <div class="text-gray-700 leading-relaxed mb-6">
+                        <p>$descLongue</p>
+                    </div>
+
+                    <!-- Points forts en grille -->
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="flex items-start gap-3 p-4 bg-green-50 rounded-lg border border-green-200">
+                            <i class="fas fa-check-circle text-2xl text-green-600 mt-1"></i>
+                            <div>
+                                <div class="font-bold text-gray-900">Fabrication européenne</div>
+                                <div class="text-sm text-gray-600">Qualité certifiée $certification</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                            <i class="fas fa-shipping-fast text-2xl text-blue-600 mt-1"></i>
+                            <div>
+                                <div class="font-bold text-gray-900">Livraison express</div>
+                                <div class="text-sm text-gray-600">{$delai} jours partout en Europe</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 p-4 bg-purple-50 rounded-lg border border-purple-200">
+                            <i class="fas fa-medal text-2xl text-purple-600 mt-1"></i>
+                            <div>
+                                <div class="font-bold text-gray-900">Durabilité</div>
+                                <div class="text-sm text-gray-600">Durée de vie : $dureeVie</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 p-4 bg-red-50 rounded-lg border border-red-200">
+                            <i class="fas fa-tag text-2xl text-red-600 mt-1"></i>
+                            <div>
+                                <div class="font-bold text-gray-900">Prix dégressifs</div>
+                                <div class="text-sm text-gray-600">Jusqu'à -40% selon quantité</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Caractéristiques -->
@@ -170,45 +212,72 @@ function genererPageProduitHTML($p) {
                     <h2 class="text-2xl font-black text-gray-900 mb-6 flex items-center gap-2">
                         <i class="fas fa-cogs text-blue-600"></i> Caractéristiques techniques
                     </h2>
+
                     <div class="grid md:grid-cols-2 gap-4">
-                        <div class="spec-badge rounded-lg p-4">
-                            <div class="text-sm text-blue-700 font-medium">Poids</div>
-                            <div class="text-lg font-black text-gray-900">$poids kg/m²</div>
+                        <div class="flex items-center gap-4 p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border-l-4 border-blue-600">
+                            <i class="fas fa-weight text-3xl text-blue-600"></i>
+                            <div>
+                                <div class="text-sm text-blue-700 font-medium">Poids</div>
+                                <div class="text-xl font-black text-gray-900">$poids kg/m²</div>
+                            </div>
                         </div>
-                        <div class="spec-badge rounded-lg p-4">
-                            <div class="text-sm text-blue-700 font-medium">Épaisseur</div>
-                            <div class="text-lg font-black text-gray-900">$epaisseur</div>
+                        <div class="flex items-center gap-4 p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg border-l-4 border-purple-600">
+                            <i class="fas fa-ruler-vertical text-3xl text-purple-600"></i>
+                            <div>
+                                <div class="text-sm text-purple-700 font-medium">Épaisseur</div>
+                                <div class="text-xl font-black text-gray-900">$epaisseur</div>
+                            </div>
                         </div>
-                        <div class="spec-badge rounded-lg p-4">
-                            <div class="text-sm text-blue-700 font-medium">Format maximum</div>
-                            <div class="text-lg font-black text-gray-900">$formatMax cm</div>
+                        <div class="flex items-center gap-4 p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-lg border-l-4 border-green-600">
+                            <i class="fas fa-expand text-3xl text-green-600"></i>
+                            <div>
+                                <div class="text-sm text-green-700 font-medium">Format maximum</div>
+                                <div class="text-xl font-black text-gray-900">$formatMax cm</div>
+                            </div>
                         </div>
-                        <div class="spec-badge rounded-lg p-4">
-                            <div class="text-sm text-blue-700 font-medium">Usage</div>
-                            <div class="text-lg font-black text-gray-900">$usage</div>
+                        <div class="flex items-center gap-4 p-4 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg border-l-4 border-orange-600">
+                            <i class="fas fa-map-marker-alt text-3xl text-orange-600"></i>
+                            <div>
+                                <div class="text-sm text-orange-700 font-medium">Usage</div>
+                                <div class="text-xl font-black text-gray-900">$usage</div>
+                            </div>
                         </div>
-                        <div class="spec-badge rounded-lg p-4">
-                            <div class="text-sm text-blue-700 font-medium">Durée de vie</div>
-                            <div class="text-lg font-black text-gray-900">$dureeVie</div>
+                        <div class="flex items-center gap-4 p-4 bg-gradient-to-r from-indigo-50 to-indigo-100 rounded-lg border-l-4 border-indigo-600">
+                            <i class="fas fa-clock text-3xl text-indigo-600"></i>
+                            <div>
+                                <div class="text-sm text-indigo-700 font-medium">Durée de vie</div>
+                                <div class="text-xl font-black text-gray-900">$dureeVie</div>
+                            </div>
                         </div>
-                        <div class="spec-badge rounded-lg p-4">
-                            <div class="text-sm text-blue-700 font-medium">Certification</div>
-                            <div class="text-lg font-black text-gray-900">$certification</div>
+                        <div class="flex items-center gap-4 p-4 bg-gradient-to-r from-teal-50 to-teal-100 rounded-lg border-l-4 border-teal-600">
+                            <i class="fas fa-certificate text-3xl text-teal-600"></i>
+                            <div>
+                                <div class="text-sm text-teal-700 font-medium">Certification</div>
+                                <div class="text-xl font-black text-gray-900">$certification</div>
+                            </div>
                         </div>
-                        <div class="spec-badge rounded-lg p-4">
-                            <div class="text-sm text-blue-700 font-medium">Finition</div>
-                            <div class="text-lg font-black text-gray-900">$finition</div>
+                        <div class="flex items-center gap-4 p-4 bg-gradient-to-r from-pink-50 to-pink-100 rounded-lg border-l-4 border-pink-600">
+                            <i class="fas fa-paint-brush text-3xl text-pink-600"></i>
+                            <div>
+                                <div class="text-sm text-pink-700 font-medium">Finition</div>
+                                <div class="text-xl font-black text-gray-900">$finition</div>
+                            </div>
                         </div>
-                        <div class="spec-badge rounded-lg p-4">
-                            <div class="text-sm text-blue-700 font-medium">Délai</div>
-                            <div class="text-lg font-black text-gray-900">{$delai} jours</div>
+                        <div class="flex items-center gap-4 p-4 bg-gradient-to-r from-red-50 to-red-100 rounded-lg border-l-4 border-red-600">
+                            <i class="fas fa-truck-fast text-3xl text-red-600"></i>
+                            <div>
+                                <div class="text-sm text-red-700 font-medium">Délai</div>
+                                <div class="text-xl font-black text-gray-900">{$delai} jours</div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Prix dégressifs -->
                 <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
-                    <h2 class="text-2xl font-black text-gray-900 mb-6">💰 Prix dégressifs au m²</h2>
+                    <h2 class="text-2xl font-black text-gray-900 mb-6 flex items-center gap-2">
+                        <i class="fas fa-euro-sign text-green-600"></i> Prix dégressifs au m²
+                    </h2>
                     <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
                         <div class="border-2 border-gray-200 rounded-lg p-4 text-center hover:border-red-600 transition">
                             <div class="text-sm text-gray-600 mb-1">0-10 m²</div>
