@@ -622,3 +622,55 @@ function genererEtSauvegarderPageProduit($produit, $outputDir = null) {
 
     return file_put_contents($fileName, $html) !== false;
 }
+
+/**
+ * Régénérer la page HTML d'un produit depuis la base de données
+ * @param string $codeOuId Le code ou ID du produit
+ * @return bool True si succès, false sinon
+ */
+function regenererPageProduitDepuisBDD($codeOuId) {
+    require_once __DIR__ . '/../../api/config.php';
+
+    $db = Database::getInstance();
+
+    // Charger le produit depuis la BDD
+    $produit = $db->fetchOne(
+        "SELECT * FROM produits WHERE code = ? OR id = ?",
+        [$codeOuId, $codeOuId]
+    );
+
+    if (!$produit) {
+        return false;
+    }
+
+    // Mapper les colonnes DB (minuscules) vers format CSV (majuscules)
+    $produitFormate = [
+        'ID_PRODUIT' => $produit['code'],
+        'CATEGORIE' => $produit['categorie'] ?? '',
+        'NOM_PRODUIT' => $produit['nom'] ?? '',
+        'SOUS_TITRE' => $produit['sous_titre'] ?? '',
+        'DESCRIPTION_COURTE' => $produit['description_courte'] ?? '',
+        'DESCRIPTION_LONGUE' => $produit['description_longue'] ?? '',
+        'POIDS_M2' => $produit['poids_m2'] ?? '',
+        'EPAISSEUR' => $produit['epaisseur'] ?? '',
+        'FORMAT_MAX_CM' => $produit['format_max'] ?? '',
+        'USAGE' => $produit['usage'] ?? '',
+        'DUREE_VIE' => $produit['duree_vie'] ?? '',
+        'CERTIFICATION' => $produit['certification'] ?? '',
+        'FINITION' => $produit['finition'] ?? '',
+        'IMPRESSION_FACES' => $produit['impression_faces'] ?? '',
+        'PRIX_SIMPLE_FACE' => $produit['prix_simple_face'] ?? '',
+        'PRIX_DOUBLE_FACE' => $produit['prix_double_face'] ?? '',
+        'PRIX_0_10_M2' => $produit['prix_0_10'] ?? '',
+        'PRIX_11_50_M2' => $produit['prix_11_50'] ?? '',
+        'PRIX_51_100_M2' => $produit['prix_51_100'] ?? '',
+        'PRIX_101_300_M2' => $produit['prix_101_300'] ?? '',
+        'PRIX_300_PLUS_M2' => $produit['prix_300_plus'] ?? '',
+        'COMMANDE_MIN_EURO' => $produit['commande_min'] ?? '',
+        'DELAI_STANDARD_JOURS' => $produit['delai_jours'] ?? '',
+        'UNITE_VENTE' => $produit['unite_vente'] ?? 'm²',
+        'IMAGE_URL' => $produit['image_url'] ?? ''
+    ];
+
+    return genererEtSauvegarderPageProduit($produitFormate);
+}

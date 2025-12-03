@@ -231,8 +231,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Log admin action
             logAdminAction($admin['id'] ?? 0, 'modification_produit', "Produit {$produit['code']} modifié");
 
+            // Régénérer la page HTML du produit
+            require_once __DIR__ . '/helpers/generer-page-produit.php';
+            $pageRegeneree = regenererPageProduitDepuisBDD($produit['code']);
+
             // Redirection
-            header('Location: produits.php?success=' . urlencode('Produit modifié avec succès !'));
+            $message = $pageRegeneree
+                ? 'Produit modifié et page régénérée avec succès !'
+                : 'Produit modifié mais erreur lors de la régénération de la page';
+            header('Location: produits.php?success=' . urlencode($message));
             exit;
 
         } catch (Exception $e) {
