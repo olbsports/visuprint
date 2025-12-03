@@ -63,6 +63,12 @@ try {
         }
     }
 
+    // Charger les formats déjà définis pour ce produit
+    $formats = $db->fetchAll(
+        "SELECT * FROM produits_formats WHERE produit_id = ? ORDER BY ordre",
+        [$produit['id']]
+    );
+
 } catch (Exception $e) {
     header('Location: produits.php?error=' . urlencode('Erreur chargement: ' . $e->getMessage()));
     exit;
@@ -128,6 +134,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     "UPDATE produits SET " . implode(', ', $updates) . ", updated_at = NOW() WHERE id = ?",
                     $params
                 );
+            }
+
+            // Mettre à jour formats
+            if (isset($_POST['formats']) && is_array($_POST['formats'])) {
+                // Supprimer anciens formats
+                $db->query("DELETE FROM produits_formats WHERE produit_id = ?", [$produit['id']]);
+
+                // Ajouter les nouveaux formats
+                $ordre = 0;
+                foreach ($_POST['formats'] as $format) {
+                    if (!empty($format['nom']) && !empty($format['largeur']) && !empty($format['hauteur'])) {
+                        $db->query(
+                            "INSERT INTO produits_formats (
+                                produit_id, nom, largeur_cm, hauteur_cm, actif, ordre
+                            ) VALUES (?, ?, ?, ?, 1, ?)",
+                            [
+                                $produit['id'],
+                                $format['nom'],
+                                floatval($format['largeur']),
+                                floatval($format['hauteur']),
+                                $ordre++
+                            ]
+                        );
+                    }
+                }
             }
 
             // Mettre à jour finitions depuis le catalogue
@@ -468,6 +499,67 @@ include __DIR__ . '/includes/header.php';
         </div><!-- .card-body -->
     </div><!-- .card Logistique -->
 
+    <!-- Formats disponibles -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">📏 Formats disponibles</h2>
+            <p style="color: var(--text-muted); font-size: 14px; margin: 8px 0 0 0;">
+                Définissez les formats préformatés disponibles pour ce produit
+            </p>
+        </div>
+        <div class="card-body">
+            <div id="formats-container" style="margin-bottom: 20px;">
+                <?php
+                if (empty($formats)) {
+                    // Formats par défaut si aucun n'est défini
+                    $formatsDefaut = [
+                        ['nom' => 'A0 (84×119 cm)', 'largeur_cm' => 84, 'hauteur_cm' => 119],
+                        ['nom' => 'A1 (59×84 cm)', 'largeur_cm' => 59, 'hauteur_cm' => 84],
+                        ['nom' => 'A2 (42×59 cm)', 'largeur_cm' => 42, 'hauteur_cm' => 59],
+                        ['nom' => 'A3 (30×42 cm)', 'largeur_cm' => 30, 'hauteur_cm' => 42],
+                        ['nom' => '100×100 cm', 'largeur_cm' => 100, 'hauteur_cm' => 100],
+                        ['nom' => '200×100 cm', 'largeur_cm' => 200, 'hauteur_cm' => 100],
+                        ['nom' => 'Roll-up 85×200 cm', 'largeur_cm' => 85, 'hauteur_cm' => 200],
+                        ['nom' => '300×200 cm', 'largeur_cm' => 300, 'hauteur_cm' => 200],
+                        ['nom' => 'Personnalisé', 'largeur_cm' => 100, 'hauteur_cm' => 100]
+                    ];
+                    $formats = $formatsDefaut;
+                }
+
+                $index = 0;
+                foreach ($formats as $format):
+                ?>
+                    <div class="format-item" style="background: white; padding: 16px; margin-bottom: 12px; border-radius: var(--radius-md); border: 2px solid var(--border); display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 12px; align-items: center;">
+                        <div class="form-group" style="margin: 0;">
+                            <label style="font-size: 12px; color: #666; margin-bottom: 4px;">Nom du format</label>
+                            <input type="text" name="formats[<?php echo $index; ?>][nom]" value="<?php echo htmlspecialchars($format['nom']); ?>" placeholder="Ex: A0 (84×119 cm)" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label style="font-size: 12px; color: #666; margin-bottom: 4px;">Largeur (cm)</label>
+                            <input type="number" step="0.1" name="formats[<?php echo $index; ?>][largeur]" value="<?php echo $format['largeur_cm']; ?>" placeholder="100" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label style="font-size: 12px; color: #666; margin-bottom: 4px;">Hauteur (cm)</label>
+                            <input type="number" step="0.1" name="formats[<?php echo $index; ?>][hauteur]" value="<?php echo $format['hauteur_cm']; ?>" placeholder="100" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                        <button type="button" class="btn-remove-format" onclick="this.parentElement.remove()" style="padding: 8px 12px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">
+                            ✕
+                        </button>
+                    </div>
+                <?php
+                    $index++;
+                endforeach;
+                ?>
+            </div>
+            <button type="button" id="btn-add-format" style="padding: 12px 24px; background: var(--primary); color: white; border: none; border-radius: var(--radius-md); cursor: pointer; font-weight: 600;">
+                ➕ Ajouter un format
+            </button>
+            <p style="color: var(--text-muted); font-size: 12px; margin-top: 12px;">
+                💡 Laissez vide pour utiliser les formats par défaut. Ajoutez "Personnalisé" pour permettre aux clients de saisir des dimensions custom.
+            </p>
+        </div><!-- .card-body -->
+    </div><!-- .card Formats -->
+
     <!-- Finitions et options -->
     <div class="card">
         <div class="card-header">
@@ -697,6 +789,35 @@ include __DIR__ . '/includes/header.php';
 // Toggle promo fields
 document.querySelector('input[name="promo_actif"]').addEventListener('change', function(e) {
     document.getElementById('promo-fields').style.display = e.target.checked ? 'block' : 'none';
+});
+
+// Ajouter un format
+document.getElementById('btn-add-format').addEventListener('click', function() {
+    const container = document.getElementById('formats-container');
+    const items = container.querySelectorAll('.format-item');
+    const newIndex = items.length;
+
+    const newFormat = document.createElement('div');
+    newFormat.className = 'format-item';
+    newFormat.style.cssText = 'background: white; padding: 16px; margin-bottom: 12px; border-radius: var(--radius-md); border: 2px solid var(--border); display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 12px; align-items: center;';
+    newFormat.innerHTML = `
+        <div class="form-group" style="margin: 0;">
+            <label style="font-size: 12px; color: #666; margin-bottom: 4px;">Nom du format</label>
+            <input type="text" name="formats[${newIndex}][nom]" placeholder="Ex: A0 (84×119 cm)" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+        </div>
+        <div class="form-group" style="margin: 0;">
+            <label style="font-size: 12px; color: #666; margin-bottom: 4px;">Largeur (cm)</label>
+            <input type="number" step="0.1" name="formats[${newIndex}][largeur]" placeholder="100" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+        </div>
+        <div class="form-group" style="margin: 0;">
+            <label style="font-size: 12px; color: #666; margin-bottom: 4px;">Hauteur (cm)</label>
+            <input type="number" step="0.1" name="formats[${newIndex}][hauteur]" placeholder="100" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+        </div>
+        <button type="button" class="btn-remove-format" onclick="this.parentElement.remove()" style="padding: 8px 12px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">
+            ✕
+        </button>
+    `;
+    container.appendChild(newFormat);
 });
 </script>
 
