@@ -33,6 +33,112 @@ function genererPageProduitHTML($p) {
     $finition = htmlspecialchars($p['FINITION']);
     $delai = intval($p['DELAI_STANDARD_JOURS']);
 
+    // Charger formats et finitions depuis la BDD
+    $formatsBDD = isset($p['_FORMATS_BDD']) ? $p['_FORMATS_BDD'] : [];
+    $finitionsBDD = isset($p['_FINITIONS_BDD']) ? $p['_FINITIONS_BDD'] : [];
+
+    // Générer HTML des formats
+    $formatsHTML = '';
+    if (!empty($formatsBDD)) {
+        foreach ($formatsBDD as $format) {
+            $formatNom = htmlspecialchars($format['nom']);
+            $formatLargeur = floatval($format['largeur_cm']);
+            $formatHauteur = floatval($format['hauteur_cm']);
+            $isCustom = (strpos(strtolower($formatNom), 'personnalis') !== false) ? 'true' : 'false';
+            $blueClass = ($isCustom === 'true') ? 'bg-blue-100 border-blue-400' : '';
+            $blueText = ($isCustom === 'true') ? 'text-blue-900' : '';
+
+            $formatsHTML .= '<button type="button" class="config-option ' . $blueClass . ' rounded-lg p-3 text-center" data-format="' . $formatNom . '" data-w="' . $formatLargeur . '" data-h="' . $formatHauteur . '" data-custom="' . $isCustom . '">
+                <div class="font-semibold text-sm ' . $blueText . '">' . $formatNom . '</div>
+            </button>' . "\n                            ";
+        }
+    } else {
+        // Formats par défaut si aucun format en BDD
+        $formatsHTML = '<button type="button" class="config-option rounded-lg p-3 text-center" data-format="A0 (84×119 cm)" data-w="84" data-h="119" data-custom="false">
+                <div class="font-semibold text-sm">A0 (84×119 cm)</div>
+            </button>
+            <button type="button" class="config-option rounded-lg p-3 text-center" data-format="A1 (59×84 cm)" data-w="59" data-h="84" data-custom="false">
+                <div class="font-semibold text-sm">A1 (59×84 cm)</div>
+            </button>
+            <button type="button" class="config-option rounded-lg p-3 text-center" data-format="A2 (42×59 cm)" data-w="42" data-h="59" data-custom="false">
+                <div class="font-semibold text-sm">A2 (42×59 cm)</div>
+            </button>
+            <button type="button" class="config-option rounded-lg p-3 text-center" data-format="A3 (30×42 cm)" data-w="30" data-h="42" data-custom="false">
+                <div class="font-semibold text-sm">A3 (30×42 cm)</div>
+            </button>
+            <button type="button" class="config-option rounded-lg p-3 text-center" data-format="100×100 cm" data-w="100" data-h="100" data-custom="false">
+                <div class="font-semibold text-sm">100×100 cm</div>
+            </button>
+            <button type="button" class="config-option rounded-lg p-3 text-center" data-format="200×100 cm" data-w="200" data-h="100" data-custom="false">
+                <div class="font-semibold text-sm">200×100 cm</div>
+            </button>
+            <button type="button" class="config-option rounded-lg p-3 text-center" data-format="Roll-up 85×200 cm" data-w="85" data-h="200" data-custom="false">
+                <div class="font-semibold text-sm">Roll-up 85×200</div>
+            </button>
+            <button type="button" class="config-option rounded-lg p-3 text-center" data-format="300×200 cm" data-w="300" data-h="200" data-custom="false">
+                <div class="font-semibold text-sm">300×200 cm</div>
+            </button>
+            <button type="button" class="config-option bg-blue-100 border-blue-400 rounded-lg p-3 text-center" data-format="Personnalisé" data-w="100" data-h="100" data-custom="true">
+                <div class="font-semibold text-sm text-blue-900">Personnalisé</div>
+            </button>';
+    }
+
+    // Générer HTML des finitions
+    $finitionsHTML = '';
+    if (!empty($finitionsBDD)) {
+        $first = true;
+        foreach ($finitionsBDD as $fin) {
+            $finNom = htmlspecialchars($fin['nom']);
+            $finDesc = htmlspecialchars($fin['description'] ?? '');
+            $finPrix = floatval($fin['prix_supplement']);
+            $finType = $fin['type_prix'];
+
+            $selected = $first ? 'selected' : '';
+            $first = false;
+
+            // Format du prix selon le type
+            $prixTexte = '';
+            if ($finPrix == 0) {
+                $prixTexte = 'Inclus';
+            } else {
+                switch ($finType) {
+                    case 'par_m2':
+                        $prixTexte = '+' . number_format($finPrix, 2) . '€/m²';
+                        break;
+                    case 'par_ml':
+                        $prixTexte = '+' . number_format($finPrix, 2) . '€/ml';
+                        break;
+                    case 'pourcentage':
+                        $prixTexte = '+' . number_format($finPrix, 0) . '%';
+                        break;
+                    case 'fixe':
+                    default:
+                        $prixTexte = '+' . number_format($finPrix, 2) . '€';
+                        break;
+                }
+            }
+
+            $finitionsHTML .= '<button type="button" class="config-option rounded-lg p-4 ' . $selected . '" data-option="' . strtolower(str_replace(' ', '_', $finNom)) . '" data-prix="' . $finPrix . '" data-type-prix="' . $finType . '">
+                <div class="font-bold">' . $finNom . '</div>
+                <div class="text-sm text-gray-600">' . $prixTexte . '</div>
+            </button>' . "\n                            ";
+        }
+    } else {
+        // Finitions par défaut si aucune finition en BDD
+        $finitionsHTML = '<button type="button" class="config-option rounded-lg p-4 selected" data-option="standard" data-prix="0" data-type-prix="fixe">
+                <div class="font-bold">Standard</div>
+                <div class="text-sm text-gray-600">Inclus</div>
+            </button>
+            <button type="button" class="config-option rounded-lg p-4" data-option="oeillets" data-prix="5" data-type-prix="fixe">
+                <div class="font-bold">Avec œillets</div>
+                <div class="text-sm text-gray-600">+5€</div>
+            </button>
+            <button type="button" class="config-option rounded-lg p-4" data-option="support" data-prix="12" data-type-prix="par_m2">
+                <div class="font-bold">Sur support</div>
+                <div class="text-sm text-gray-600">+12€/m²</div>
+            </button>';
+    }
+
     $html = <<<HTML
 <!DOCTYPE html>
 <html lang="fr">
@@ -111,33 +217,7 @@ function genererPageProduitHTML($p) {
                             <i class="fas fa-ruler-combined"></i> Format
                         </label>
                         <div class="grid grid-cols-2 md:grid-cols-3 gap-3" id="format-selector">
-                            <button type="button" class="config-option rounded-lg p-3 text-center" data-format="A0 (84×119 cm)" data-w="84" data-h="119" data-custom="false">
-                                <div class="font-semibold text-sm">A0 (84×119 cm)</div>
-                            </button>
-                            <button type="button" class="config-option rounded-lg p-3 text-center" data-format="A1 (59×84 cm)" data-w="59" data-h="84" data-custom="false">
-                                <div class="font-semibold text-sm">A1 (59×84 cm)</div>
-                            </button>
-                            <button type="button" class="config-option rounded-lg p-3 text-center" data-format="A2 (42×59 cm)" data-w="42" data-h="59" data-custom="false">
-                                <div class="font-semibold text-sm">A2 (42×59 cm)</div>
-                            </button>
-                            <button type="button" class="config-option rounded-lg p-3 text-center" data-format="A3 (30×42 cm)" data-w="30" data-h="42" data-custom="false">
-                                <div class="font-semibold text-sm">A3 (30×42 cm)</div>
-                            </button>
-                            <button type="button" class="config-option rounded-lg p-3 text-center" data-format="100×100 cm" data-w="100" data-h="100" data-custom="false">
-                                <div class="font-semibold text-sm">100×100 cm</div>
-                            </button>
-                            <button type="button" class="config-option rounded-lg p-3 text-center" data-format="200×100 cm" data-w="200" data-h="100" data-custom="false">
-                                <div class="font-semibold text-sm">200×100 cm</div>
-                            </button>
-                            <button type="button" class="config-option rounded-lg p-3 text-center" data-format="Roll-up 85×200 cm" data-w="85" data-h="200" data-custom="false">
-                                <div class="font-semibold text-sm">Roll-up 85×200</div>
-                            </button>
-                            <button type="button" class="config-option rounded-lg p-3 text-center" data-format="300×200 cm" data-w="300" data-h="200" data-custom="false">
-                                <div class="font-semibold text-sm">300×200 cm</div>
-                            </button>
-                            <button type="button" class="config-option bg-blue-100 border-blue-400 rounded-lg p-3 text-center" data-format="Personnalisé" data-w="100" data-h="100" data-custom="true">
-                                <div class="font-semibold text-sm text-blue-900">Personnalisé</div>
-                            </button>
+                            $formatsHTML
                         </div>
                     </div>
 
@@ -168,18 +248,7 @@ function genererPageProduitHTML($p) {
                             <i class="fas fa-palette"></i> Finition
                         </label>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                            <button type="button" class="config-option rounded-lg p-4 selected" data-option="standard" data-prix="0">
-                                <div class="font-bold">Standard</div>
-                                <div class="text-sm text-gray-600">Inclus</div>
-                            </button>
-                            <button type="button" class="config-option rounded-lg p-4" data-option="oeillets" data-prix="5">
-                                <div class="font-bold">Avec œillets</div>
-                                <div class="text-sm text-gray-600">+5€</div>
-                            </button>
-                            <button type="button" class="config-option rounded-lg p-4" data-option="support" data-prix="12">
-                                <div class="font-bold">Sur support</div>
-                                <div class="text-sm text-gray-600">+12€/m²</div>
-                            </button>
+                            $finitionsHTML
                         </div>
                     </div>
 
@@ -483,7 +552,7 @@ function genererPageProduitHTML($p) {
         prix: { '0-10': $prix010, '11-50': $prix1150, '51-100': $prix51100, '101-300': $prix101300, '300+': $prix300plus },
         delai: $delai
     };
-    var config = { largeur: 100, hauteur: 100, quantite: 1, finition: 'standard', prixFinition: 0, format: 'Personnalisé', fichier: null };
+    var config = { largeur: 100, hauteur: 100, quantite: 1, finition: 'standard', prixFinition: 0, typeFinition: 'fixe', format: 'Personnalisé', fichier: null };
 
     function toggleSpecs() {
         var content = document.getElementById('specs-content');
@@ -505,7 +574,20 @@ function genererPageProduitHTML($p) {
         else prixM2 = PRODUIT.prix['0-10'];
 
         var prixImpression = prixM2 * surface * config.quantite;
-        var prixOptions = config.prixFinition * (config.prixFinition > 20 ? 1 : surface) * config.quantite;
+
+        // Calculer le prix des options selon le type
+        var prixOptions = 0;
+        if (config.typeFinition === 'fixe') {
+            prixOptions = config.prixFinition;
+        } else if (config.typeFinition === 'par_m2') {
+            prixOptions = config.prixFinition * surface * config.quantite;
+        } else if (config.typeFinition === 'par_ml') {
+            var perimetre = ((config.largeur + config.hauteur) * 2) / 100;
+            prixOptions = config.prixFinition * perimetre * config.quantite;
+        } else if (config.typeFinition === 'pourcentage') {
+            prixOptions = prixImpression * (config.prixFinition / 100);
+        }
+
         var prixTotal = prixImpression + prixOptions;
 
         var prixUnitEl = document.getElementById('prix-unitaire');
@@ -563,6 +645,7 @@ function genererPageProduitHTML($p) {
                 this.classList.add('selected');
                 config.finition = this.getAttribute('data-option');
                 config.prixFinition = parseFloat(this.getAttribute('data-prix'));
+                config.typeFinition = this.getAttribute('data-type-prix') || 'fixe';
                 document.getElementById('resume-finition').textContent = this.querySelector('.font-bold').textContent;
                 calculerPrix();
             };
@@ -643,6 +726,18 @@ function regenererPageProduitDepuisBDD($codeOuId) {
         return false;
     }
 
+    // Charger les formats personnalisés du produit
+    $formats = $db->fetchAll(
+        "SELECT * FROM produits_formats WHERE produit_id = ? AND actif = 1 ORDER BY ordre ASC",
+        [$produit['id']]
+    );
+
+    // Charger les finitions du produit
+    $finitions = $db->fetchAll(
+        "SELECT * FROM produits_finitions WHERE produit_id = ? AND actif = 1 ORDER BY ordre ASC",
+        [$produit['id']]
+    );
+
     // Mapper les colonnes DB (minuscules) vers format CSV (majuscules)
     $produitFormate = [
         'ID_PRODUIT' => $produit['code'],
@@ -669,7 +764,9 @@ function regenererPageProduitDepuisBDD($codeOuId) {
         'COMMANDE_MIN_EURO' => $produit['commande_min'] ?? '',
         'DELAI_STANDARD_JOURS' => $produit['delai_jours'] ?? '',
         'UNITE_VENTE' => $produit['unite_vente'] ?? 'm²',
-        'IMAGE_URL' => $produit['image_url'] ?? ''
+        'IMAGE_URL' => $produit['image_url'] ?? '',
+        '_FORMATS_BDD' => $formats,
+        '_FINITIONS_BDD' => $finitions
     ];
 
     return genererEtSauvegarderPageProduit($produitFormate);
